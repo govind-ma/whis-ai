@@ -1,0 +1,5 @@
+<resources>
+    <style name="Theme.Whis" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- UI module will define the full design system here -->
+    </style>
+</resources>

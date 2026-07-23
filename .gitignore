@@ -1,0 +1,41 @@
+# .gitignore — Whis Android Project
+
+# ── Gradle ────────────────────────────────────────────────────────────────
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ── Android / IDE ─────────────────────────────────────────────────────────
+*.iml
+.idea/
+*.hprof
+local.properties
+*.log
+captures/
+
+# ── Signing ───────────────────────────────────────────────────────────────
+*.jks
+*.keystore
+
+# ── OS ────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Firebase ──────────────────────────────────────────────────────────────
+# The PLACEHOLDER google-services.json is tracked in VCS so the build
+# always succeeds. However, when a developer drops in the REAL
+# google-services.json (with actual Firebase credentials), we must NOT
+# let it get committed — that would leak the Firebase config if this
+# repo goes public.
+#
+# Workflow:
+#   1. The placeholder is already committed and tracked.
+#   2. After replacing it with the real file, run:
+#        git update-index --assume-unchanged app/google-services.json
+#      This tells Git to ignore local changes to the file while keeping
+#      the placeholder in the repo history.
+#   3. To re-track changes (e.g., to update the placeholder):
+#        git update-index --no-assume-unchanged app/google-services.json
+#
+# We do NOT gitignore the file outright because that would remove the
+# tracked placeholder from VCS, breaking fresh clones.

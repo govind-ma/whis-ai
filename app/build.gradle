@@ -1,0 +1,69 @@
+plugins {
+    id 'com.android.application'
+    // google-services plugin is applied conditionally below so the project
+    // still compiles before the real google-services.json is dropped in.
+}
+
+// ---------------------------------------------------------------------------
+// Conditionally apply google-services plugin.
+// The placeholder google-services.json ships in VCS so the build always has
+// *something* to parse, but if a developer deletes it before adding the real
+// one, the build must not crash — hence the file-existence check.
+// ---------------------------------------------------------------------------
+if (file("google-services.json").exists()) {
+    apply plugin: 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.whis.app'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.whis.app"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "0.1.0-foundation"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    // ── Firebase (BOM + Firestore + AI) ──────────────────────────────────
+    // Per MASTER_PLAN.md Section 2.7 and AI_AGENT_PLAN.md Section 4.4
+    implementation platform('com.google.firebase:firebase-bom:34.16.0')
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-ai'
+
+    // ── Networking ───────────────────────────────────────────────────────
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // ── AndroidX ─────────────────────────────────────────────────────────
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+
+    // ── Material Components ──────────────────────────────────────────────
+    implementation 'com.google.android.material:material:1.12.0'
+
+    // ── Room (set up now for MSG module's history DAO) ────────────────────
+    implementation 'androidx.room:room-runtime:2.7.1'
+    annotationProcessor 'androidx.room:room-compiler:2.7.1'
+
+    // ── Testing ──────────────────────────────────────────────────────────
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
