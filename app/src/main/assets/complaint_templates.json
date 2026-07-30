@@ -1,0 +1,4 @@
+{
+  "bank_dispute_letter": "To,\nThe Branch Manager,\n[Bank Name], [Branch Address]\n\nSubject: Notice of Unauthorised Electronic Banking Transaction under RBI Circular DBR.No.Leg.BC.78/09.07.005/2017-18\n\nRespected Sir/Madam,\nI am writing to report an unauthorised electronic banking transaction on my account [Account Number] on [Date & Time] for the amount of Rs. [Amount].\n1930 Cybercrime Complaint Ref No: [1930 Ref]\nUTR/Transaction ID: [Transaction ID]\n\nUnder RBI guidelines, I am reporting this within 3 working days. I request you to cut off my liability immediately and credit the shadow balance within 10 working days.\n\nSincerely,\n[User Name]",
+  "rbi_ombudsman_template": "File online at cms.rbi.org.in within 90 days if bank does not resolve complaint within 30 days."
+}

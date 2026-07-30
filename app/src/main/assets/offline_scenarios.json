@@ -1,0 +1,38 @@
+[
+  {
+    "id": "UPI_COLLECT_REQUEST",
+    "keywords": ["collect", "request", "approve", "scan", "qr", "refund", "receive money"],
+    "risk": "HIGH",
+    "responseHindi": "Ye UPI Collect Request fraud ho sakta hai! Yaad rakhein: UPI PIN sirf PAISA BHEJNE ke liye hota hai, PAISA PAANE ke liye PIN nahi chahiye.",
+    "responseGujarati": "Aaa UPI Collect Request fraud thai shake chhe! Yaad rakho: UPI PIN maatra paise mokalva mate chhe.",
+    "responseEnglish": "This may be a UPI Collect Request scam! Remember: UPI PIN is ONLY entered to send money, NEVER to receive money.",
+    "nextStepsHindi": ["PAISA PAY par click mat karo", "1930 par turant call karo", "Bank helpline par call karke card/UPI block karo"],
+    "nextStepsGujarati": ["Pay par click na karo", "1930 par call karo", "Bank ne report karo"],
+    "nextStepsEnglish": ["Do not click Pay", "Call 1930 immediately", "Report to your bank helpline"],
+    "escalate": true
+  },
+  {
+    "id": "DIGITAL_ARREST",
+    "keywords": ["cbi", "police", "digital arrest", "customs", "cyber cell", "arrest", "court notice"],
+    "risk": "CRITICAL",
+    "responseHindi": "GHABRAO MAT! Police ya CBI kabhi video call par arrest nahi karti. Ye Digital Arrest Scam hai. Phone turant kaato!",
+    "responseGujarati": "GHABRAO NAHI! Police kabhi video call par arrest nathi karti. Phone kaati nakho!",
+    "responseEnglish": "DO NOT PANIC! Police or CBI NEVER arrest anyone over video call. This is a Digital Arrest scam. Hang up immediately!",
+    "nextStepsHindi": ["Phone immediately kaat do", "1930 par complaint daraj karo", "Kisi ko paisa mat bhejo"],
+    "nextStepsGujarati": ["Phone kaati nakho", "1930 par complaint karo"],
+    "nextStepsEnglish": ["Disconnect call now", "Call 1930", "Do not transfer money"],
+    "escalate": true
+  },
+  {
+    "id": "KYC_EXPIRED",
+    "keywords": ["kyc", "expired", "update kyc", "account blocked", "sim block"],
+    "risk": "HIGH",
+    "responseHindi": "SMS ya call ke zariye KYC update karne ko kehna scam hai. Bank kabhi SMS link se KYC nahi karwata.",
+    "responseGujarati": "SMS link thi KYC update na karo, aa scam chhe.",
+    "responseEnglish": "Bank never asks to update KYC via SMS links. This is a phishing scam.",
+    "nextStepsHindi": ["Kisi link par click mat karo", "Apne official bank branch jao"],
+    "nextStepsGujarati": ["Link par click na karo", "Bank branch par jao"],
+    "nextStepsEnglish": ["Do not click links", "Visit official bank branch"],
+    "escalate": false
+  }
+]

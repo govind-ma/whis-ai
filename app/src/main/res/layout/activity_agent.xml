@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/whis_bg">
+
+    <!-- Top Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/whis_surface"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Whis AI Case Officer"
+            android:textColor="@color/whis_text_hi"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_voice_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Voice"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <!-- Chat Messages Container / ScrollView -->
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="12dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/chat_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="8dp" />
+    </ScrollView>
+
+    <!-- Typing Indicator Row — hidden until AI is responding -->
+    <FrameLayout
+        android:id="@+id/typing_indicator_row"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone">
+
+        <com.whis.app.agent.TypingIndicatorView
+            android:id="@+id/typing_indicator"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|center_vertical" />
+    </FrameLayout>
+
+    <!-- Input Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/whis_surface"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <!-- EditText with animated border — styled with a GradientDrawable background set in code -->
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Ask Whis AI or describe what happened..."
+            android:textColor="@color/whis_text_hi"
+            android:textColorHint="@color/whis_text_mid"
+            android:background="@null"
+            android:paddingHorizontal="12dp"
+            android:textSize="14sp"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="3"
+            android:imeOptions="actionSend" />
+
+        <!-- Send button — rotation animation applied in code on click -->
+        <ImageButton
+            android:id="@+id/btn_send"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_send_button"
+            android:contentDescription="Send message"
+            android:src="@drawable/ic_send"
+            android:scaleType="center"
+            android:padding="10dp" />
+
+    </LinearLayout>
+</LinearLayout>

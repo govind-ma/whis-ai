@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- PermissionStepFragment — one full-screen per permission step (UI_PLAN.md §2.2 step 7) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <!-- Step indicator (e.g. "Step 1 of 5") -->
+        <TextView
+            android:id="@+id/tv_step_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_perm_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- Explanation card — plain language "why we're asking" -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section">
+
+            <TextView
+                android:id="@+id/tv_perm_explanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Whis.TextAppearance.BodyLarge" />
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Manufacturer hint (shown only for step 3) -->
+        <TextView
+            android:id="@+id/tv_manufacturer_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            style="@style/Whis.TextAppearance.Caption"
+            android:visibility="gone" />
+
+        <!-- Status indicator (shown after returning from settings) -->
+        <TextView
+            android:id="@+id/tv_perm_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            style="@style/Whis.TextAppearance.Body"
+            android:visibility="gone" />
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Grant permission button -->
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_grant_permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section" />
+
+        <!-- Skip button — never blocks progression -->
+        <Button
+            android:id="@+id/btn_skip"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_floor"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="Skip for now"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:textColor="@color/whis_text_mid"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- HomeFragment layout (UI_PLAN.md §2.4 / §3.1) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <!-- Screen title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Protection Status"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- Hero Cards Container with Screen-Level Refraction Glow -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_hero_glass_glow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- 1. ProtectionRing status card — GlassCardView for hero treatment -->
+                <com.whis.app.ui.components.GlassCardView
+                    android:id="@+id/card_protection_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_item">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/whis_spacing_card_padding">
+
+                        <com.whis.app.ui.components.ProtectionRing
+                            android:id="@+id/home_protection_ring"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="@dimen/whis_spacing_card_padding"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_protection_headline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Protected"
+                                style="@style/Whis.TextAppearance.Display"
+                                android:textSize="22sp" />
+
+                            <TextView
+                                android:id="@+id/tv_protection_subtext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Calls &amp; SMS active protection is running"
+                                style="@style/Whis.TextAppearance.Caption" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.whis.app.ui.components.GlassCardView>
+
+                <!-- 2. "Ask Whis anything" contextual AI entry card — GlassCardView (§2.4) -->
+                <com.whis.app.ui.components.GlassCardView
+                    android:id="@+id/card_ask_whis_ai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_item">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/whis_spacing_card_padding">
+
+                        <!-- Icon with soft tinted circle background -->
+                        <FrameLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_icon_circle_trusted">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_nav_learn"
+                                android:tint="@color/whis_trusted" />
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="@dimen/whis_spacing_item"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ask Whis Anything"
+                                style="@style/Whis.TextAppearance.Body"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Check a message, UPI ID, or scam pattern in plain language"
+                                style="@style/Whis.TextAppearance.Caption" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.whis.app.ui.components.GlassCardView>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <!-- 3. Activity feed header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Recent Activity Feed"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <!-- 4. Activity feed RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_activity_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- 5. Empty state — shown when no AI-analysed activity yet -->
+        <include
+            android:id="@+id/home_empty_state"
+            layout="@layout/layout_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

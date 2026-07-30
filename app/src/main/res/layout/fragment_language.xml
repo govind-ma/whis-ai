@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LanguageFragment — large single-select buttons (UI_PLAN.md §2.2 step 2) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose your language"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="अपनी भाषा चुनें · તમારી ભાષા પસંદ કરો"
+            style="@style/Whis.TextAppearance.Body"
+            android:textColor="@color/whis_text_mid" />
+
+        <Button
+            android:id="@+id/btn_english"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="English"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_hindi"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="हिन्दी"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_gujarati"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="ગુજરાતી"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

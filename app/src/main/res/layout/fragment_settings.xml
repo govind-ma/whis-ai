@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SettingsFragment — UI_PLAN.md §3.1 -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- 1. Account Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Account &amp; Profile"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_settings_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name: Not set"
+                    style="@style/Whis.TextAppearance.BodyLarge"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_settings_emergency_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="Emergency Contact: Not set"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textColor="@color/whis_text_mid" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 2. Protection & Permission Status -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Protection &amp; Permissions"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_perm_sms_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SMS Protection: Active (Granted)"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_perm_calls_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Call Screening: Active (Granted)"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_open_notification_access"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="Enable Notification Access Settings"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_open_dnd_access"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:layout_marginTop="8dp"
+                    android:text="Enable Do Not Disturb (DND) Override"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 3. Alert Preferences -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Alert Preferences"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notifications"
+                        style="@style/Whis.TextAppearance.Body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="High-priority scam warning alerts"
+                        style="@style/Whis.TextAppearance.Caption" />
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/switch_voice_alerts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:minHeight="@dimen/whis_touch_floor" />
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Dark Theme Control -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dark Theme"
+                        style="@style/Whis.TextAppearance.Body"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Switch between light and dark mode"
+                        style="@style/Whis.TextAppearance.Caption" />
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/switch_dark_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/whis_touch_floor" />
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Emergency Contacts Section (2 Contacts) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Emergency Contacts (SOS)"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Emergency Contact 1"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_emergency_name_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:hint="Contact 1 Name (e.g. Mom / Father)"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_emergency_phone_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:hint="Contact 1 Phone Number"
+                    android:inputType="phone"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Emergency Contact 2"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_emergency_name_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:hint="Contact 2 Name (e.g. Brother / Friend)"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_emergency_phone_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:hint="Contact 2 Phone Number"
+                    android:inputType="phone"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_save_emergency_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:layout_marginTop="12dp"
+                    android:text="Save Emergency Contacts"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 4. Support & Feedback -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Support &amp; Feedback"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btn_report_false_positive"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:text="Report False Positive"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 5. Accessibility & System Settings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Accessibility Preferences"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text Size"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="Whis uses your device system font size (sp units). Change text size in your phone's Display settings to adjust text across the entire app."
+                    style="@style/Whis.TextAppearance.Caption" />
+
+                <Button
+                    android:id="@+id/btn_open_display_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:layout_marginTop="@dimen/whis_spacing_item"
+                    android:text="System Display &amp; Font Settings"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 6. About & App Version -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="About Whis"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Whis v1.0.0 (Build 1)"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="AI Cyber Fraud Protection for India"
+                    style="@style/Whis.TextAppearance.Caption" />
+
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- EmergencyContactFragment — name + phone (UI_PLAN.md §2.2 step 5) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:id="@+id/tv_emergency_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency contact"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:id="@+id/tv_emergency_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="Whis can alert this person if you are in danger from a live scam."
+            style="@style/Whis.TextAppearance.Body"
+            android:textColor="@color/whis_text_mid" />
+
+        <!-- Contact name -->
+        <TextView
+            android:id="@+id/label_contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Contact name"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <EditText
+            android:id="@+id/et_contact_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:hint="e.g. Papa, Bhai, Beta"
+            android:inputType="textPersonName"
+            android:textSize="16sp"
+            android:paddingHorizontal="@dimen/whis_spacing_card_padding"
+            android:background="@color/whis_surface" />
+
+        <!-- Phone number -->
+        <TextView
+            android:id="@+id/label_contact_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Phone number"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <EditText
+            android:id="@+id/et_contact_phone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:hint="+91 98765 43210"
+            android:inputType="phone"
+            android:textSize="16sp"
+            android:paddingHorizontal="@dimen/whis_spacing_card_padding"
+            android:background="@color/whis_surface" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_emergency_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Next" />
+
+    </LinearLayout>
+</ScrollView>

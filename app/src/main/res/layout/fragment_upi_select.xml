@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UpiSelectFragment — single-select UPI app (UI_PLAN.md §2.2 step 4) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:id="@+id/tv_upi_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your primary UPI app"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:id="@+id/tv_upi_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="This helps Whis give you app-specific guidance."
+            style="@style/Whis.TextAppearance.Body"
+            android:textColor="@color/whis_text_mid" />
+
+        <Button
+            android:id="@+id/btn_gpay"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Google Pay"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_phonepe"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="PhonePe"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_paytm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="Paytm"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_bhim"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="BHIM"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btn_other_upi"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="Other"
+            android:textSize="17sp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</ScrollView>

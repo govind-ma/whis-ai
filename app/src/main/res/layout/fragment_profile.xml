@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ProfileFragment — name, age group, techLevel (UI_PLAN.md §2.2 step 3) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:id="@+id/tv_profile_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tell us about yourself"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- Name -->
+        <TextView
+            android:id="@+id/label_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Your name"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:hint="Enter your name"
+            android:inputType="textPersonName"
+            android:textSize="16sp"
+            android:paddingHorizontal="@dimen/whis_spacing_card_padding"
+            android:background="@color/whis_surface" />
+
+        <!-- Age group — large single-select buttons, not a text field -->
+        <TextView
+            android:id="@+id/label_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Age group"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_age_18_30"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/whis_spacing_base"
+                android:text="18–30"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_age_31_45"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:text="31–45"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_age_46_60"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/whis_spacing_base"
+                android:text="46–60"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_age_60_plus"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:text="60+"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <!-- Tech level — two-button choice -->
+        <TextView
+            android:id="@+id/label_tech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="How comfortable are you with phones?"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_tech_basic"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/whis_spacing_base"
+                android:text="Basic"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btn_tech_advanced"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/whis_touch_standard"
+                android:layout_weight="1"
+                android:text="Advanced"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/whis_spacing_section" />
+
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_profile_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Next" />
+
+    </LinearLayout>
+</ScrollView>

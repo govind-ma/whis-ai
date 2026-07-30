@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- CallsFragment layout — screened calls & blocked numbers (UI_PLAN.md §2.4 / §3.5) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Call Protection"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Screened calls since protection was turned on"
+            style="@style/Whis.TextAppearance.Caption" />
+
+        <!-- Blocked numbers management section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Blocked Numbers Management"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:id="@+id/container_blocked_numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Screened calls section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Recent Screened Calls"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_calls_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Empty state — shown when callSamples list is empty -->
+        <include
+            layout="@layout/layout_empty_state"
+            android:id="@+id/calls_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

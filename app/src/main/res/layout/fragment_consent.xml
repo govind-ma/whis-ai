@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ConsentFragment — exact draft copy from UI_PLAN.md §2.3 -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Before we start protecting you"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- Section 1: Reading calls and messages -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. Reading calls and messages for danger signs."
+                    style="@style/Whis.TextAppearance.BodyLarge"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="Whis checks incoming calls and texts for scam patterns — before you answer or open them. We don't store your messages; we only look for warning signs."
+                    style="@style/Whis.TextAppearance.Body" />
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Section 2: Community reporting (optional toggle) -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. Helping other users (optional)."
+                    style="@style/Whis.TextAppearance.BodyLarge"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="If you mark a number as a scam, you can choose to share that number so Whis can warn others too. Your name is never shared."
+                    style="@style/Whis.TextAppearance.Body" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_floor"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="@dimen/whis_spacing_item">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Share flagged numbers"
+                        style="@style/Whis.TextAppearance.Body" />
+
+                    <Switch
+                        android:id="@+id/switch_community"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:minHeight="@dimen/whis_touch_floor" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Section 3: Asking Whis questions -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3. Asking Whis questions."
+                    style="@style/Whis.TextAppearance.BodyLarge"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="You can ask Whis to explain any warning in plain language, anytime."
+                    style="@style/Whis.TextAppearance.Body" />
+            </LinearLayout>
+        </com.whis.app.ui.components.StatusCard>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_consent_agree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="I understand and agree" />
+
+    </LinearLayout>
+</ScrollView>

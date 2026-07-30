@@ -1,0 +1,30 @@
+<resources>
+    <style name="Theme.Whis" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Brand green -->
+        <item name="colorPrimary">@color/whis_trusted</item>
+        <item name="colorPrimaryVariant">@color/whis_green_dark</item>
+        <item name="colorOnPrimary">@color/whis_text_hi</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/whis_likely_safe</item>
+        <item name="colorOnSecondary">@color/whis_bg</item>
+
+        <!-- Surface and background -->
+        <item name="colorSurface">@color/whis_surface</item>
+        <item name="colorOnSurface">@color/whis_text_hi</item>
+        <item name="android:colorBackground">@color/whis_bg</item>
+        <item name="android:windowBackground">@color/whis_bg</item>
+
+        <!-- Text on backgrounds -->
+        <item name="android:textColorPrimary">@color/whis_text_hi</item>
+        <item name="android:textColorSecondary">@color/whis_text_mid</item>
+        <item name="android:textColorHint">@color/whis_text_mid</item>
+
+        <!-- Status bar: dark bg = white icons -->
+        <item name="android:statusBarColor">@color/whis_bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/whis_surface_elevated</item>
+    </style>
+</resources>

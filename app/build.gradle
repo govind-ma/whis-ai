@@ -3,6 +3,9 @@ plugins {
     // google-services plugin is applied conditionally below so the project
     // still compiles before the real google-services.json is dropped in.
 }
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 
 // ---------------------------------------------------------------------------
 // Conditionally apply google-services plugin.
@@ -26,6 +29,11 @@ android {
         versionName "0.1.0-foundation"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "GEMINI_API_KEY", "\"${localProperties['GEMINI_API_KEY']}\""
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {
@@ -42,11 +50,12 @@ android {
 }
 
 dependencies {
-    // ── Firebase (BOM + Firestore + AI) ──────────────────────────────────
-    // Per MASTER_PLAN.md Section 2.7 and AI_AGENT_PLAN.md Section 4.4
+    // ── Firebase (BOM + Firestore) ────────────────────────────────────────
     implementation platform('com.google.firebase:firebase-bom:34.16.0')
     implementation 'com.google.firebase:firebase-firestore'
-    implementation 'com.google.firebase:firebase-ai'
+
+    // ── Gemini Direct API ─────────────────────────────────────────────────
+    implementation 'com.google.ai.client.generativeai:generativeai:0.7.0'
 
     // ── Networking ───────────────────────────────────────────────────────
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
@@ -58,9 +67,16 @@ dependencies {
     // ── Material Components ──────────────────────────────────────────────
     implementation 'com.google.android.material:material:1.12.0'
 
+    // ── Navigation Component (UI_PLAN.md §2.4 — 5-tab nav shell) ────────
+    implementation 'androidx.navigation:navigation-fragment:2.9.0'
+    implementation 'androidx.navigation:navigation-ui:2.9.0'
+
     // ── Room (set up now for MSG module's history DAO) ────────────────────
     implementation 'androidx.room:room-runtime:2.7.1'
     annotationProcessor 'androidx.room:room-compiler:2.7.1'
+
+    // ── Dynamic Animation (SpringAnimation for swipe spring-back) ────────
+    implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
 
     // ── Testing ──────────────────────────────────────────────────────────
     testImplementation 'junit:junit:4.13.2'

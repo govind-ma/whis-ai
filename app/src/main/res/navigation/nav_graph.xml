@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.whis.app.ui.home.HomeFragment"
+        android:label="Home">
+        <action
+            android:id="@+id/action_home_to_alert_detail"
+            app:destination="@id/nav_alert_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_calls"
+        android:name="com.whis.app.ui.calls.CallsFragment"
+        android:label="Calls">
+        <action
+            android:id="@+id/action_calls_to_alert_detail"
+            app:destination="@id/nav_alert_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.whis.app.ui.messages.MessagesFragment"
+        android:label="Messages">
+        <action
+            android:id="@+id/action_messages_to_alert_detail"
+            app:destination="@id/nav_alert_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_learn"
+        android:name="com.whis.app.ui.learn.LearnFragment"
+        android:label="Learn">
+        <action
+            android:id="@+id/action_learn_to_lesson_detail"
+            app:destination="@id/nav_lesson_detail"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.whis.app.ui.settings.SettingsFragment"
+        android:label="Settings" />
+
+    <fragment
+        android:id="@+id/nav_alert_detail"
+        android:name="com.whis.app.ui.alert.AlertDetailFragment"
+        android:label="Alert Detail" />
+
+    <fragment
+        android:id="@+id/nav_lesson_detail"
+        android:name="com.whis.app.ui.learn.LessonDetailFragment"
+        android:label="Lesson Detail" />
+
+</navigation>

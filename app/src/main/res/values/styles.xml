@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Whis Design Token System — Text styles (WhatsApp-style dark theme)
+  Typeface: Outfit (Gilroy-equivalent from Google Fonts)
+  All sizes in sp. Crisp white text on dark surfaces.
+-->
+<resources>
+
+    <!-- ── type_display — Protection status headline (28sp Bold) ──────── -->
+    <style name="Whis.TextAppearance.Display" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/whis_text_hi</item>
+    </style>
+
+    <!-- ── type_h1 — Screen titles (22sp Bold) ────────────────────────── -->
+    <style name="Whis.TextAppearance.H1" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/whis_text_hi</item>
+    </style>
+
+    <!-- ── type_h2 — Section labels (13sp Bold, uppercase) ──────────── -->
+    <style name="Whis.TextAppearance.H2" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textColor">@color/whis_text_mid</item>
+    </style>
+
+    <!-- ── type_body_lg — Alert/detail body text (17sp Regular) ────────── -->
+    <style name="Whis.TextAppearance.BodyLarge" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/whis_text_hi</item>
+    </style>
+
+    <!-- ── type_body — List item titles (16sp Regular) ─────────────────── -->
+    <style name="Whis.TextAppearance.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/whis_text_hi</item>
+    </style>
+
+    <!-- ── type_caption — Metadata/timestamps (13sp Regular) ── -->
+    <style name="Whis.TextAppearance.Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/outfit</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/whis_text_mid</item>
+    </style>
+
+</resources>

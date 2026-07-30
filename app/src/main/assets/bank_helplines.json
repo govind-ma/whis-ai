@@ -1,0 +1,16 @@
+{
+  "banks": [
+    {"name": "SBI", "helpline": "1800-11-2211"},
+    {"name": "HDFC", "helpline": "1800-258-6161"},
+    {"name": "ICICI", "helpline": "1800-1080"},
+    {"name": "Axis", "helpline": "1800-103-5577"},
+    {"name": "Kotak", "helpline": "1800-209-0000"},
+    {"name": "Yes Bank", "helpline": "1800-1200"},
+    {"name": "PNB", "helpline": "1800-180-2222"},
+    {"name": "BOB", "helpline": "1800-5700"},
+    {"name": "Canara", "helpline": "1800-425-0018"},
+    {"name": "Union", "helpline": "1800-222-244"},
+    {"name": "IDFC", "helpline": "1800-419-4332"},
+    {"name": "Default", "helpline": "Debit card ke peeche helpline number dekho"}
+  ]
+}

@@ -1,0 +1,170 @@
+package com.whis.app.ui.components;
+
+import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.whis.app.R;
+import com.whis.app.core.WhisVerdict;
+
+/**
+ * Shared list-row component — icon + title + subtitle + optional {@link RiskTag}
+ * (UI_PLAN.md §3.1).
+ * <p>
+ * Minimum 56dp tall ({@code whis_list_row_min_height}). No text truncation or
+ * ellipsis on any risk-relevant text — the row wraps to accommodate full content
+ * per UI_PLAN.md §2.1.
+ * <p>
+ * Usage:
+ * <pre>{@code
+ * WhisListRow row = new WhisListRow(context);
+ * row.setIcon(R.drawable.ic_call);
+ * row.setTitle("Unknown Caller");
+ * row.setSubtitle("+91 98765 43210 · 2 min ago");
+ * row.setVerdict(WhisVerdict.SUSPICIOUS);
+ * container.addView(row);
+ * }</pre>
+ */
+public class WhisListRow extends LinearLayout {
+
+    private ImageView iconView;
+    private TextView titleView;
+    private TextView subtitleView;
+    private RiskTag riskTag;
+
+    public WhisListRow(@NonNull Context context) {
+        super(context);
+        init(context);
+    }
+
+    public WhisListRow(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public WhisListRow(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER_VERTICAL);
+        setMinimumHeight(context.getResources().getDimensionPixelSize(R.dimen.whis_list_row_min_height));
+
+        int itemSpacing = context.getResources().getDimensionPixelSize(R.dimen.whis_spacing_item);
+        int cardPadding = context.getResources().getDimensionPixelSize(R.dimen.whis_spacing_card_padding);
+        setPadding(cardPadding, itemSpacing, cardPadding, itemSpacing);
+
+        // ── Icon with tinted circle background ───────────────────────────
+        int iconContainerSize = dpToPx(context, 40);
+        FrameLayout iconContainer = new FrameLayout(context);
+        iconContainer.setLayoutParams(new LayoutParams(iconContainerSize, iconContainerSize));
+
+        // Default tint circle: whis_unknown gray at 15% opacity
+        int defaultBgColor = context.getResources().getColor(R.color.whis_unknown, context.getTheme());
+        GradientDrawable iconBg = new GradientDrawable();
+        iconBg.setShape(GradientDrawable.OVAL);
+        iconBg.setColor((38 << 24) | (defaultBgColor & 0x00FFFFFF)); // 15% alpha
+        iconContainer.setBackground(iconBg);
+
+        iconView = new ImageView(context);
+        int iconSize = dpToPx(context, 22);
+        FrameLayout.LayoutParams iconLP = new FrameLayout.LayoutParams(iconSize, iconSize);
+        iconLP.gravity = Gravity.CENTER;
+        iconView.setLayoutParams(iconLP);
+        iconView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        iconContainer.addView(iconView);
+
+        LayoutParams containerParams = new LayoutParams(iconContainerSize, iconContainerSize);
+        containerParams.setMarginEnd(itemSpacing);
+        iconContainer.setLayoutParams(containerParams);
+        addView(iconContainer);
+
+        // ── Text column (title + subtitle, no truncation) ────────────────
+        LinearLayout textColumn = new LinearLayout(context);
+        textColumn.setOrientation(VERTICAL);
+        LayoutParams textParams = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        textColumn.setLayoutParams(textParams);
+
+        titleView = new TextView(context);
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16); // type_body
+        titleView.setTextColor(context.getResources().getColor(R.color.whis_text_hi, context.getTheme()));
+        // No ellipsis, no maxLines — risk-relevant text must never be truncated
+        titleView.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textColumn.addView(titleView);
+
+        subtitleView = new TextView(context);
+        subtitleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13); // type_caption
+        subtitleView.setTextColor(context.getResources().getColor(R.color.whis_text_mid, context.getTheme()));
+        subtitleView.setLayoutParams(new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textColumn.addView(subtitleView);
+
+        addView(textColumn);
+
+        // ── RiskTag (optional, hidden by default) ────────────────────────
+        riskTag = new RiskTag(context);
+        LayoutParams tagParams = new LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tagParams.setMarginStart(itemSpacing);
+        riskTag.setLayoutParams(tagParams);
+        riskTag.setVisibility(GONE);
+        addView(riskTag);
+    }
+
+    /** Set the leading icon drawable resource. */
+    public void setIcon(@DrawableRes int resId) {
+        iconView.setImageResource(resId);
+        iconView.setVisibility(VISIBLE);
+    }
+
+    /** Hide the icon (e.g. for rows that don't need one). */
+    public void hideIcon() {
+        iconView.setVisibility(GONE);
+    }
+
+    /** Set the title text (no truncation — wraps fully). */
+    public void setTitle(@NonNull String text) {
+        titleView.setText(text);
+    }
+
+    /** Set the subtitle text (no truncation — wraps fully). */
+    public void setSubtitle(@NonNull String text) {
+        subtitleView.setText(text);
+        subtitleView.setVisibility(VISIBLE);
+    }
+
+    /** Hide the subtitle row. */
+    public void hideSubtitle() {
+        subtitleView.setVisibility(GONE);
+    }
+
+    /**
+     * Show a {@link RiskTag} for the given verdict. Pass {@code null} to hide.
+     */
+    public void setVerdict(@Nullable WhisVerdict verdict) {
+        if (verdict == null) {
+            riskTag.setVisibility(GONE);
+        } else {
+            riskTag.setVerdict(verdict);
+            riskTag.setVisibility(VISIBLE);
+        }
+    }
+
+    private static int dpToPx(Context context, float dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density + 0.5f);
+    }
+}

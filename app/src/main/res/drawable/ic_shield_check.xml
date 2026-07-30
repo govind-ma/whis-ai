@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shield with checkmark — used in empty state views -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Shield body -->
+    <path
+        android:fillColor="#41C85A"
+        android:pathData="M12,1L3,5v6c0,5.55,3.84,10.74,9,12c5.16,-1.26,9,-6.45,9,-12V5L12,1z" />
+
+    <!-- Checkmark (white) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M10,14.17L7.83,12l-1.42,1.41L10,17l6,-6,-1.41,-1.41L10,14.17z" />
+</vector>

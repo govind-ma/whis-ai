@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.whis.app.ui.components.StatusCard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_learn_root"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Hero Thumbnail Box (Shared Element target) -->
+        <FrameLayout
+            android:id="@+id/hero_thumbnail_container"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/bg_search_input"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_carousel_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DIGITAL ARREST"
+                android:textColor="@color/whis_trusted"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_carousel_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|top"
+                android:text="Tap to Read"
+                android:textColor="@color/whis_text_mid"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_carousel_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Fake Police &amp; CBI Video Call"
+                android:textColor="@color/whis_text_hi"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end" />
+        </FrameLayout>
+
+        <!-- Summary -->
+        <TextView
+            android:id="@+id/tv_carousel_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Scammers impersonate police or TRAI officers..."
+            android:textColor="@color/whis_text_mid"
+            android:textSize="12sp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- Thin green progress bar at bottom (0-100% fill) -->
+        <ProgressBar
+            android:id="@+id/pb_card_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/bg_lesson_progress" />
+
+    </LinearLayout>
+
+</com.whis.app.ui.components.StatusCard>

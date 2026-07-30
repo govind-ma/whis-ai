@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom sheet layout for AlertRenderer — exactly 2 buttons (UI_PLAN.md §1.1 / §2.1) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+    android:paddingTop="@dimen/whis_spacing_section"
+    android:paddingBottom="@dimen/whis_spacing_section"
+    android:background="@color/whis_surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <com.whis.app.ui.components.RiskTag
+            android:id="@+id/alert_risk_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/alert_score"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            style="@style/Whis.TextAppearance.Caption"
+            android:textColor="@color/whis_text_mid" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/alert_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/whis_spacing_item"
+        style="@style/Whis.TextAppearance.H1" />
+
+    <TextView
+        android:id="@+id/alert_copy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/whis_spacing_base"
+        style="@style/Whis.TextAppearance.BodyLarge" />
+
+    <!-- Exactly two action buttons (UI_PLAN.md §1.1 / §2.1) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/whis_spacing_section"
+        android:orientation="vertical">
+
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_alert_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Action" />
+
+        <Button
+            android:id="@+id/btn_alert_secondary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="Ask Whis AI"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:textColor="@color/whis_text_hi"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+
+</LinearLayout>

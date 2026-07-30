@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Whis Design Token System — Dimensions
+  Source of truth: UI_PLAN.md §2.1 Spacing and Touch targets
+  8dp base grid throughout.
+-->
+<resources>
+
+    <!-- ── Spacing (8dp base grid) ────────────────────────────────────── -->
+    <dimen name="whis_spacing_base">8dp</dimen>
+    <dimen name="whis_spacing_item">12dp</dimen>       <!-- Inter-item spacing -->
+    <dimen name="whis_spacing_card_padding">16dp</dimen><!-- Card internal padding -->
+    <dimen name="whis_spacing_screen_margin">20dp</dimen><!-- Screen edge margin -->
+    <dimen name="whis_spacing_section">24dp</dimen>     <!-- Between sections -->
+
+    <!-- ── Touch targets (§1.7 / §2.1) ────────────────────────────────── -->
+    <dimen name="whis_touch_floor">48dp</dimen>         <!-- Absolute minimum per Google/WCAG -->
+    <dimen name="whis_touch_standard">56dp</dimen>      <!-- Individual touch targets (buttons, rows) — NOT for bar height -->
+    <dimen name="whis_list_row_min_height">56dp</dimen> <!-- List row minimum height -->
+
+    <!-- ── Navigation bar (§2.4) ─────────────────────────────────────── -->
+    <!-- Standard Material bottom nav height: tall enough for icon + label stack -->
+    <dimen name="whis_nav_bar_height">80dp</dimen>
+
+</resources>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Whis Knowledge Book / Learn Awareness Module Layout (LEARN_PLAN.md)
+  Includes search-by-problem input, universal 1930 reporting card, and dynamic chapter list.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="96dp"> <!-- Extra padding for floating AI bubble -->
+
+        <!-- Screen Title -->
+        <TextView
+            android:id="@+id/tv_learn_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Whis Knowledge Book"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:id="@+id/tv_learn_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Every scam has a pattern. Once you see the pattern, it stops working on you."
+            style="@style/Whis.TextAppearance.Caption" />
+
+        <!-- 1. Universal Reporting Card (1930 Helpline) -->
+        <com.whis.app.ui.components.StatusCard
+            android:id="@+id/card_1930_helpline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🚨 National Cyber Helpline: 1930"
+                        style="@style/Whis.TextAppearance.H2"
+                        android:textColor="@color/whis_trusted" />
+
+                    <Button
+                        android:id="@+id/btn_call_1930_banner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="DIAL 1930"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/whis_bg"
+                        android:backgroundTint="@color/whis_trusted"
+                        android:paddingHorizontal="12dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_helpline_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="If money moved, call 1930 immediately. Banks have the best chance to freeze destination accounts within the first hours."
+                    style="@style/Whis.TextAppearance.Caption"
+                    android:textColor="@color/whis_text_mid" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Official Portal: cybercrime.gov.in"
+                    style="@style/Whis.TextAppearance.Caption"
+                    android:textColor="@color/whis_trusted" />
+
+            </LinearLayout>
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 2. Search-by-Problem Bar -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <EditText
+                android:id="@+id/et_search_learn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_search_input"
+                android:hint="Search by problem (e.g. police call, AnyDesk, QR PIN)..."
+                android:textColorHint="@color/whis_text_mid"
+                android:textColor="@color/whis_text_hi"
+                android:textSize="14sp"
+                android:paddingStart="16dp"
+                android:paddingEnd="40dp"
+                android:singleLine="true"
+                android:imeOptions="actionSearch" />
+
+            <ImageView
+                android:id="@+id/btn_clear_search"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="12dp"
+                android:src="@android:drawable/ic_menu_search"
+                app:tint="@color/whis_text_mid"
+                android:contentDescription="Search Icon" />
+
+        </FrameLayout>
+
+        <!-- 3. Overall Completion Progress Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_progress_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Your Awareness Progress"
+                    style="@style/Whis.TextAppearance.Caption"
+                    android:textStyle="bold"
+                    android:textColor="@color/whis_text_hi" />
+
+                <TextView
+                    android:id="@+id/tv_progress_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 of 5 Completed"
+                    style="@style/Whis.TextAppearance.Caption"
+                    android:textColor="@color/whis_trusted"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_overall_progress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="6dp"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_lesson_progress" />
+
+        </LinearLayout>
+
+        <!-- No Search Results Label -->
+        <TextView
+            android:id="@+id/tv_no_results"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="No chapters match your search. Try searching for 'police', 'QR', 'app', 'loan', or 'parcel'."
+            style="@style/Whis.TextAppearance.Body"
+            android:textColor="@color/whis_text_mid"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <!-- 4. Dynamic Chapters Horizontal Carousel -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_learn_carousel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:clipToPadding="false"
+            android:paddingHorizontal="40dp"
+            android:orientation="horizontal" />
+
+        <!-- Vertical fallback list for search results -->
+        <LinearLayout
+            android:id="@+id/container_lessons_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:orientation="vertical"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

@@ -10,5 +10,14 @@
 # Keep Firebase model classes
 -keep class com.google.firebase.** { *; }
 
-# Keep Whis core contracts
+# Keep Whis core contracts & API models
 -keep class com.whis.app.core.** { *; }
+-keep class com.whis.app.agent.api.** { *; }
+-keep class com.whis.app.agent.model.** { *; }
+-keep class com.whis.app.msg.model.** { *; }
+-keep class com.whis.app.call.** { *; }
+
+# Keep OkHttp & JSON parsing
+-keep class okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**

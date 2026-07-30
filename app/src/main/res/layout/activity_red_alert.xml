@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whis_high_risk">
+
+    <!-- Red Vignette Pulse Overlay View -->
+    <View
+        android:id="@+id/vignette_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_red_vignette"
+        android:alpha="0.2" />
+
+    <!-- Full Screen Red Flash Overlay View -->
+    <View
+        android:id="@+id/flash_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF0000"
+        android:alpha="0.3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <!-- Title revealed letter-by-letter -->
+        <TextView
+            android:id="@+id/tv_red_alert_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/whis_text_hi"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_red_alert_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Ye 3 kaam abhi तुरंत karein:"
+            android:textColor="@color/whis_text_hi"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <!-- Button 1: Call 1930 -->
+        <Button
+            android:id="@+id/btn_call_1930"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/whis_text_hi"
+            android:text="1. DIAL 1930 (CYBER CRIME)"
+            android:textColor="@color/whis_high_risk"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Button 2: Call Bank -->
+        <Button
+            android:id="@+id/btn_call_bank"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/whis_text_hi"
+            android:text="2. CALL BANK HELPLINE"
+            android:textColor="@color/whis_high_risk"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Button 3: Alert Family -->
+        <Button
+            android:id="@+id/btn_alert_family"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/whis_text_hi"
+            android:text="3. SMS EMERGENCY CONTACT"
+            android:textColor="@color/whis_high_risk"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_dismiss_red_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Main theek hoon, wapas jaao"
+            android:textColor="@color/whis_text_hi"
+            android:backgroundTint="@color/whis_overlay" />
+
+    </LinearLayout>
+</FrameLayout>

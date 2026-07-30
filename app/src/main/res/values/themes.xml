@@ -1,5 +1,33 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Whis" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- UI module will define the full design system here -->
+
+        <!-- Brand green -->
+        <item name="colorPrimary">@color/whis_trusted</item>
+        <item name="colorPrimaryVariant">@color/whis_green_dark</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/whis_likely_safe</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+
+        <!-- Surface and background -->
+        <item name="colorSurface">@color/whis_surface</item>
+        <item name="colorOnSurface">@color/whis_text_hi</item>
+        <item name="android:colorBackground">@color/whis_bg</item>
+        <item name="android:windowBackground">@color/whis_bg</item>
+
+        <!-- Text on backgrounds -->
+        <item name="android:textColorPrimary">@color/whis_text_hi</item>
+        <item name="android:textColorSecondary">@color/whis_text_mid</item>
+        <item name="android:textColorHint">@color/whis_text_mid</item>
+
+        <!-- Status bar: light bg = dark status bar icons -->
+        <item name="android:statusBarColor">@color/whis_bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/whis_surface_elevated</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+
     </style>
 </resources>

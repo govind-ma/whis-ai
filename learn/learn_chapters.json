@@ -1,0 +1,98 @@
+{
+  "bookTitle": "Whis Knowledge Book",
+  "subtitle": "Every scam has a pattern. Once you see the pattern, it stops working on you.",
+  "universalReporting": {
+    "helpline": "1930",
+    "portal": "cybercrime.gov.in",
+    "note": "These are the correct, current channels for every scam in this book. Call 1930 as fast as possible if money has already moved — banks have the best chance of freezing the receiving account within the first hours."
+  },
+  "chapters": [
+    {
+      "chapterId": "digital_arrest",
+      "title": "The Fake Police Video Call",
+      "shortName": "Digital Arrest",
+      "searchTriggers": ["police video call", "CBI called me", "digital arrest", "arrest warrant", "customs officer video call", "ED called", "TRAI said my number is blocked", "I am under investigation"],
+      "whatHappens": "You get a call or video call from someone claiming to be police, CBI, ED, or a telecom official. They say your name is linked to a serious crime — drug trafficking, money laundering, an illegal parcel. Sometimes they appear on video wearing a uniform, sitting in front of what looks like a police office, with government symbols behind them. They tell you that you are now under 'digital arrest' and must stay on the call, not tell anyone, and pay money or share your bank details to 'prove you are innocent' or 'avoid arrest.'",
+      "whyItWorks": "This works by combining two pressures at once: fear of arrest, and isolation — they specifically tell you not to contact anyone, which cuts you off from the one thing that would break the spell, a second opinion. The uniform and official-looking setting make it feel real even though it is staged. Anyone can be caught off guard by this, especially if the call comes unexpectedly and you have no time to think.",
+      "doRightNow": [
+        "Hang up. There is no such thing as a 'digital arrest' under Indian law — no agency can arrest you over a phone or video call, or ask for money to avoid arrest.",
+        "Do not share your OTP, bank details, or make any payment, no matter how official they sound.",
+        "If you already made a payment, call 1930 immediately — the first hours matter most for getting money frozen before it disappears."
+      ],
+      "howWhisHelps": "Whis flags calls from numbers reported by other users for this pattern, and the alert will show you plainly why a call looks suspicious before you decide whether to trust it.",
+      "crossReference": ["courier_customs"],
+      "sourceConfidence": "high — TRAI public advisory, MHA statement, multiple independent case reports, legal guidance sources"
+    },
+    {
+      "chapterId": "qr_code_upi",
+      "title": "The QR Code That Empties Your Account",
+      "shortName": "QR / UPI Scam",
+      "searchTriggers": ["scan QR to receive money", "buyer sent me a QR code", "scan to get refund", "UPI money gone", "scan to collect prize", "QR code at shop looked odd"],
+      "whatHappens": "Someone — a buyer on an online marketplace, a 'customer support' caller, a message claiming to be your bank — asks you to scan a QR code or enter your UPI PIN to 'receive' money, a refund, or a prize. You scan it expecting money to arrive. Instead, money leaves your account.",
+      "whyItWorks": "This works because of one simple, widespread misunderstanding: many people believe scanning a QR code or entering a PIN can be part of receiving money. It never is. On UPI, receiving money needs nothing from you at all — it simply arrives. Scanning a code or entering a PIN is only ever done to send money. Because the request sounds like part of getting paid, people don't pause to question it.",
+      "doRightNow": [
+        "Remember the rule: you never need to scan anything or enter your PIN to receive money on UPI. If someone asks you to, it is always a scam, no exceptions.",
+        "Do not scan the code or enter your PIN. Close the conversation.",
+        "If you already scanned and lost money, screenshot everything — the message, the caller's number, any transaction ID — then call 1930 and your bank's fraud line immediately."
+      ],
+      "howWhisHelps": "Whis flags SMS messages containing suspicious payment links, and can warn you before you open a message asking you to 'scan to receive' anything.",
+      "crossReference": [],
+      "sourceConfidence": "high — confirmed independently across many current sources, consistent, unambiguous mechanism"
+    },
+    {
+      "chapterId": "remote_access_app",
+      "title": "The \"Install This App\" Call",
+      "shortName": "AnyDesk / Remote Access",
+      "searchTriggers": ["asked me to install AnyDesk", "bank asked me to download an app", "TeamViewer scam", "9 digit code shared", "KYC officer asked for app install", "someone can see my screen"],
+      "whatHappens": "Someone calling as 'bank support' or a 'KYC officer' asks you to download an app like AnyDesk or TeamViewer to 'fix' a problem or 'complete verification.' The app shows you a 9-digit code. If you share that code with them, they can now see and control your phone, including your banking apps and any OTP that arrives.",
+      "whyItWorks": "This works because the app itself is real and harmless on its own — it's a legitimate tool many companies use for genuine tech support. The scam is entirely in who's asking and why. A newer version of this scam now often follows a fake KYC-link message: you click a link, enter details on a fake page, and minutes later get a call asking you to install the app 'to finish the process' — making it feel connected and official when it's actually the second half of the same scam.",
+      "doRightNow": [
+        "Never share a remote-access code with anyone who called you, no matter what they claim to represent.",
+        "If you've already installed the app and shared the code, put your phone in airplane mode or turn it off immediately — these apps need an active connection to keep control.",
+        "Once safely offline, uninstall the app, then call your bank's fraud line and 1930 before reconnecting to the internet."
+      ],
+      "howWhisHelps": "Whis can warn you if a call is followed by an SMS containing a payment or app-download link, since that combination is a strong signal of this exact pattern.",
+      "crossReference": [],
+      "sourceConfidence": "high — RBI's own official warning on this mechanism, multiple case reports across cities, current 2026 KYC-chain variant confirmed by independent source"
+    },
+    {
+      "chapterId": "courier_customs",
+      "title": "\"Your Parcel Is Held\"",
+      "shortName": "Courier / Customs Scam",
+      "searchTriggers": ["parcel held at customs", "courier said pay a fee", "package stuck", "customs duty payment", "delivery fee scam", "FedEx SMS asking for payment"],
+      "whatHappens": "A message or call claims a parcel addressed to you is stuck — at customs, with a courier company, or flagged for containing something illegal — and you must pay a small fee to release it. Sometimes this escalates into a full 'digital arrest' call claiming the parcel had drugs and you're now under investigation.",
+      "whyItWorks": "This works because receiving parcels is such a normal, frequent part of daily life that the message feels completely ordinary at first glance. The amount asked for is often small enough that people pay quickly rather than pause to verify — and by the time anything feels wrong, the payment is already made.",
+      "doRightNow": [
+        "Know this clearly: India's Customs department has stated it never contacts the public by phone, SMS, or email asking for duty payment to a private account.",
+        "Do not click any link or pay any fee from an unexpected courier message. Contact the courier company directly using their official number, not any number given in the message.",
+        "If you've already paid, contact the courier company immediately with your tracking number, and file a complaint at cybercrime.gov.in or call 1930 the same day — fast reporting has led to real, documented refunds."
+      ],
+      "howWhisHelps": "Whis checks sender IDs against known courier-impersonation patterns and flags messages requesting urgent payment for a 'held' parcel.",
+      "crossReference": ["digital_arrest"],
+      "sourceConfidence": "high — official CBIC statement, real documented recovery case, multiple independent reports"
+    },
+    {
+      "chapterId": "fake_loan_app",
+      "title": "The Instant Loan App",
+      "shortName": "Fake Loan Apps",
+      "searchTriggers": ["instant loan app", "loan app asking for contacts", "app threatened my family", "loan app blackmail", "borrowed money now owe double", "loan app not RBI registered"],
+      "whatHappens": "An ad or WhatsApp message offers an instant loan with no paperwork. The app asks for access to your contacts, photos, and messages before giving any money — and once installed, may either give a small amount and demand it back with huge added fees, or use your contact list and photos to threaten and shame you into paying far more than you borrowed.",
+      "whyItWorks": "This works by targeting people at a moment of real financial need, when a fast 'yes' feels like relief rather than a risk. The professional-looking app design and quick approval feel like proof of legitimacy, when in reality none of that is checked or regulated at all.",
+      "doRightNow": [
+        "Before installing any loan app, check whether its lending partner appears on the RBI's official NBFC registry — if it doesn't, do not proceed.",
+        "Never grant a loan app access to your contacts, photos, or SMS. A genuine lender never needs this.",
+        "If you're already being threatened, tell your close contacts in advance that your data was compromised and any messages from an unknown number should be ignored — this removes the scammer's main pressure point — then report to cybercrime.gov.in or 1930."
+      ],
+      "howWhisHelps": "Whis can flag SMS/WhatsApp messages containing loan-app APK links from unverified sources.",
+      "crossReference": [],
+      "sourceConfidence": "high — RBI/ED enforcement actions with real case numbers, multiple documented individual cases with specific figures"
+    }
+  ],
+  "pendingChapters": [
+    {
+      "chapterId": "investment_romance",
+      "title": "Investment & Companionship Scams",
+      "status": "NOT YET WRITTEN — needs its own dedicated research pass before content is added. Currently only loosely grounded (one case reference: elderly Hyderabad victims lost ₹3.2 crore to a fake crypto platform via Telegram/WhatsApp). Do not publish a thin chapter here just to complete the set."
+    }
+  ]
+}

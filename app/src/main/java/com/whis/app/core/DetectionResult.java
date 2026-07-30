@@ -1,16 +1,13 @@
 package com.whis.app.core;
 
 /**
- * The shared detection-result interface — MASTER_PLAN.md Section 3.1.
+ * The shared detection-result interface — MASTER_PLAN.md Section 3.1 & Section 7.1.
  * <p>
  * Implemented by:
  * <ul>
  *   <li>{@code WhisCallAnalysis} (Call module, {@code com.whis.app.call})</li>
  *   <li>{@code MsgDetectionResult} (MSG module, {@code com.whis.app.msg})</li>
  * </ul>
- * <p>
- * This is a locked contract. Do NOT add fields here without updating
- * MASTER_PLAN.md Section 3.1 and notifying all module owners.
  */
 public interface DetectionResult {
 
@@ -52,9 +49,6 @@ public interface DetectionResult {
      * <p>
      * Values include: {@code "CONTACT"}, {@code "DLT_REGISTERED"},
      * {@code "1600_SERIES"}, {@code "UNKNOWN_MOBILE"}, etc.
-     * <p>
-     * One field, shared across sources, per the established pattern
-     * of not proliferating a new field per source.
      *
      * @return non-null identifier type string
      */
@@ -66,4 +60,11 @@ public interface DetectionResult {
      * @return timestamp in milliseconds since epoch
      */
     long getTimestamp();
+
+    /**
+     * Indicates the underlying confidence source of this detection result (MASTER_PLAN.md §7.1).
+     *
+     * @return one of the {@link ConfidenceSource} enum values
+     */
+    ConfidenceSource getConfidenceSource();
 }

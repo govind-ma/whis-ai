@@ -48,4 +48,8 @@ public class WhisConsentManager {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putBoolean(KEY_CONSENT_GIVEN, given).apply();
     }
+
+    public static void setConsentGiven(Context context, boolean given) {
+        saveConsent(context, given);
+    }
 }

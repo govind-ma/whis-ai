@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Outfit font family — closest free Google Font to Gilroy.
+  Geometric, rounded sans-serif. Clean and modern.
+  Downloaded via Android Downloadable Fonts API from Google Fonts.
+-->
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:fontProviderAuthority="com.google.android.gms.fonts"
+    app:fontProviderPackage="com.google.android.gms"
+    app:fontProviderQuery="Outfit"
+    app:fontProviderCerts="@array/com_google_android_gms_fonts_certs">
+</font-family>

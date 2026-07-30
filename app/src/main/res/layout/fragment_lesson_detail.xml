@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chapter Detail Layout — Whis Knowledge Book (LEARN_PLAN.md §2.1)
+  Renders the 4-question scam awareness framework.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="48dp">
+
+        <!-- Progress bar -->
+        <ProgressBar
+            android:id="@+id/pb_lesson_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/bg_lesson_progress" />
+
+        <!-- Chapter Category / Tag Badge -->
+        <TextView
+            android:id="@+id/tv_chapter_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="SCAM MECHANICS"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_lesson_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="The Fake Police Video Call"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <!-- Emergency 1930 Helpline Banner -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🚨 Is this happening right now?"
+                        style="@style/Whis.TextAppearance.Caption"
+                        android:textStyle="bold"
+                        android:textColor="@color/whis_text_hi" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Call 1930 immediately to freeze accounts."
+                        style="@style/Whis.TextAppearance.Caption"
+                        android:textColor="@color/whis_text_mid" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_detail_call_1930"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="DIAL 1930"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/whis_bg"
+                    android:backgroundTint="@color/whis_trusted"
+                    android:paddingHorizontal="12dp" />
+
+            </LinearLayout>
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Q1: What happens? -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="1. WHAT HAPPENS?"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tv_what_happens"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Whis.TextAppearance.BodyLarge"
+                android:textColor="@color/whis_text_hi" />
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Q2: Why does this work, even on careful people? -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="2. WHY DOES THIS WORK, EVEN ON CAREFUL PEOPLE?"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tv_why_it_works"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Whis.TextAppearance.BodyLarge"
+                android:textColor="@color/whis_text_hi" />
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Q3: What do I do right now if this is happening to me? -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="3. WHAT DO I DO RIGHT NOW IF THIS IS HAPPENING TO ME?"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <LinearLayout
+            android:id="@+id/container_do_right_now"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical" />
+
+        <!-- Q4: What does Whis do about this automatically? -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="4. WHAT DOES WHIS DO ABOUT THIS AUTOMATICALLY?"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_how_whis_helps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Whis.TextAppearance.BodyLarge"
+                    android:textColor="@color/whis_text_hi" />
+
+            </LinearLayout>
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="24dp" />
+
+        <!-- Mark as Completed button -->
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_complete_lesson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mark Chapter as Completed ✓" />
+
+        <!-- Back to Knowledge Book -->
+        <Button
+            android:id="@+id/btn_lesson_back"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="Back to Whis Knowledge Book"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:textColor="@color/whis_text_mid"
+            android:background="@android:color/transparent" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Whis Design Token System — Light Mode Token Palette
+  Clean, high-contrast light mode for max legibility & accessibility.
+-->
+<resources>
+
+    <!-- ── Primary Light System ─────────────────────────────────────────── -->
+    <color name="whis_bg">#F8FAFC</color>             <!-- Clean light base background -->
+    <color name="whis_surface">#FFFFFF</color>        <!-- Pure white card surface -->
+    <color name="whis_surface_elevated">#F1F5F9</color> <!-- Light elevated panel surface -->
+
+    <color name="whis_text_hi">#0F172A</color>        <!-- High-contrast dark text -->
+    <color name="whis_text_mid">#64748B</color>       <!-- Secondary slate text -->
+
+    <color name="whis_border">#E2E8F0</color>         <!-- Fine 1dp border / divider -->
+    <color name="whis_overlay">#0D000000</color>      <!-- Subtle hover / active tint -->
+
+    <!-- ── Semantic Accents ─────────────────────────────────────────────── -->
+    <color name="whis_trusted">#16A34A</color>        <!-- TRUSTED / Safe green -->
+    <color name="whis_likely_safe">#22C55E</color>
+    <color name="whis_unknown">#64748B</color>
+    <color name="whis_suspicious">#D97706</color>     <!-- Amber warning -->
+    <color name="whis_high_risk">#DC2626</color>      <!-- Danger red -->
+
+    <!-- ── Translucent Accent Tints ────────────────────────────────────── -->
+    <color name="whis_trusted_tint">#1A16A34A</color>
+    <color name="whis_suspicious_tint">#1AD97706</color>
+    <color name="whis_high_risk_tint">#1ADC2626</color>
+    <color name="whis_unknown_tint">#1A64748B</color>
+
+    <color name="whis_green_dark">#15803D</color>
+
+</resources>

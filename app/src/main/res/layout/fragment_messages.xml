@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MessagesFragment layout — screened messages (UI_PLAN.md §2.4 / §3.5) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="@dimen/whis_spacing_section"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message Protection"
+            style="@style/Whis.TextAppearance.H1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Screened SMS alerts since protection was turned on"
+            style="@style/Whis.TextAppearance.Caption" />
+
+        <!-- Info Card explaining notification listener standard mode -->
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Real-time SMS Scam Protection Active"
+                    style="@style/Whis.TextAppearance.Body"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/whis_spacing_base"
+                    android:text="Whis screens incoming SMS notifications in real time to detect fraudulent links and payment demands before you open them."
+                    style="@style/Whis.TextAppearance.Caption" />
+
+            </LinearLayout>
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- Screened messages section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="Recent Screened Messages"
+            style="@style/Whis.TextAppearance.H2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_messages_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Empty state — shown when msgSamples list is empty -->
+        <include
+            layout="@layout/layout_empty_state"
+            android:id="@+id/messages_empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

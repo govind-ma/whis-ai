@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "URGENCY_THREAT",
+      "patterns": ["turant", "abhi", "immediately", "last chance", "account blocked", "band ho jayega", "arrested", "cyber cell", "cbi notice", "electricity disconnect", "power cut"],
+      "weight": 35,
+      "type": "SCAM"
+    },
+    {
+      "id": "CREDENTIAL_REQUEST",
+      "patterns": ["share otp", "enter pin", "give password", "share aadhaar", "verify upi pin", "share your pin"],
+      "weight": 40,
+      "type": "SCAM"
+    },
+    {
+      "id": "AUTHORITY_IMPERSONATION",
+      "patterns": ["rbi notice", "trai advisory", "income tax department", "npci notice", "customs officer", "cyber crime police"],
+      "weight": 30,
+      "type": "SCAM"
+    },
+    {
+      "id": "SHORTENED_URL",
+      "patterns": ["bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "shorturl.at"],
+      "weight": 35,
+      "type": "SCAM"
+    },
+    {
+      "id": "GENUINE_OTP_PATTERN",
+      "patterns": ["valid for", "expires in", "do not share", "use this otp"],
+      "weight": -25,
+      "type": "HAM"
+    },
+    {
+      "id": "GENUINE_BANK_ALERT",
+      "patterns": ["debited by rs", "credited with rs", "avail bal", "ac XXXXX"],
+      "weight": -20,
+      "type": "HAM"
+    }
+  ]
+}

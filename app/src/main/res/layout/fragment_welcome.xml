@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- WelcomeFragment — logo, one-line promise, no data collected (UI_PLAN.md §2.2 step 1) -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/whis_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/whis_spacing_screen_margin"
+        android:paddingTop="80dp"
+        android:paddingBottom="@dimen/whis_spacing_section">
+
+        <!-- Logo placeholder -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Whis"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/whis_trusted" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_item"
+            android:text="Your personal fraud protection officer."
+            style="@style/Whis.TextAppearance.BodyLarge"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.whis.app.ui.components.PrimaryButton
+            android:id="@+id/btn_get_started"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Started" />
+
+    </LinearLayout>
+</ScrollView>
