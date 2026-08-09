@@ -50,8 +50,24 @@ public class WhisNotificationListenerService extends NotificationListenerService
         CharSequence titleCS = extras.getCharSequence("android.title");
         CharSequence textCS = extras.getCharSequence("android.text");
 
+        StringBuilder bodyBuilder = new StringBuilder();
+        if (textCS != null && !textCS.toString().trim().isEmpty()) {
+            bodyBuilder.append(textCS.toString().trim());
+        }
+
+        // Parse multi-line notifications (WhatsApp group chats, aggregated lines)
+        CharSequence[] textLines = extras.getCharSequenceArray("android.textLines");
+        if (textLines != null && textLines.length > 0) {
+            for (CharSequence line : textLines) {
+                if (line != null && !line.toString().trim().isEmpty()) {
+                    if (bodyBuilder.length() > 0) bodyBuilder.append(" ");
+                    bodyBuilder.append(line.toString().trim());
+                }
+            }
+        }
+
         String title = titleCS != null ? titleCS.toString() : "";
-        String text = textCS != null ? textCS.toString() : "";
+        String text = bodyBuilder.toString();
 
         if (text.trim().isEmpty()) return;
 

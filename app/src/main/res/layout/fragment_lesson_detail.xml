@@ -159,6 +159,19 @@
             android:layout_marginTop="6dp"
             android:orientation="vertical" />
 
+        <!-- Audio Summary Listen Button (Text-to-Speech) -->
+        <Button
+            android:id="@+id/btn_audio_summary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="🔊 Listen to Hinglish Audio Summary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@color/whis_trusted"
+            android:backgroundTint="#152619" />
+
         <!-- Q4: What does Whis do about this automatically? -->
         <TextView
             android:layout_width="wrap_content"
@@ -186,6 +199,28 @@
                     android:textColor="@color/whis_text_hi" />
 
             </LinearLayout>
+
+        </com.whis.app.ui.components.StatusCard>
+
+        <!-- 5. Interactive Scam Quiz / Awareness Challenge -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="5. QUICK SCAM QUIZ (+50 XP)"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="@color/whis_trusted" />
+
+        <com.whis.app.ui.components.StatusCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+
+            <LinearLayout
+                android:id="@+id/container_quiz"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
         </com.whis.app.ui.components.StatusCard>
 

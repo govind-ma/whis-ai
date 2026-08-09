@@ -140,20 +140,103 @@
 
         </FrameLayout>
 
-        <!-- 3. Activity feed header -->
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- 3. Activity feed header + Export Cybercrime Report button -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/whis_spacing_section"
-            android:text="Recent Activity Feed"
-            style="@style/Whis.TextAppearance.H2" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Recent Activity Feed"
+                style="@style/Whis.TextAppearance.H2" />
+
+            <Button
+                android:id="@+id/btn_export_report"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="📄 Export Report"
+                android:textSize="11sp"
+                android:textAllCaps="false"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/whis_trusted"
+                android:backgroundTint="#152619" />
+
+        </LinearLayout>
+
+        <!-- Filter Chips (All, Calls, Messages, Blocked) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/chip_filter_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="All"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/whis_bg"
+                    android:backgroundTint="@color/whis_trusted"
+                    android:layout_marginEnd="6dp" />
+
+                <Button
+                    android:id="@+id/chip_filter_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Calls"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/whis_text_hi"
+                    android:backgroundTint="#222226"
+                    android:layout_marginEnd="6dp" />
+
+                <Button
+                    android:id="@+id/chip_filter_messages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Messages"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/whis_text_hi"
+                    android:backgroundTint="#222226"
+                    android:layout_marginEnd="6dp" />
+
+                <Button
+                    android:id="@+id/chip_filter_blocked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Blocked"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    android:paddingHorizontal="12dp"
+                    android:textColor="@color/whis_text_hi"
+                    android:backgroundTint="#222226" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
 
         <!-- 4. Activity feed RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_activity_feed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:layout_marginTop="8dp"
             android:nestedScrollingEnabled="false" />
 
         <!-- 5. Empty state — shown when no AI-analysed activity yet -->

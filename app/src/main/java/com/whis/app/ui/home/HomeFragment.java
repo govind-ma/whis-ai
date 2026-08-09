@@ -139,6 +139,25 @@ public class HomeFragment extends Fragment {
         adapterHolder[0] = adapter;
         rvFeed.setAdapter(adapter);
 
+        // ── Filter Chips ──────────────────────────────────────────────────
+        android.widget.Button chipAll = view.findViewById(R.id.chip_filter_all);
+        android.widget.Button chipCalls = view.findViewById(R.id.chip_filter_calls);
+        android.widget.Button chipMessages = view.findViewById(R.id.chip_filter_messages);
+        android.widget.Button chipBlocked = view.findViewById(R.id.chip_filter_blocked);
+
+        if (chipAll != null && chipCalls != null && chipMessages != null && chipBlocked != null) {
+            chipAll.setOnClickListener(v -> filterFeed(feedItems, adapter, "ALL"));
+            chipCalls.setOnClickListener(v -> filterFeed(feedItems, adapter, "CALLS"));
+            chipMessages.setOnClickListener(v -> filterFeed(feedItems, adapter, "MESSAGES"));
+            chipBlocked.setOnClickListener(v -> filterFeed(feedItems, adapter, "BLOCKED"));
+        }
+
+        // ── Export Cybercrime Report Button ────────────────────────────────
+        View btnExport = view.findViewById(R.id.btn_export_report);
+        if (btnExport != null) {
+            btnExport.setOnClickListener(v -> exportCybercrimeReport(feedItems));
+        }
+
         // 4. Empty state — visible until real detections arrive
         View emptyState = view.findViewById(R.id.home_empty_state);
         View emptyIcon  = emptyState != null ? emptyState.findViewById(R.id.empty_state_icon) : null;
@@ -188,5 +207,61 @@ public class HomeFragment extends Fragment {
         pulse.start();
 
         target.setTag(R.id.home_protection_ring, pulse);
+    }
+
+    private void filterFeed(List<DetectionResult> allItems, ActivityFeedAdapter adapter, String filter) {
+        List<DetectionResult> filtered = new java.util.ArrayList<>();
+        for (DetectionResult item : allItems) {
+            if ("ALL".equals(filter)) {
+                filtered.add(item);
+            } else if ("CALLS".equals(filter) && item.getIdentifierType().contains("CALL")) {
+                filtered.add(item);
+            } else if ("MESSAGES".equals(filter) && !item.getIdentifierType().contains("CALL")) {
+                filtered.add(item);
+            } else if ("BLOCKED".equals(filter) && item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
+                filtered.add(item);
+            }
+        }
+        ActivityFeedAdapter newAdapter = new ActivityFeedAdapter(filtered, (item, position) -> {
+            com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, null);
+        });
+        RecyclerView rvFeed = getView() != null ? getView().findViewById(R.id.rv_activity_feed) : null;
+        if (rvFeed != null) rvFeed.setAdapter(newAdapter);
+        android.widget.Toast.makeText(requireContext(), "Filter applied: " + filter, android.widget.Toast.LENGTH_SHORT).show();
+    }
+
+    private void exportCybercrimeReport(List<DetectionResult> items) {
+        StringBuilder report = new StringBuilder();
+        report.append("========================================\n");
+        report.append("  WHIS AI — CYBERCRIME THREAT REPORT\n");
+        report.append("  Generated: ").append(new java.util.Date()).append("\n");
+        report.append("========================================\n\n");
+
+        int count = 0;
+        for (DetectionResult item : items) {
+            if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK || item.getVerdict() == com.whis.app.core.WhisVerdict.SUSPICIOUS) {
+                count++;
+                report.append("INCIDENT #").append(count).append("\n");
+                report.append("• Date/Time: ").append(new java.util.Date(item.getTimestamp())).append("\n");
+                report.append("• Risk Level: ").append(item.getVerdict().name()).append("\n");
+                report.append("• Category: ").append(item.getIdentifierType()).append("\n");
+                report.append("• Details: ").append(item.getReasonText() != null ? item.getReasonText() : "N/A").append("\n");
+                report.append("----------------------------------------\n");
+            }
+        }
+
+        if (count == 0) {
+            report.append("No active cyber fraud threats recorded.\n");
+        }
+
+        report.append("\nReporting Channels:\n");
+        report.append("• National Helpline: 1930\n");
+        report.append("• Cybercrime Portal: cybercrime.gov.in\n");
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "WHIS AI Cybercrime Threat Report");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, report.toString());
+        startActivity(Intent.createChooser(shareIntent, "Share Cybercrime Report"));
     }
 }

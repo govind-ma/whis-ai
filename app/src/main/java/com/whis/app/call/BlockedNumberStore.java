@@ -61,10 +61,20 @@ public class BlockedNumberStore {
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    /** Strips spaces, dashes, and leading country code variations for comparison. */
-    static String normalize(String number) {
+    /** Strips spaces, dashes, country code (+91, 91, 0) for 10-digit core comparison. */
+    public static String normalize(String number) {
         if (number == null) return "";
-        return number.replaceAll("[\\s\\-()]", "");
+        String digits = number.replaceAll("[^0-9]", "");
+        if (digits.startsWith("91") && digits.length() == 12) {
+            return digits.substring(2);
+        }
+        if (digits.startsWith("0") && digits.length() == 11) {
+            return digits.substring(1);
+        }
+        if (digits.length() > 10) {
+            return digits.substring(digits.length() - 10);
+        }
+        return digits;
     }
 
     private static Set<String> load(Context context) {

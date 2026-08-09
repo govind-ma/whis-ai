@@ -69,19 +69,44 @@ public class SettingsFragment extends Fragment {
         boolean smsGranted = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECEIVE_SMS)
                 == PackageManager.PERMISSION_GRANTED;
         boolean callsGranted = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE)
+                == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ANSWER_PHONE_CALLS)
                 == PackageManager.PERMISSION_GRANTED;
 
         tvPermSms.setText("SMS Protection: " + (smsGranted ? "Active (Granted)" : "Action Needed (Denied)"));
-        tvPermCalls.setText("Call Screening: " + (callsGranted ? "Active (Granted)" : "Action Needed (Denied)"));
+        tvPermCalls.setText("Call Screening & Blocking: " + (callsGranted ? "Active (Granted)" : "Action Needed (Denied)"));
 
-        // 3. App Version number
-        tvAppVersion.setText("Whis v1.0.0 (Build 1)");
+        Button btnGrantCall = view.findViewById(R.id.btn_grant_call_perm);
+        if (btnGrantCall != null) {
+            if (!callsGranted) {
+                btnGrantCall.setVisibility(View.VISIBLE);
+                btnGrantCall.setOnClickListener(v -> requestPermissions(new String[]{
+                        Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.ANSWER_PHONE_CALLS,
+                        Manifest.permission.READ_CALL_LOG
+                }, 2001));
+            } else {
+                btnGrantCall.setVisibility(View.GONE);
+            }
+        }
 
-        // 4. Notifications / Voice toggle
-        if (switchVoice != null) {
-            switchVoice.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                String state = isChecked ? "enabled" : "disabled";
-                Toast.makeText(requireContext(), "Scam warning notifications " + state, Toast.LENGTH_SHORT).show();
+        // WhatsApp & Push Screening Toggle Switch
+        Switch switchWhatsApp = view.findViewById(R.id.switch_whatsapp_screening);
+        if (switchWhatsApp != null) {
+            boolean notifAccessGranted = isNotificationAccessGranted();
+            switchWhatsApp.setChecked(notifAccessGranted);
+
+            switchWhatsApp.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked && !isNotificationAccessGranted()) {
+                    Toast.makeText(requireContext(), "Enable Notification Access for Whis", Toast.LENGTH_LONG).show();
+                    try {
+                        startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                    } catch (Exception e) {
+                        startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    }
+                } else {
+                    String status = isChecked ? "Enabled" : "Disabled";
+                    Toast.makeText(requireContext(), "WhatsApp Screening " + status, Toast.LENGTH_SHORT).show();
+                }
             });
         }
 
@@ -168,6 +193,16 @@ public class SettingsFragment extends Fragment {
                 com.whis.app.core.EmergencyContactStore.saveContacts(requireContext(), name1, phone1, name2, phone2);
                 Toast.makeText(requireContext(), "Emergency Contacts Saved Successfully!", Toast.LENGTH_SHORT).show();
             });
+        }
+    }
+
+    private boolean isNotificationAccessGranted() {
+        try {
+            java.util.Set<String> enabledListeners = androidx.core.app.NotificationManagerCompat
+                    .getEnabledListenerPackages(requireContext());
+            return enabledListeners.contains(requireContext().getPackageName());
+        } catch (Exception e) {
+            return false;
         }
     }
 }

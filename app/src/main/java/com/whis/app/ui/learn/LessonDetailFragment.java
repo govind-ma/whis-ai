@@ -66,6 +66,9 @@ public class LessonDetailFragment extends Fragment {
         Button btnBack = view.findViewById(R.id.btn_lesson_back);
         Button btnCall1930 = view.findViewById(R.id.btn_detail_call_1930);
 
+        Button btnAudio = view.findViewById(R.id.btn_audio_summary);
+        LinearLayout containerQuiz = view.findViewById(R.id.container_quiz);
+
         if (btnCall1930 != null) {
             btnCall1930.setOnClickListener(v -> dial1930());
         }
@@ -84,6 +87,16 @@ public class LessonDetailFragment extends Fragment {
             // Render 3 action steps for "What do I do right now?"
             renderActionSteps(containerDoRightNow, chapter.doRightNow);
 
+            // ── Feature 5 Upgrade 1: Text-to-Speech Audio Summary ───────────────
+            if (btnAudio != null) {
+                btnAudio.setOnClickListener(v -> speakAudioSummary(chapter));
+            }
+
+            // ── Feature 5 Upgrade 2: Interactive Scam Quiz ───────────────────────
+            if (containerQuiz != null) {
+                renderQuiz(containerQuiz, chapter.chapterId);
+            }
+
             if (isCompleted) {
                 btnComplete.setText("Completed ✓");
             }
@@ -92,7 +105,7 @@ public class LessonDetailFragment extends Fragment {
                 repository.setChapterCompleted(chapter.chapterId, true);
                 pbProgress.setProgress(100);
                 btnComplete.setText("Completed ✓");
-                Toast.makeText(requireContext(), "Chapter marked as completed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Chapter marked as completed! (+50 XP)", Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -162,5 +175,90 @@ public class LessonDetailFragment extends Fragment {
             card.addView(layout);
             container.addView(card);
         }
+    }
+
+    private android.speech.tts.TextToSpeech tts;
+
+    private void speakAudioSummary(LearnChapter chapter) {
+        if (chapter == null) return;
+        String summaryToSpeak = "Chapter: " + chapter.title + ". "
+                + "What happens: " + chapter.whatHappens + " "
+                + "What to do right now: " + (chapter.doRightNow != null && !chapter.doRightNow.isEmpty() ? chapter.doRightNow.get(0) : "");
+
+        if (tts == null) {
+            tts = new android.speech.tts.TextToSpeech(requireContext(), status -> {
+                if (status == android.speech.tts.TextToSpeech.SUCCESS) {
+                    tts.setLanguage(new java.util.Locale("en", "IN"));
+                    tts.speak(summaryToSpeak, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, "whis_tts");
+                }
+            });
+        } else {
+            tts.speak(summaryToSpeak, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, "whis_tts");
+        }
+        Toast.makeText(requireContext(), "🔊 Playing audio walkthrough...", Toast.LENGTH_SHORT).show();
+    }
+
+    private void renderQuiz(LinearLayout container, String chapterId) {
+        container.removeAllViews();
+
+        String qText = "Q: Can Indian police or CBI perform a 'digital arrest' over video call and demand money?";
+        boolean correctAnswer = false; // False — digital arrest is 100% fake
+
+        TextView tvQuestion = new TextView(requireContext());
+        tvQuestion.setText(qText);
+        tvQuestion.setTextSize(15);
+        tvQuestion.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvQuestion.setTextColor(getResources().getColor(R.color.whis_text_hi, requireContext().getTheme()));
+
+        LinearLayout btnRow = new LinearLayout(requireContext());
+        btnRow.setOrientation(LinearLayout.HORIZONTAL);
+        btnRow.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        btnRow.setPadding(0, 12, 0, 0);
+
+        Button btnTrue = new Button(requireContext());
+        btnTrue.setText("YES (True)");
+        btnTrue.setTextSize(13);
+        btnTrue.setAllCaps(false);
+        LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        p1.setMarginEnd(8);
+        btnTrue.setLayoutParams(p1);
+
+        Button btnFalse = new Button(requireContext());
+        btnFalse.setText("NO (False)");
+        btnFalse.setTextSize(13);
+        btnFalse.setAllCaps(false);
+        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+        btnFalse.setLayoutParams(p2);
+
+        TextView tvFeedback = new TextView(requireContext());
+        tvFeedback.setTextSize(14);
+        tvFeedback.setPadding(0, 12, 0, 0);
+
+        btnTrue.setOnClickListener(v -> {
+            tvFeedback.setText("❌ Incorrect! Indian law has NO digital arrest over video calls. It is always a scam.");
+            tvFeedback.setTextColor(0xFFFF4D4D);
+        });
+
+        btnFalse.setOnClickListener(v -> {
+            tvFeedback.setText("✅ Correct! (+50 XP) No agency can arrest over video or ask money to avoid arrest.");
+            tvFeedback.setTextColor(0xFF4CAF50);
+        });
+
+        btnRow.addView(btnTrue);
+        btnRow.addView(btnFalse);
+
+        container.addView(tvQuestion);
+        container.addView(btnRow);
+        container.addView(tvFeedback);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }
