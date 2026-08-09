@@ -45,8 +45,13 @@ public final class AlertRenderer {
      * Interface for bottom sheet action callbacks.
      */
     public interface AlertActionListener {
-        /** Fired when primary button is clicked (e.g. Block / Warn). */
-        void onPrimaryAction();
+        /**
+         * Fired when primary button is clicked.
+         * For HIGH_RISK verdicts this is "Block & Protect".
+         *
+         * @param phoneNumber the number associated with this detection (may be empty)
+         */
+        void onPrimaryAction(String phoneNumber);
 
         /** Fired when secondary button is clicked (e.g. Ask Whis AI). */
         void onSecondaryAction();
@@ -100,6 +105,12 @@ public final class AlertRenderer {
     public static BottomSheetDialog showBottomSheetAlert(@NonNull Context context,
                                                            @NonNull DetectionResult result,
                                                            @Nullable AlertActionListener listener) {
+        // Extract phone number from reasonText for block action
+        String extractedNumber = "";
+        String reasonForExtract = result.getReasonText() != null ? result.getReasonText() : "";
+        java.util.regex.Matcher numMatcher = java.util.regex.Pattern.compile("\\+?\\d{10,13}").matcher(reasonForExtract);
+        if (numMatcher.find()) extractedNumber = numMatcher.group();
+        final String phoneNumber = extractedNumber;
         BottomSheetDialog dialog = new BottomSheetDialog(context);
         View view = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_alert, null);
         
@@ -145,7 +156,7 @@ public final class AlertRenderer {
         // Exactly two buttons — click handlers
         btnPrimary.setOnClickListener(v -> {
             dialog.dismiss();
-            if (listener != null) listener.onPrimaryAction();
+            if (listener != null) listener.onPrimaryAction(phoneNumber);
         });
 
         btnSecondary.setOnClickListener(v -> {

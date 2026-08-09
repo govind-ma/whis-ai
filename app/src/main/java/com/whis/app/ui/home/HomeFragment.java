@@ -111,11 +111,23 @@ public class HomeFragment extends Fragment {
         // Sort feed by timestamp DESC (newest activity first)
         java.util.Collections.sort(feedItems, (a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
 
+        final ActivityFeedAdapter[] adapterHolder = new ActivityFeedAdapter[1];
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(feedItems, (item, position) -> {
             com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
                 @Override
-                public void onPrimaryAction() {
-                    // Dismissed
+                public void onPrimaryAction(String phoneNumber) {
+                    if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
+                        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                            com.whis.app.call.BlockedNumberStore.block(requireContext(), phoneNumber);
+                            android.widget.Toast.makeText(requireContext(),
+                                    "🚫 Blocked: " + phoneNumber, android.widget.Toast.LENGTH_SHORT).show();
+                        } else {
+                            android.widget.Toast.makeText(requireContext(),
+                                    "🚫 Blocked high-risk item", android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                        feedItems.remove(position);
+                        if (adapterHolder[0] != null) adapterHolder[0].notifyItemRemoved(position);
+                    }
                 }
 
                 @Override
@@ -124,6 +136,7 @@ public class HomeFragment extends Fragment {
                 }
             });
         });
+        adapterHolder[0] = adapter;
         rvFeed.setAdapter(adapter);
 
         // 4. Empty state — visible until real detections arrive

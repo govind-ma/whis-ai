@@ -39,9 +39,6 @@ import java.util.List;
  */
 public class CallsFragment extends Fragment {
 
-    /** User-managed blocked numbers — starts empty; populated via block actions. */
-    private final List<String> blockedNumbers = new ArrayList<>();
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -99,11 +96,25 @@ public class CallsFragment extends Fragment {
         RecyclerView rvFeed = view.findViewById(R.id.rv_calls_feed);
         rvFeed.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        final ActivityFeedAdapter[] adapterHolder = new ActivityFeedAdapter[1];
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(callItems, (item, position) -> {
             com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
                 @Override
-                public void onPrimaryAction() {
-                    // Dismissed
+                public void onPrimaryAction(String phoneNumber) {
+                    if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
+                        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                            com.whis.app.call.BlockedNumberStore.block(requireContext(), phoneNumber);
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked: " + phoneNumber, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked high-risk call", Toast.LENGTH_SHORT).show();
+                        }
+                        callItems.remove(position);
+                        if (adapterHolder[0] != null) adapterHolder[0].notifyItemRemoved(position);
+                        // Refresh blocked panel
+                        renderBlockedNumbers(containerBlocked);
+                    }
                 }
 
                 @Override
@@ -112,6 +123,7 @@ public class CallsFragment extends Fragment {
                 }
             });
         });
+        adapterHolder[0] = adapter;
 
         // ── Animation Layer 1: staggered entrance observer ───────────────────
         adapter.registerAdapterDataObserver(
@@ -168,6 +180,9 @@ public class CallsFragment extends Fragment {
 
     private void renderBlockedNumbers(LinearLayout container) {
         container.removeAllViews();
+        java.util.List<String> blockedNumbers =
+                com.whis.app.call.BlockedNumberStore.getAll(requireContext());
+
         if (blockedNumbers.isEmpty()) {
             com.whis.app.ui.components.WhisListRow emptyRow =
                     new com.whis.app.ui.components.WhisListRow(requireContext());
@@ -183,7 +198,7 @@ public class CallsFragment extends Fragment {
                     new com.whis.app.ui.components.WhisListRow(requireContext());
             row.setIcon(R.drawable.ic_nav_calls);
             row.setTitle(blocked);
-            row.setSubtitle("Blocked by protection policy");
+            row.setSubtitle("Blocked — calls will be rejected silently");
             row.setVerdict(com.whis.app.core.WhisVerdict.HIGH_RISK);
 
             android.widget.Button btnUnblock = new android.widget.Button(requireContext());
@@ -191,8 +206,8 @@ public class CallsFragment extends Fragment {
             btnUnblock.setTextSize(13);
             btnUnblock.setAllCaps(false);
             btnUnblock.setOnClickListener(v -> {
-                blockedNumbers.remove(blocked);
-                Toast.makeText(requireContext(), "Unblocked " + blocked, Toast.LENGTH_SHORT).show();
+                com.whis.app.call.BlockedNumberStore.unblock(requireContext(), blocked);
+                Toast.makeText(requireContext(), "✅ Unblocked " + blocked, Toast.LENGTH_SHORT).show();
                 renderBlockedNumbers(container);
             });
 

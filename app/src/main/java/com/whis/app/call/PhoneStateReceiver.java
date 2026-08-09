@@ -36,6 +36,21 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             return;
         }
 
+        // ── BLOCK CHECK: Silently reject calls from blocked numbers ────────────
+        if (BlockedNumberStore.isBlocked(context, phoneNumber)) {
+            Log.d(TAG, "Blocked number calling: " + phoneNumber + " — rejecting silently.");
+            try {
+                android.telecom.TelecomManager tm =
+                        (android.telecom.TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+                if (tm != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                    tm.endCall();
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not end blocked call: " + e.getMessage());
+            }
+            return;
+        }
+
         // Resolve contact name (requires READ_CONTACTS permission)
         String contactName = resolveContactName(context, phoneNumber);
 

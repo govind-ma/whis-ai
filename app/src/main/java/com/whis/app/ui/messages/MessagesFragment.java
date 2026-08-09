@@ -89,11 +89,23 @@ public class MessagesFragment extends Fragment {
         RecyclerView rvFeed = view.findViewById(R.id.rv_messages_feed);
         rvFeed.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        final ActivityFeedAdapter[] adapterHolder = new ActivityFeedAdapter[1];
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(msgItems, (item, position) -> {
             com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
                 @Override
-                public void onPrimaryAction() {
-                    // Dismissed
+                public void onPrimaryAction(String phoneNumber) {
+                    if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
+                        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                            com.whis.app.call.BlockedNumberStore.block(requireContext(), phoneNumber);
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked: " + phoneNumber, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked high-risk message", Toast.LENGTH_SHORT).show();
+                        }
+                        msgItems.remove(position);
+                        if (adapterHolder[0] != null) adapterHolder[0].notifyItemRemoved(position);
+                    }
                 }
 
                 @Override
@@ -102,6 +114,7 @@ public class MessagesFragment extends Fragment {
                 }
             });
         });
+        adapterHolder[0] = adapter;
 
         // ── Animation Layer 1: staggered entrance observer ───────────────────
         adapter.registerAdapterDataObserver(

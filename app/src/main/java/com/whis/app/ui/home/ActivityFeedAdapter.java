@@ -70,10 +70,19 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         row.setTitle(formatCleanTitle(item));
         row.setSubtitle(formatCleanSubtitle(item));
 
-        // Apply clean light green/yellow/red card tinting
-        row.setVerdictStyle(item.getVerdict(), item.getIdentifierType());
+        WhisVerdict verdict = item.getVerdict();
+        if ("CONTACT".equalsIgnoreCase(item.getIdentifierType()) || "SAVED_CONTACT".equalsIgnoreCase(item.getIdentifierType())) {
+            verdict = WhisVerdict.TRUSTED;
+        }
+        row.setVerdictStyle(verdict, item.getIdentifierType());
 
-        row.setOnClickListener(v -> listener.onItemClick(item, position));
+        // Use a stable click reference via ViewHolder to avoid stale position
+        row.setOnClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_ID) {
+                listener.onItemClick(item, pos);
+            }
+        });
 
         // ── Staggered slide-up entrance animation ───────────────────────────
         row.setAlpha(0f);
@@ -145,12 +154,14 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     @DrawableRes
     public static int categoryIconRes(@NonNull String identifierType) {
         switch (identifierType.toUpperCase()) {
-            case "CONTACT":        return R.drawable.ic_category_contact;
-            case "DLT_REGISTERED": return R.drawable.ic_category_dlt_verified;
-            case "UNKNOWN_MOBILE": return R.drawable.ic_category_unknown;
-            case "COMMUNITY_REPORT": return R.drawable.ic_category_community_report;
-            case "SCAM_LINK":      return R.drawable.ic_category_scam_link;
-            default:               return R.drawable.ic_nav_calls;
+            case "CONTACT":
+            case "SAVED_CONTACT":   return R.drawable.ic_category_contact;
+            case "DLT_REGISTERED":  return R.drawable.ic_category_dlt_verified;
+            case "UNKNOWN_MOBILE":  return R.drawable.ic_category_unknown;
+            case "COMMUNITY_REPORT":return R.drawable.ic_category_community_report;
+            case "SCAM_CALL":
+            case "SCAM_LINK":       return R.drawable.ic_category_scam_link;
+            default:                return R.drawable.ic_nav_calls;
         }
     }
 
