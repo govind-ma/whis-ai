@@ -112,7 +112,17 @@ public class HomeFragment extends Fragment {
         java.util.Collections.sort(feedItems, (a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
 
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(feedItems, (item, position) -> {
-            // Detail navigation
+            com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
+                @Override
+                public void onPrimaryAction() {
+                    // Dismissed
+                }
+
+                @Override
+                public void onSecondaryAction() {
+                    com.whis.app.agent.AgentLauncher.launch(requireContext());
+                }
+            });
         });
         rvFeed.setAdapter(adapter);
 

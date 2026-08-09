@@ -118,24 +118,25 @@ public final class AlertRenderer {
         WhisVerdict verdict = result.getVerdict();
         riskTag.setVerdict(verdict);
 
-        // Header title
-        tvTitle.setText(verdictToTitle(verdict, result.getSourceType()));
+        String reason = result.getReasonText() != null ? result.getReasonText() : "";
 
-        // Formatted copy enforcing §1.6 confidence rules
-        tvCopy.setText(formatAlertCopy(result));
-
-        // Risk score tag
-        tvScore.setText("Risk Score: " + result.getRiskScore() + "/100");
-
-        // Color coding primary button for HIGH_RISK
-        if (verdict == WhisVerdict.HIGH_RISK) {
+        if (verdict == WhisVerdict.TRUSTED || "CONTACT".equalsIgnoreCase(result.getIdentifierType())) {
+            tvTitle.setText("🟢 Saved Contact");
+            tvCopy.setText(reason.isEmpty() ? "Saved contact in your address book. 100% verified safe." : reason);
+            tvScore.setText("Risk Score: 0/100 (Safe)");
+            btnPrimary.setButtonColor(R.color.whis_trusted);
+            btnPrimary.setText("Dismiss");
+        } else if (verdict == WhisVerdict.HIGH_RISK) {
+            tvTitle.setText("🚨 Cyber Scam Analysis");
+            tvCopy.setText("🚨 SCAM DIAGNOSIS & REASON:\n\n" + reason);
+            tvScore.setText("Risk Score: " + result.getRiskScore() + "/100 (HIGH RISK)");
             btnPrimary.setButtonColor(R.color.whis_high_risk);
             btnPrimary.setText("Block & Protect");
-        } else if (verdict == WhisVerdict.SUSPICIOUS) {
-            btnPrimary.setButtonColor(R.color.whis_suspicious);
-            btnPrimary.setText("Proceed with Caution");
         } else {
-            btnPrimary.setButtonColor(R.color.whis_trusted);
+            tvTitle.setText("ℹ️ Unknown Number Details");
+            tvCopy.setText("Standard activity from an un-saved number.\n\nSummary: " + (reason.isEmpty() ? "No financial scam patterns detected." : reason));
+            tvScore.setText("Risk Score: " + result.getRiskScore() + "/100 (Neutral)");
+            btnPrimary.setButtonColor(R.color.whis_suspicious);
             btnPrimary.setText("Dismiss");
         }
 

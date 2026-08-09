@@ -164,6 +164,45 @@ public class WhisListRow extends LinearLayout {
         }
     }
 
+    /**
+     * Apply clean background card tinting based on verdict:
+     * - Known Contact / Trusted → Light Green tint
+     * - Unknown Normal → Light Yellow tint
+     * - Confirmed Scam → Light Red tint
+     */
+    public void setVerdictStyle(@Nullable WhisVerdict verdict, @Nullable String identifierType) {
+        setVerdict(verdict);
+
+        GradientDrawable cardBg = new GradientDrawable();
+        cardBg.setCornerRadius(dpToPx(getContext(), 12));
+
+        boolean isDark = (getContext().getResources().getConfiguration().uiMode &
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES;
+
+        if (verdict == WhisVerdict.TRUSTED || "CONTACT".equalsIgnoreCase(identifierType)) {
+            // Light green tint
+            int bg = isDark ? 0xFF0D2A18 : 0xFFE8F5E9;
+            int stroke = isDark ? 0xFF1B5E20 : 0xFFA5D6A7;
+            cardBg.setColor(bg);
+            cardBg.setStroke(dpToPx(getContext(), 1), stroke);
+        } else if (verdict == WhisVerdict.HIGH_RISK) {
+            // Light red tint
+            int bg = isDark ? 0xFF331214 : 0xFFFFEBEE;
+            int stroke = isDark ? 0xFFB71C1C : 0xFFEF9A9A;
+            cardBg.setColor(bg);
+            cardBg.setStroke(dpToPx(getContext(), 1), stroke);
+        } else {
+            // Light yellow tint (Unknown / Suspicious)
+            int bg = isDark ? 0xFF2A2710 : 0xFFFFFDE7;
+            int stroke = isDark ? 0xFFF57F17 : 0xFFFFE082;
+            cardBg.setColor(bg);
+            cardBg.setStroke(dpToPx(getContext(), 1), stroke);
+        }
+
+        setBackground(cardBg);
+    }
+
     private static int dpToPx(Context context, float dp) {
         return (int) (dp * context.getResources().getDisplayMetrics().density + 0.5f);
     }

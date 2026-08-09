@@ -90,7 +90,17 @@ public class MessagesFragment extends Fragment {
         rvFeed.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(msgItems, (item, position) -> {
-            // Detail navigation will be wired when real data model is connected
+            com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
+                @Override
+                public void onPrimaryAction() {
+                    // Dismissed
+                }
+
+                @Override
+                public void onSecondaryAction() {
+                    com.whis.app.agent.AgentLauncher.launch(requireContext());
+                }
+            });
         });
 
         // ── Animation Layer 1: staggered entrance observer ───────────────────

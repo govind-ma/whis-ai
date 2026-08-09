@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.whis.app.R;
 import com.whis.app.core.DetectionResult;
+import com.whis.app.core.WhisVerdict;
 import com.whis.app.ui.alert.AlertRenderer;
 import com.whis.app.ui.components.WhisListRow;
 
@@ -63,22 +64,14 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         DetectionResult item = items.get(position);
         WhisListRow row = holder.row;
 
-        // Icon driven by the detection category, not the raw source type string
         row.setIcon(categoryIconRes(item.getIdentifierType()));
 
-        // Title: confidence-appropriate copy only — no raw token prepended
-        row.setTitle(AlertRenderer.formatAlertCopy(item));
+        // Clean title & subtitle formatting
+        row.setTitle(formatCleanTitle(item));
+        row.setSubtitle(formatCleanSubtitle(item));
 
-        // Subtitle: relative timestamp
-        CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(
-                item.getTimestamp(),
-                System.currentTimeMillis(),
-                DateUtils.MINUTE_IN_MILLIS
-        );
-        row.setSubtitle(relativeTime.toString());
-
-        // RiskTag per verdict
-        row.setVerdict(item.getVerdict());
+        // Apply clean light green/yellow/red card tinting
+        row.setVerdictStyle(item.getVerdict(), item.getIdentifierType());
 
         row.setOnClickListener(v -> listener.onItemClick(item, position));
 
@@ -102,6 +95,37 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         AnimatorSet entrance = new AnimatorSet();
         entrance.playTogether(slideUp, fadeIn);
         entrance.start();
+    }
+
+    private static String formatCleanTitle(DetectionResult item) {
+        String reason = item.getReasonText() != null ? item.getReasonText() : "";
+
+        if (item.getVerdict() == WhisVerdict.TRUSTED || "CONTACT".equalsIgnoreCase(item.getIdentifierType())) {
+            if (reason.contains(" (")) {
+                return reason.substring(0, reason.indexOf(" (")).trim();
+            }
+            return "Saved Contact";
+        } else if (item.getVerdict() == WhisVerdict.HIGH_RISK) {
+            return "🚨 Scam Detected";
+        } else {
+            return "Unknown Number";
+        }
+    }
+
+    private static String formatCleanSubtitle(DetectionResult item) {
+        CharSequence relativeTime = DateUtils.getRelativeTimeSpanString(
+                item.getTimestamp(),
+                System.currentTimeMillis(),
+                DateUtils.MINUTE_IN_MILLIS
+        );
+        String reason = item.getReasonText() != null ? item.getReasonText() : "";
+
+        // Extract phone number if present
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("\\+?\\d{10,13}").matcher(reason);
+        if (m.find()) {
+            return m.group() + " · " + relativeTime;
+        }
+        return relativeTime.toString();
     }
 
     @Override

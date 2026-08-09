@@ -100,7 +100,17 @@ public class CallsFragment extends Fragment {
         rvFeed.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         ActivityFeedAdapter adapter = new ActivityFeedAdapter(callItems, (item, position) -> {
-            // Detail navigation will be wired when real data model is connected
+            com.whis.app.ui.alert.AlertRenderer.showBottomSheetAlert(requireContext(), item, new com.whis.app.ui.alert.AlertRenderer.AlertActionListener() {
+                @Override
+                public void onPrimaryAction() {
+                    // Dismissed
+                }
+
+                @Override
+                public void onSecondaryAction() {
+                    com.whis.app.agent.AgentLauncher.launch(requireContext());
+                }
+            });
         });
 
         // ── Animation Layer 1: staggered entrance observer ───────────────────
