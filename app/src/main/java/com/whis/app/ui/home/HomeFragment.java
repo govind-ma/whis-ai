@@ -186,12 +186,6 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        // ── Export Cybercrime Report Button ────────────────────────────────
-        View btnExport = view.findViewById(R.id.btn_export_report);
-        if (btnExport != null) {
-            btnExport.setOnClickListener(v -> exportCybercrimeReport(feedItems));
-        }
-
         // ── Multi-Select Action Bar (Select All, Unselect All, Delete Selected) ──
         View barMultiSelect = view.findViewById(R.id.bar_multi_select);
         View btnSelectAll = view.findViewById(R.id.btn_select_all);
