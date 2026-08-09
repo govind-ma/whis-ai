@@ -16,8 +16,19 @@ public class LearnChapter {
     public final String whyItWorks;
     public final List<String> doRightNow;
     public final String howWhisHelps;
-    public final List<String> crossReference;
-    public final String sourceConfidence;
+    public static class QuizQuestion {
+        public final String question;
+        public final boolean isTrueCorrect;
+        public final String explanation;
+
+        public QuizQuestion(String question, boolean isTrueCorrect, String explanation) {
+            this.question = question;
+            this.isTrueCorrect = isTrueCorrect;
+            this.explanation = explanation;
+        }
+    }
+
+    public List<QuizQuestion> quizQuestions = new ArrayList<>();
     public List<String> whatNotToDo = new ArrayList<>();
 
     public LearnChapter(String chapterId, String title, String shortName,

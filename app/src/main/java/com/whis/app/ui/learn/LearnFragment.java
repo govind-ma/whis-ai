@@ -91,8 +91,35 @@ public class LearnFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
+        Button btnGenerateMain = view.findViewById(R.id.btn_generate_ai_story_main);
+        if (btnGenerateMain != null) {
+            btnGenerateMain.setOnClickListener(v -> triggerMainAiStoryGeneration());
+        }
+
         renderCarousel(repository.getAllChapters());
         updateProgress();
+    }
+
+    private void triggerMainAiStoryGeneration() {
+        Toast.makeText(requireContext(), "✨ Generating fresh AI Scam Story...", Toast.LENGTH_SHORT).show();
+        LearnStoryGenerator.generateNewStory(requireContext(), new LearnStoryGenerator.StoryCallback() {
+            @Override
+            public void onStoryGenerated(LearnChapter newChapter) {
+                if (repository != null) {
+                    repository.addDynamicChapter(requireContext(), newChapter);
+                    List<LearnChapter> all = repository.getAllChapters();
+                    renderCarousel(all);
+                    updateProgress();
+                    rvCarousel.smoothScrollToPosition(all.size() - 1);
+                }
+                Toast.makeText(requireContext(), "🎉 New Story Unlocked: " + newChapter.title, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(requireContext(), "Failed to generate story", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupCarousel() {

@@ -107,7 +107,7 @@ public class LessonDetailFragment extends Fragment {
 
             // ── Feature 5 Upgrade 2: Interactive Scam Quiz ───────────────────────
             if (containerQuiz != null) {
-                renderQuiz(containerQuiz, chapter.chapterId);
+                renderQuiz(containerQuiz, chapter);
             }
 
             if (isCompleted) {
@@ -241,59 +241,83 @@ public class LessonDetailFragment extends Fragment {
         Toast.makeText(requireContext(), "🔊 Playing audio walkthrough...", Toast.LENGTH_SHORT).show();
     }
 
-    private void renderQuiz(LinearLayout container, String chapterId) {
+    private void renderQuiz(LinearLayout container, LearnChapter chapter) {
         container.removeAllViews();
+        if (chapter == null) return;
 
-        String qText = "Q: Can Indian police or CBI perform a 'digital arrest' over video call and demand money?";
-        boolean correctAnswer = false; // False — digital arrest is 100% fake
+        List<LearnChapter.QuizQuestion> questions = chapter.quizQuestions;
+        if (questions == null || questions.isEmpty()) {
+            questions = java.util.Arrays.asList(
+                    new LearnChapter.QuizQuestion(
+                            "Q: Is it safe to follow instructions from a caller asking you to download AnyDesk or pay money?",
+                            false,
+                            "FALSE! Never download remote access apps or send money to strangers over the phone."
+                    )
+            );
+        }
 
-        TextView tvQuestion = new TextView(requireContext());
-        tvQuestion.setText(qText);
-        tvQuestion.setTextSize(15);
-        tvQuestion.setTypeface(null, android.graphics.Typeface.BOLD);
-        tvQuestion.setTextColor(getResources().getColor(R.color.whis_text_hi, requireContext().getTheme()));
+        for (int i = 0; i < questions.size(); i++) {
+            LearnChapter.QuizQuestion q = questions.get(i);
 
-        LinearLayout btnRow = new LinearLayout(requireContext());
-        btnRow.setOrientation(LinearLayout.HORIZONTAL);
-        btnRow.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        btnRow.setPadding(0, 12, 0, 0);
+            TextView tvQuestion = new TextView(requireContext());
+            tvQuestion.setText("Q" + (i + 1) + ": " + q.question);
+            tvQuestion.setTextSize(15);
+            tvQuestion.setTypeface(null, android.graphics.Typeface.BOLD);
+            tvQuestion.setTextColor(getResources().getColor(R.color.whis_text_hi, requireContext().getTheme()));
+            if (i > 0) tvQuestion.setPadding(0, 16, 0, 0);
 
-        Button btnTrue = new Button(requireContext());
-        btnTrue.setText("YES (True)");
-        btnTrue.setTextSize(13);
-        btnTrue.setAllCaps(false);
-        LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-        p1.setMarginEnd(8);
-        btnTrue.setLayoutParams(p1);
+            LinearLayout btnRow = new LinearLayout(requireContext());
+            btnRow.setOrientation(LinearLayout.HORIZONTAL);
+            btnRow.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            btnRow.setPadding(0, 8, 0, 0);
 
-        Button btnFalse = new Button(requireContext());
-        btnFalse.setText("NO (False)");
-        btnFalse.setTextSize(13);
-        btnFalse.setAllCaps(false);
-        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-        btnFalse.setLayoutParams(p2);
+            Button btnTrue = new Button(requireContext());
+            btnTrue.setText("YES (True)");
+            btnTrue.setTextSize(13);
+            btnTrue.setAllCaps(false);
+            LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            p1.setMarginEnd(8);
+            btnTrue.setLayoutParams(p1);
 
-        TextView tvFeedback = new TextView(requireContext());
-        tvFeedback.setTextSize(14);
-        tvFeedback.setPadding(0, 12, 0, 0);
+            Button btnFalse = new Button(requireContext());
+            btnFalse.setText("NO (False)");
+            btnFalse.setTextSize(13);
+            btnFalse.setAllCaps(false);
+            LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
+            btnFalse.setLayoutParams(p2);
 
-        btnTrue.setOnClickListener(v -> {
-            tvFeedback.setText("❌ Incorrect! Indian law has NO digital arrest over video calls. It is always a scam.");
-            tvFeedback.setTextColor(0xFFFF4D4D);
-        });
+            TextView tvFeedback = new TextView(requireContext());
+            tvFeedback.setTextSize(14);
+            tvFeedback.setPadding(0, 6, 0, 0);
 
-        btnFalse.setOnClickListener(v -> {
-            tvFeedback.setText("✅ Correct! (+50 XP) No agency can arrest over video or ask money to avoid arrest.");
-            tvFeedback.setTextColor(0xFF4CAF50);
-        });
+            btnTrue.setOnClickListener(v -> {
+                if (q.isTrueCorrect) {
+                    tvFeedback.setText("✅ Correct! (+50 XP) " + q.explanation);
+                    tvFeedback.setTextColor(0xFF4CAF50);
+                } else {
+                    tvFeedback.setText("❌ Incorrect! " + q.explanation);
+                    tvFeedback.setTextColor(0xFFFF4D4D);
+                }
+            });
 
-        btnRow.addView(btnTrue);
-        btnRow.addView(btnFalse);
+            btnFalse.setOnClickListener(v -> {
+                if (!q.isTrueCorrect) {
+                    tvFeedback.setText("✅ Correct! (+50 XP) " + q.explanation);
+                    tvFeedback.setTextColor(0xFF4CAF50);
+                } else {
+                    tvFeedback.setText("❌ Incorrect! " + q.explanation);
+                    tvFeedback.setTextColor(0xFFFF4D4D);
+                }
+            });
 
-        container.addView(tvQuestion);
-        container.addView(btnRow);
-        container.addView(tvFeedback);
+            btnRow.addView(btnTrue);
+            btnRow.addView(btnFalse);
+
+            container.addView(tvQuestion);
+            container.addView(btnRow);
+            container.addView(tvFeedback);
+        }
     }
 
     @Override

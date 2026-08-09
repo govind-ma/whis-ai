@@ -173,6 +173,19 @@
 
         </LinearLayout>
 
+        <!-- 3B. AI Scam Case Story Generator Button Banner -->
+        <Button
+            android:id="@+id/btn_generate_ai_story_main"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:text="✨ Generate New AI Scam Story (+Unlock Chapter)"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="#41C85A"
+            android:backgroundTint="#152619" />
+
         <!-- No Search Results Label -->
         <TextView
             android:id="@+id/tv_no_results"

@@ -101,6 +101,25 @@ public class LearnStoryGenerator {
         }
         if (notDoList.isEmpty()) notDoList = Arrays.asList("Never share OTP or UPI PIN.", "Never download AnyDesk/TeamViewer.", "Never pay money to avoid video call arrest.");
 
+        List<LearnChapter.QuizQuestion> qList = new ArrayList<>();
+        JSONArray qnaArr = json.optJSONArray("qna");
+        if (qnaArr != null) {
+            for (int i = 0; i < qnaArr.length(); i++) {
+                JSONObject qObj = qnaArr.optJSONObject(i);
+                if (qObj != null) {
+                    qList.add(new LearnChapter.QuizQuestion(
+                            qObj.optString("q", "Is this action safe?"),
+                            qObj.optBoolean("yes_correct", false),
+                            qObj.optString("explanation", "Always verify independently before acting.")
+                    ));
+                }
+            }
+        }
+        if (qList.isEmpty()) {
+            qList.add(new LearnChapter.QuizQuestion("Can any official arrest you via WhatsApp video call?", false, "No! Real police or CBI never conduct digital arrests over video call."));
+            qList.add(new LearnChapter.QuizQuestion("Should you pay money to clear your name during a call?", false, "Never! Demanding money over the phone is a 100% scam signal."));
+        }
+
         LearnChapter ch = new LearnChapter(
                 id,
                 title,
@@ -112,6 +131,7 @@ public class LearnStoryGenerator {
                 "Whis screens calls in real time and alerts family instantly."
         );
         ch.whatNotToDo = notDoList;
+        ch.quizQuestions = qList;
         return ch;
     }
 
@@ -132,6 +152,11 @@ public class LearnStoryGenerator {
                 "Never stay isolated — scammers insist you don't tell anyone."
         );
 
+        List<LearnChapter.QuizQuestion> quiz = Arrays.asList(
+                new LearnChapter.QuizQuestion("Is 'Digital Arrest' over a WhatsApp video call legal in India?", false, "FALSE! No Indian court, police station, or CBI office conducts digital arrests via video calls."),
+                new LearnChapter.QuizQuestion("If a caller threatens to arrest you unless you pay money, should you pay?", false, "FALSE! Demanding payment to prevent arrest is a 100% scam tactic.")
+        );
+
         LearnChapter ch = new LearnChapter(
                 id,
                 title,
@@ -143,6 +168,7 @@ public class LearnStoryGenerator {
                 "Whis flags fake police numbers automatically."
         );
         ch.whatNotToDo = notDoList;
+        ch.quizQuestions = quiz;
         return ch;
     }
 }

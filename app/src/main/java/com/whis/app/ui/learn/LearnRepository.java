@@ -168,7 +168,7 @@ public class LearnRepository {
         steps1.add("Do not share your OTP, bank details, or make any payment.");
         steps1.add("If you already made a payment, call 1930 immediately.");
 
-        chapters.add(new LearnChapter(
+        LearnChapter ch1 = new LearnChapter(
                 "digital_arrest", "The Fake Police Video Call", "Digital Arrest",
                 triggers1,
                 "You get a call or video call from someone claiming to be police, CBI, ED, or a telecom official demanding money to avoid 'digital arrest'.",
@@ -176,7 +176,17 @@ public class LearnRepository {
                 steps1,
                 "Whis flags calls from reported numbers and shows plain alerts.",
                 new ArrayList<>(), "high"
-        ));
+        );
+        ch1.whatNotToDo = java.util.Arrays.asList(
+                "Never transfer money to clear your name or avoid police custody.",
+                "Never share your bank account, card numbers, or OTP over video call.",
+                "Never isolate yourself — talk to your family or local police."
+        );
+        ch1.quizQuestions = java.util.Arrays.asList(
+                new LearnChapter.QuizQuestion("Is 'Digital Arrest' over a video call legally valid in India?", false, "FALSE! No police station or law enforcement agency in India conducts video call arrests or demands money."),
+                new LearnChapter.QuizQuestion("Should you pay money to avoid an alleged police arrest over phone?", false, "FALSE! Any official asking for money over phone to avoid arrest is 100% a fraudster.")
+        );
+        chapters.add(ch1);
     }
 
     public List<LearnChapter> getAllChapters() {
