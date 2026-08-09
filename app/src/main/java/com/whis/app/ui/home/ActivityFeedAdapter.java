@@ -41,11 +41,48 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
 
     private final List<DetectionResult> items;
     private final OnItemClickListener listener;
+    private final java.util.Set<Integer> selectedPositions = new java.util.HashSet<>();
 
     public ActivityFeedAdapter(@NonNull List<DetectionResult> items,
                                @NonNull OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
+    }
+
+    public void toggleSelection(int position) {
+        if (selectedPositions.contains(position)) {
+            selectedPositions.remove(position);
+        } else {
+            selectedPositions.add(position);
+        }
+        notifyItemChanged(position);
+    }
+
+    public void selectAll() {
+        selectedPositions.clear();
+        for (int i = 0; i < items.size(); i++) {
+            selectedPositions.add(i);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void unselectAll() {
+        selectedPositions.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<DetectionResult> getSelectedItems() {
+        List<DetectionResult> selected = new java.util.ArrayList<>();
+        for (Integer pos : selectedPositions) {
+            if (pos >= 0 && pos < items.size()) {
+                selected.add(items.get(pos));
+            }
+        }
+        return selected;
+    }
+
+    public int getSelectedCount() {
+        return selectedPositions.size();
     }
 
     @NonNull
@@ -76,12 +113,34 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         }
         row.setVerdictStyle(verdict, item.getIdentifierType());
 
+        boolean isSelected = selectedPositions.contains(position);
+        if (isSelected) {
+            row.setAlpha(0.9f);
+            row.setBackgroundColor(0x3341C85A); // Green selection tint
+        } else {
+            row.setAlpha(1.0f);
+            row.setBackgroundColor(0x00000000);
+        }
+
         // Use a stable click reference via ViewHolder to avoid stale position
         row.setOnClickListener(v -> {
             int pos = holder.getAdapterPosition();
             if (pos != RecyclerView.NO_ID) {
-                listener.onItemClick(item, pos);
+                if (!selectedPositions.isEmpty()) {
+                    toggleSelection(pos);
+                } else {
+                    listener.onItemClick(item, pos);
+                }
             }
+        });
+
+        row.setOnLongClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_ID) {
+                toggleSelection(pos);
+                return true;
+            }
+            return false;
         });
 
         // ── Staggered slide-up entrance animation ───────────────────────────

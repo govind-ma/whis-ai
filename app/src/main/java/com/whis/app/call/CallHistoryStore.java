@@ -54,13 +54,33 @@ public class CallHistoryStore {
     // ── Write ─────────────────────────────────────────────────────────────────
 
     /**
-     * Prepend a new call entry (most recent first). Prunes oldest if over limit.
+     * Prepend a new call entry (most recent first). Deduplicates rapid broadcasts within 15 seconds.
      */
     public static synchronized void save(Context context, CallEntry entry) {
         try {
             SharedPreferences prefs = prefs(context);
             String existing = prefs.getString(KEY_CALLS, "[]");
             JSONArray arr = new JSONArray(existing);
+
+            String entryNorm = BlockedNumberStore.normalize(entry.phoneNumber);
+
+            // Check for duplicate recent broadcast within 15 seconds
+            int existingIndex = -1;
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                String num = obj.optString("phoneNumber", "");
+                long ts = obj.optLong("timestamp", 0L);
+                String numNorm = BlockedNumberStore.normalize(num);
+
+                boolean isSameNumber = (!entryNorm.isEmpty() && entryNorm.equals(numNorm))
+                        || (entryNorm.isEmpty() && numNorm.isEmpty());
+                boolean isRecent = Math.abs(entry.timestamp - ts) < 15000;
+
+                if (isSameNumber && isRecent) {
+                    existingIndex = i;
+                    break;
+                }
+            }
 
             JSONObject obj = new JSONObject();
             obj.put("phoneNumber", entry.phoneNumber);
@@ -71,11 +91,22 @@ public class CallHistoryStore {
             obj.put("badge",       entry.badge);
             obj.put("timestamp",   entry.timestamp);
 
-            // Build new array with new entry at index 0
             JSONArray updated = new JSONArray();
-            updated.put(obj);
-            for (int i = 0; i < arr.length() && updated.length() < MAX_ENTRIES; i++) {
-                updated.put(arr.getJSONObject(i));
+            if (existingIndex >= 0) {
+                // Update/Merge existing entry in place
+                for (int i = 0; i < arr.length(); i++) {
+                    if (i == existingIndex) {
+                        updated.put(obj);
+                    } else {
+                        updated.put(arr.getJSONObject(i));
+                    }
+                }
+            } else {
+                // Prepend new entry
+                updated.put(obj);
+                for (int i = 0; i < arr.length() && updated.length() < MAX_ENTRIES; i++) {
+                    updated.put(arr.getJSONObject(i));
+                }
             }
 
             prefs.edit().putString(KEY_CALLS, updated.toString()).apply();
@@ -110,6 +141,31 @@ public class CallHistoryStore {
             Log.e(TAG, "Failed to read call history", e);
         }
         return entries;
+    }
+
+    /**
+     * Delete call entries matching the given timestamps.
+     */
+    public static synchronized void deleteByTimestamps(Context context, java.util.Set<Long> timestampsToDelete) {
+        if (timestampsToDelete == null || timestampsToDelete.isEmpty()) return;
+        try {
+            SharedPreferences prefs = prefs(context);
+            String existing = prefs.getString(KEY_CALLS, "[]");
+            JSONArray arr = new JSONArray(existing);
+
+            JSONArray updated = new JSONArray();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                long ts = obj.optLong("timestamp", 0L);
+                if (!timestampsToDelete.contains(ts)) {
+                    updated.put(obj);
+                }
+            }
+
+            prefs.edit().putString(KEY_CALLS, updated.toString()).apply();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to delete call entries", e);
+        }
     }
 
     /**

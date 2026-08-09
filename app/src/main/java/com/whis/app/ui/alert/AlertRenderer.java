@@ -151,9 +151,14 @@ public final class AlertRenderer {
             btnPrimary.setText("Dismiss");
         }
 
-        btnSecondary.setText("Ask Whis AI");
+        boolean isUnsaved = !phoneNumber.isEmpty() && verdict != WhisVerdict.TRUSTED && !"CONTACT".equalsIgnoreCase(result.getIdentifierType());
+        if (isUnsaved) {
+            btnSecondary.setText("Save Contact 👤");
+        } else {
+            btnSecondary.setText("Ask Whis AI");
+        }
 
-        // Exactly two buttons — click handlers
+        // Click handlers
         btnPrimary.setOnClickListener(v -> {
             dialog.dismiss();
             if (listener != null) listener.onPrimaryAction(phoneNumber);
@@ -161,7 +166,18 @@ public final class AlertRenderer {
 
         btnSecondary.setOnClickListener(v -> {
             dialog.dismiss();
-            if (listener != null) listener.onSecondaryAction();
+            if (isUnsaved) {
+                try {
+                    Intent saveIntent = new Intent(Intent.ACTION_INSERT);
+                    saveIntent.setType(android.provider.ContactsContract.Contacts.CONTENT_TYPE);
+                    saveIntent.putExtra(android.provider.ContactsContract.Intents.Insert.PHONE, phoneNumber);
+                    context.startActivity(saveIntent);
+                } catch (Exception e) {
+                    android.widget.Toast.makeText(context, "Opening Contacts...", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (listener != null) listener.onSecondaryAction();
+            }
         });
 
         dialog.show();

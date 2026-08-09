@@ -168,6 +168,47 @@ public class HomeFragment extends Fragment {
             btnExport.setOnClickListener(v -> exportCybercrimeReport(feedItems));
         }
 
+        // ── Multi-Select Action Bar (Select All, Unselect All, Delete Selected) ──
+        View btnSelectAll = view.findViewById(R.id.btn_select_all);
+        View btnUnselectAll = view.findViewById(R.id.btn_unselect_all);
+        android.widget.Button btnDeleteSelected = view.findViewById(R.id.btn_delete_selected);
+
+        if (btnSelectAll != null && btnUnselectAll != null && btnDeleteSelected != null) {
+            btnSelectAll.setOnClickListener(v -> {
+                if (adapterHolder[0] != null) {
+                    adapterHolder[0].selectAll();
+                    btnDeleteSelected.setText("🗑️ Delete (" + adapterHolder[0].getSelectedCount() + ")");
+                }
+            });
+
+            btnUnselectAll.setOnClickListener(v -> {
+                if (adapterHolder[0] != null) {
+                    adapterHolder[0].unselectAll();
+                    btnDeleteSelected.setText("🗑️ Delete");
+                }
+            });
+
+            btnDeleteSelected.setOnClickListener(v -> {
+                if (adapterHolder[0] != null) {
+                    List<DetectionResult> selected = adapterHolder[0].getSelectedItems();
+                    if (selected.isEmpty()) {
+                        Toast.makeText(requireContext(), "Select items to delete first", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    java.util.Set<Long> timestampsToDelete = new java.util.HashSet<>();
+                    for (DetectionResult item : selected) {
+                        timestampsToDelete.add(item.getTimestamp());
+                    }
+                    com.whis.app.call.CallHistoryStore.deleteByTimestamps(requireContext(), timestampsToDelete);
+                    feedItems.removeAll(selected);
+                    adapterHolder[0].unselectAll();
+                    adapterHolder[0].notifyDataSetChanged();
+                    btnDeleteSelected.setText("🗑️ Delete");
+                    Toast.makeText(requireContext(), "Deleted " + selected.size() + " items", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // 4. Empty state — visible until real detections arrive
         View emptyState = view.findViewById(R.id.home_empty_state);
         View emptyIcon  = emptyState != null ? emptyState.findViewById(R.id.empty_state_icon) : null;
