@@ -16,6 +16,9 @@ public class LearnChapter {
     public final String whyItWorks;
     public final List<String> doRightNow;
     public final String howWhisHelps;
+    public final List<String> crossReference;
+    public final String sourceConfidence;
+
     public static class QuizQuestion {
         public final String question;
         public final boolean isTrueCorrect;
