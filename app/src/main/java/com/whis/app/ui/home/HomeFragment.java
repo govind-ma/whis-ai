@@ -42,7 +42,40 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. "Ask Whis anything" card click handler → launches Whis AI Assistant
+        // 1. Top Bar 3-Dot Menu — all page actions
+        View btnHomeMenu = view.findViewById(R.id.btn_home_menu);
+        if (btnHomeMenu != null) {
+            btnHomeMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup =
+                        new androidx.appcompat.widget.PopupMenu(requireContext(), v);
+                popup.getMenu().add(0, 1, 0, "📄 Export Report");
+                popup.getMenu().add(0, 2, 1, "🗑️ Clear Activity History");
+                popup.getMenu().add(0, 3, 2, "☑️ Select Items");
+                popup.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case 1:
+                            // Export cybercrime report
+                            exportReport(view);
+                            return true;
+                        case 2:
+                            // Clear all call history
+                            com.whis.app.call.CallHistoryStore.clear(requireContext());
+                            Toast.makeText(requireContext(), "Activity history cleared", Toast.LENGTH_SHORT).show();
+                            getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                            return true;
+                        case 3:
+                            // Show multi-select bar
+                            View bar = view.findViewById(R.id.bar_multi_select);
+                            if (bar != null) bar.setVisibility(View.VISIBLE);
+                            return true;
+                    }
+                    return false;
+                });
+                popup.show();
+            });
+        }
+
+        // 2. "Ask Whis anything" card click handler → launches Whis AI Assistant
         view.findViewById(R.id.card_ask_whis_ai).setOnClickListener(v ->
                 com.whis.app.agent.AgentLauncher.launch(requireContext()));
 
@@ -265,6 +298,29 @@ public class HomeFragment extends Fragment {
         RecyclerView rvFeed = getView() != null ? getView().findViewById(R.id.rv_activity_feed) : null;
         if (rvFeed != null) rvFeed.setAdapter(newAdapter);
         Toast.makeText(requireContext(), "Filter applied: " + filter, Toast.LENGTH_SHORT).show();
+    }
+
+    private void exportReport(View view) {
+        // Collect all current feed items and export
+        List<DetectionResult> items = new ArrayList<>();
+        try {
+            List<com.whis.app.call.CallHistoryStore.CallEntry> calls =
+                    com.whis.app.call.CallHistoryStore.getAll(requireContext());
+            for (com.whis.app.call.CallHistoryStore.CallEntry call : calls) {
+                com.whis.app.core.WhisVerdict v;
+                if ("SAFE".equals(call.riskLevel)) v = WhisVerdict.TRUSTED;
+                else if ("SCAM".equals(call.riskLevel)) v = WhisVerdict.HIGH_RISK;
+                else v = WhisVerdict.SUSPICIOUS;
+                com.whis.app.call.WhisCallAnalysis a = new com.whis.app.call.WhisCallAnalysis(
+                        call.phoneNumber, "SAFE".equals(call.riskLevel) ? 0 : 85, v,
+                        call.contactName + " (" + call.phoneNumber + ") - " + call.reason,
+                        "SAVED_CONTACT".equals(call.category) ? "CONTACT" : "UNKNOWN_MOBILE",
+                        "SAVED_CONTACT".equals(call.category), false, 0);
+                a.timestamp = call.timestamp;
+                items.add(a);
+            }
+        } catch (Exception ignored) {}
+        exportCybercrimeReport(items);
     }
 
     private void exportCybercrimeReport(List<DetectionResult> items) {

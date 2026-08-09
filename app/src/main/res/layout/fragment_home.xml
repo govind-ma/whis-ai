@@ -15,143 +15,92 @@
         android:paddingTop="@dimen/whis_spacing_section"
         android:paddingBottom="@dimen/whis_spacing_section">
 
-        <!-- Screen title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Protection Status"
-            style="@style/Whis.TextAppearance.H1" />
+        <!-- Top Bar: Title + 3-Dot Menu -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!-- Hero Cards Container with Screen-Level Refraction Glow -->
-        <FrameLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Whis AI"
+                style="@style/Whis.TextAppearance.H1" />
+
+            <ImageButton
+                android:id="@+id/btn_home_menu"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Options Menu"
+                android:src="@android:drawable/ic_menu_more"
+                android:tint="@color/whis_text_hi" />
+
+        </RelativeLayout>
+
+        <!-- Ask Whis AI Card -->
+        <com.whis.app.ui.components.GlassCardView
+            android:id="@+id/card_ask_whis_ai"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_hero_glass_glow">
+            android:layout_marginTop="@dimen/whis_spacing_item">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="@dimen/whis_spacing_card_padding">
 
-                <!-- 1. Protection status card — GlassCardView for hero treatment -->
-                <com.whis.app.ui.components.GlassCardView
-                    android:id="@+id/card_protection_status"
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_icon_circle_trusted">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nav_learn"
+                        android:tint="@color/whis_trusted" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/whis_spacing_item">
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/whis_spacing_item"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="@dimen/whis_spacing_card_padding">
+                        android:text="Ask Whis Anything"
+                        style="@style/Whis.TextAppearance.Body"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_protection_headline"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Protected"
-                            style="@style/Whis.TextAppearance.Display"
-                            android:textSize="22sp" />
-
-                        <TextView
-                            android:id="@+id/tv_protection_subtext"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Calls &amp; SMS active protection is running"
-                            style="@style/Whis.TextAppearance.Caption" />
-
-                    </LinearLayout>
-
-                </com.whis.app.ui.components.GlassCardView>
-
-                <!-- 2. "Ask Whis anything" contextual AI entry card — GlassCardView (§2.4) -->
-                <com.whis.app.ui.components.GlassCardView
-                    android:id="@+id/card_ask_whis_ai"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/whis_spacing_item">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/whis_spacing_card_padding">
+                        android:text="Check a message, UPI ID, or scam pattern in plain language"
+                        style="@style/Whis.TextAppearance.Caption" />
 
-                        <!-- Icon with soft tinted circle background -->
-                        <FrameLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_icon_circle_trusted">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_nav_learn"
-                                android:tint="@color/whis_trusted" />
-
-                        </FrameLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/whis_spacing_item"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Ask Whis Anything"
-                                style="@style/Whis.TextAppearance.Body"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Check a message, UPI ID, or scam pattern in plain language"
-                                style="@style/Whis.TextAppearance.Caption" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.whis.app.ui.components.GlassCardView>
+                </LinearLayout>
 
             </LinearLayout>
 
-        </FrameLayout>
+        </com.whis.app.ui.components.GlassCardView>
 
-        <!-- 3. Activity feed header + Export Cybercrime Report button -->
-        <LinearLayout
+        <!-- Activity feed header -->
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/whis_spacing_section"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Recent Activity Feed"
-                style="@style/Whis.TextAppearance.H2" />
-
-            <Button
-                android:id="@+id/btn_export_report"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="📄 Export Report"
-                android:textSize="11sp"
-                android:textAllCaps="false"
-                android:paddingHorizontal="10dp"
-                android:textColor="@color/whis_trusted"
-                android:backgroundTint="@color/whis_trusted_tint" />
-
-        </LinearLayout>
+            android:text="Recent Activity"
+            style="@style/Whis.TextAppearance.H2" />
 
         <!-- Filter Chips (All, Calls, Messages, Blocked) -->
         <HorizontalScrollView
