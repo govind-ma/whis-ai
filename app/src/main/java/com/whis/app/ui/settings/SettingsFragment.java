@@ -63,6 +63,7 @@ public class SettingsFragment extends Fragment {
         // 1. Account section display with real user profile
         UserProfile profile = UserProfileContext.getProfile(requireContext());
         tvName.setText("User Profile: " + (profile.name != null ? profile.name : "User"));
+        if (tvAppVersion != null) tvAppVersion.setText("Whis v2.1 (Build 2)");
         tvEmergency.setText("Emergency Contact: " + (profile.emergencyContact != null ? profile.emergencyContact : "Not set"));
 
         // 2. Dynamic permission status checks
