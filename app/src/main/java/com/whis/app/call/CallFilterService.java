@@ -176,6 +176,11 @@ public class CallFilterService extends JobIntentService {
     private void showWarningNotification(String phoneNumber, String contactName,
                                          String badge, String reason) {
         try {
+            // Do not show warning notification for known address book contacts
+            if (contactName != null && !contactName.equalsIgnoreCase("Unknown") && !contactName.trim().isEmpty()) {
+                return;
+            }
+
             NotificationManager nm =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             if (nm == null) return;
@@ -190,10 +195,14 @@ public class CallFilterService extends JobIntentService {
                 nm.createNotificationChannel(channel);
             }
 
-            String title = "⚠ " + badge + ": " + contactName + " (" + phoneNumber + ")";
-            String text  = reason != null && !reason.isEmpty()
-                    ? reason
-                    : "Suspicious call detected. Be careful.";
+            String displayNum = (phoneNumber != null && !phoneNumber.isEmpty()) ? phoneNumber : "Unknown";
+            String title = "⚠️ Suspicious Call: " + displayNum;
+            String text = "Unknown caller displaying suspicious activity patterns.";
+
+            if ("Scam Detected".equalsIgnoreCase(badge)) {
+                title = "🚨 Scam Call Warning: " + displayNum;
+                text = "Possible digital arrest or impersonation call. Do not panic or transfer money.";
+            }
 
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(this, CHANNEL_ID)

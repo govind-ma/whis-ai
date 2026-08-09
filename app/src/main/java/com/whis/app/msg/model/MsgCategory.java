@@ -23,5 +23,8 @@ public enum MsgCategory {
     GENERAL,
 
     /** Confirmed scam or junk message */
-    JUNK
+    JUNK,
+
+    /** Urgent family emergency, accident, or hospital alert */
+    EMERGENCY
 }

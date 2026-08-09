@@ -42,26 +42,31 @@ public class SmsFilterService extends JobIntentService {
         // Run full 5-layer detection pipeline (Layer 5 now makes a real Gemini API call)
         MsgDetectionResult result = WeightedScoreEngine.analyze(this, sender, body);
 
-        // ── Map threat level to user-facing badge ────────────────────────────
-        // SAFE       → "Likely Safe"    (green badge)
-        // SUSPICIOUS → "Suspicious"     (orange badge)
-        // SCAM       → "Scam Detected"  (red badge)
+        // ── Map threat level & category to user-facing badge ──────────────────
         String badge;
-        if ("SCAM".equalsIgnoreCase(result.threatLevel)) {
+        if (result.category == com.whis.app.msg.model.MsgCategory.EMERGENCY) {
+            badge = "Emergency Alert";
+        } else if ("SCAM".equalsIgnoreCase(result.threatLevel)) {
             badge = "Scam Detected";
         } else if ("SUSPICIOUS".equalsIgnoreCase(result.threatLevel)) {
             badge = "Suspicious";
         } else {
             badge = "Likely Safe";
         }
-        result.reasonText = "[" + badge + "] " + (result.reasonText != null ? result.reasonText : "");
+
+        // Clean reason text (without messy debug tags)
+        if (result.reasonText == null || result.reasonText.isEmpty()) {
+            result.reasonText = "Verified message check completed.";
+        }
 
         // Persist SHA-256 hash of body for DPDP compliance
         saveHistoryEntry(sender, body, result, timestamp);
 
-        // Show notification warning if SUSPICIOUS or HIGH_RISK
-        if (result.verdict == WhisVerdict.SUSPICIOUS || result.verdict == WhisVerdict.HIGH_RISK) {
-            showWarningNotification(result, badge);
+        // Show notification if EMERGENCY, SUSPICIOUS or HIGH_RISK
+        if (result.category == com.whis.app.msg.model.MsgCategory.EMERGENCY) {
+            showEmergencyNotification(sender, body);
+        } else if (result.verdict == WhisVerdict.SUSPICIOUS || result.verdict == WhisVerdict.HIGH_RISK) {
+            showWarningNotification(sender, result, badge);
         }
     }
 
@@ -86,7 +91,36 @@ public class SmsFilterService extends JobIntentService {
         }
     }
 
-    private void showWarningNotification(MsgDetectionResult result, String badge) {
+    private void showEmergencyNotification(String sender, String body) {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nm == null) return;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "whis_emergency",
+                    "Whis Urgent Emergency Alerts",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Urgent family emergency and hospital message alerts");
+            nm.createNotificationChannel(channel);
+        }
+
+        String displaySender = (sender != null && !sender.isEmpty()) ? sender : "Unknown";
+        String title = "🚑 URGENT: Possible Family Emergency!";
+        String text = "Message from " + displaySender + " mentions emergency or hospital. Tap to view.";
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "whis_emergency")
+                .setSmallIcon(android.R.drawable.stat_sys_warning)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_CALL)
+                .setAutoCancel(true);
+
+        nm.notify(NOTIFICATION_ID + 100, builder.build());
+    }
+
+    private void showWarningNotification(String sender, MsgDetectionResult result, String badge) {
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (nm == null) return;
 
@@ -100,12 +134,14 @@ public class SmsFilterService extends JobIntentService {
             nm.createNotificationChannel(channel);
         }
 
-        String title = "⚠ " + badge + ": " + (result.sender != null ? result.sender : "Unknown");
+        String displaySender = (sender != null && !sender.isEmpty()) ? sender : "Unknown";
+        String title = "🚨 Scam SMS Alert: " + displaySender;
+        String text = "Phishing or fake link detected. Do not share OTP or click unverified links.";
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.stat_sys_warning)
                 .setContentTitle(title)
-                .setContentText(result.reasonText)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 

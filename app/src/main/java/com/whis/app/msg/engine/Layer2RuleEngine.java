@@ -60,6 +60,17 @@ public class Layer2RuleEngine {
         boolean hasUrl = URL_REGEX.matcher(body).find();
         boolean hasCallbackNum = CALLBACK_MOBILE_REGEX.matcher(body).find();
 
+        // ── Emergency Keyword Detection (Accident & Hospital Protection) ─────────────
+        if (containsAny(lowerBody, "accident", "hospital", "emergency", "police station", "injured", "doctor", "icu", "ambulance", "haadsa", "ispatal", "maddad", "trauma", "casualty")) {
+            return new RuleResult(
+                    0,
+                    "SAFE",
+                    MsgCategory.EMERGENCY,
+                    "Urgent emergency message (Hospital/Accident context)",
+                    false
+            );
+        }
+
         // ── CRITICAL OTP Whitelisting Rule (False-Positive Prevention) ────────────────
         // If message contains ONLY a numeric OTP + bank name / expiry statement,
         // has no URL, no callback number, and is from a DLT-registered sender or valid header:
