@@ -123,4 +123,9 @@ public class AgentViewModel {
     public List<ChatMessage> getHistory() {
         return sessionContext.getHistory();
     }
+
+    /** Clears all turns in the current session so the AI starts fresh. */
+    public void clearHistory() {
+        sessionContext.clearSession();
+    }
 }

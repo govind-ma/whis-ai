@@ -66,9 +66,6 @@ public class LessonDetailFragment extends Fragment {
         Button btnBack = view.findViewById(R.id.btn_lesson_back);
         Button btnCall1930 = view.findViewById(R.id.btn_detail_call_1930);
 
-        Button btnAudio = view.findViewById(R.id.btn_audio_summary);
-        LinearLayout containerQuiz = view.findViewById(R.id.container_quiz);
-
         LinearLayout containerWhatNotToDo = view.findViewById(R.id.container_what_not_to_do);
         Button btnGenerateAiStory = view.findViewById(R.id.btn_generate_ai_story);
 
@@ -100,25 +97,31 @@ public class LessonDetailFragment extends Fragment {
                 btnGenerateAiStory.setOnClickListener(v -> triggerAiStoryGeneration());
             }
 
-            // ── Feature 5 Upgrade 1: Text-to-Speech Audio Summary ───────────────
-            if (btnAudio != null) {
-                btnAudio.setOnClickListener(v -> speakAudioSummary(chapter));
-            }
-
-            // ── Feature 5 Upgrade 2: Interactive Scam Quiz ───────────────────────
-            if (containerQuiz != null) {
-                renderQuiz(containerQuiz, chapter);
-            }
-
             if (isCompleted) {
-                btnComplete.setText("Completed ✓");
+                btnComplete.setText("Completed ✓ (Tap to generate next)");
             }
 
             btnComplete.setOnClickListener(v -> {
-                repository.setChapterCompleted(chapter.chapterId, true);
-                pbProgress.setProgress(100);
-                btnComplete.setText("Completed ✓");
-                Toast.makeText(requireContext(), "Chapter marked as completed! (+50 XP)", Toast.LENGTH_SHORT).show();
+                btnComplete.setEnabled(false);
+                btnComplete.setText("✨ Generating New AI Scam Story...");
+                Toast.makeText(requireContext(), "🎉 Story Completed! Deleting this story & generating a new AI story...", Toast.LENGTH_LONG).show();
+
+                repository.deleteChapterAndReplaceWithAi(requireContext(), chapter.chapterId, new LearnStoryGenerator.StoryCallback() {
+                    @Override
+                    public void onStoryGenerated(LearnChapter newChapter) {
+                        if (!isAdded()) return;
+                        Toast.makeText(requireContext(), "✨ New AI Story Unlocked: " + newChapter.title, Toast.LENGTH_LONG).show();
+                        // Navigate back to updated Scam Stories library
+                        Navigation.findNavController(requireView()).navigateUp();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        if (!isAdded()) return;
+                        Toast.makeText(requireContext(), "Story completed!", Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(requireView()).navigateUp();
+                    }
+                });
             });
         }
 
@@ -136,7 +139,7 @@ public class LessonDetailFragment extends Fragment {
     }
 
     private void triggerAiStoryGeneration() {
-        Toast.makeText(requireContext(), "✨ Generating AI Scam Story...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "✨ Generating fresh AI Scam Story...", Toast.LENGTH_SHORT).show();
         LearnStoryGenerator.generateNewStory(requireContext(), new LearnStoryGenerator.StoryCallback() {
             @Override
             public void onStoryGenerated(LearnChapter newChapter) {
@@ -144,7 +147,7 @@ public class LessonDetailFragment extends Fragment {
                     repository.addDynamicChapter(requireContext(), newChapter);
                 }
                 new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                        .setTitle("🎉 New Story Unlocked!")
+                        .setTitle("🎉 New Scam Story Unlocked!")
                         .setMessage("Unlocked: " + newChapter.title + "\n\nStory: " + newChapter.whatHappens.substring(0, Math.min(120, newChapter.whatHappens.length())) + "...")
                         .setPositiveButton("Read Story 📖", (dialog, which) -> {
                             Bundle args = new Bundle();
@@ -218,114 +221,5 @@ public class LessonDetailFragment extends Fragment {
             card.addView(layout);
             container.addView(card);
         }
-    }
-
-    private android.speech.tts.TextToSpeech tts;
-
-    private void speakAudioSummary(LearnChapter chapter) {
-        if (chapter == null) return;
-        String summaryToSpeak = "Chapter: " + chapter.title + ". "
-                + "What happens: " + chapter.whatHappens + " "
-                + "What to do right now: " + (chapter.doRightNow != null && !chapter.doRightNow.isEmpty() ? chapter.doRightNow.get(0) : "");
-
-        if (tts == null) {
-            tts = new android.speech.tts.TextToSpeech(requireContext(), status -> {
-                if (status == android.speech.tts.TextToSpeech.SUCCESS) {
-                    tts.setLanguage(new java.util.Locale("en", "IN"));
-                    tts.speak(summaryToSpeak, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, "whis_tts");
-                }
-            });
-        } else {
-            tts.speak(summaryToSpeak, android.speech.tts.TextToSpeech.QUEUE_FLUSH, null, "whis_tts");
-        }
-        Toast.makeText(requireContext(), "🔊 Playing audio walkthrough...", Toast.LENGTH_SHORT).show();
-    }
-
-    private void renderQuiz(LinearLayout container, LearnChapter chapter) {
-        container.removeAllViews();
-        if (chapter == null) return;
-
-        List<LearnChapter.QuizQuestion> questions = chapter.quizQuestions;
-        if (questions == null || questions.isEmpty()) {
-            questions = java.util.Arrays.asList(
-                    new LearnChapter.QuizQuestion(
-                            "Q: Is it safe to follow instructions from a caller asking you to download AnyDesk or pay money?",
-                            false,
-                            "FALSE! Never download remote access apps or send money to strangers over the phone."
-                    )
-            );
-        }
-
-        for (int i = 0; i < questions.size(); i++) {
-            LearnChapter.QuizQuestion q = questions.get(i);
-
-            TextView tvQuestion = new TextView(requireContext());
-            tvQuestion.setText("Q" + (i + 1) + ": " + q.question);
-            tvQuestion.setTextSize(15);
-            tvQuestion.setTypeface(null, android.graphics.Typeface.BOLD);
-            tvQuestion.setTextColor(getResources().getColor(R.color.whis_text_hi, requireContext().getTheme()));
-            if (i > 0) tvQuestion.setPadding(0, 16, 0, 0);
-
-            LinearLayout btnRow = new LinearLayout(requireContext());
-            btnRow.setOrientation(LinearLayout.HORIZONTAL);
-            btnRow.setLayoutParams(new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            btnRow.setPadding(0, 8, 0, 0);
-
-            Button btnTrue = new Button(requireContext());
-            btnTrue.setText("YES (True)");
-            btnTrue.setTextSize(13);
-            btnTrue.setAllCaps(false);
-            LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            p1.setMarginEnd(8);
-            btnTrue.setLayoutParams(p1);
-
-            Button btnFalse = new Button(requireContext());
-            btnFalse.setText("NO (False)");
-            btnFalse.setTextSize(13);
-            btnFalse.setAllCaps(false);
-            LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            btnFalse.setLayoutParams(p2);
-
-            TextView tvFeedback = new TextView(requireContext());
-            tvFeedback.setTextSize(14);
-            tvFeedback.setPadding(0, 6, 0, 0);
-
-            btnTrue.setOnClickListener(v -> {
-                if (q.isTrueCorrect) {
-                    tvFeedback.setText("✅ Correct! (+50 XP) " + q.explanation);
-                    tvFeedback.setTextColor(0xFF4CAF50);
-                } else {
-                    tvFeedback.setText("❌ Incorrect! " + q.explanation);
-                    tvFeedback.setTextColor(0xFFFF4D4D);
-                }
-            });
-
-            btnFalse.setOnClickListener(v -> {
-                if (!q.isTrueCorrect) {
-                    tvFeedback.setText("✅ Correct! (+50 XP) " + q.explanation);
-                    tvFeedback.setTextColor(0xFF4CAF50);
-                } else {
-                    tvFeedback.setText("❌ Incorrect! " + q.explanation);
-                    tvFeedback.setTextColor(0xFFFF4D4D);
-                }
-            });
-
-            btnRow.addView(btnTrue);
-            btnRow.addView(btnFalse);
-
-            container.addView(tvQuestion);
-            container.addView(btnRow);
-            container.addView(tvFeedback);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
-        super.onDestroy();
     }
 }

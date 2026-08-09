@@ -19,7 +19,29 @@
         "Do not share your OTP, bank details, or make any payment, no matter how official they sound.",
         "If you already made a payment, call 1930 immediately — the first hours matter most for getting money frozen before it disappears."
       ],
+      "whatNotToDo": [
+        "Do NOT stay on the call — hanging up is not rude, it is safe.",
+        "Do NOT follow their instruction to keep the call secret from family or friends.",
+        "Do NOT transfer money to any account to 'prove innocence' — real police never work this way."
+      ],
       "howWhisHelps": "Whis flags calls from numbers reported by other users for this pattern, and the alert will show you plainly why a call looks suspicious before you decide whether to trust it.",
+      "quizQuestions": [
+        {
+          "question": "Can Indian police legally arrest you over a phone or video call?",
+          "isTrueCorrect": false,
+          "explanation": "No! 'Digital arrest' does not exist in Indian law. Police can only arrest you in person with a warrant — never over a call."
+        },
+        {
+          "question": "If a caller in uniform says you must pay money to avoid arrest, is that how real police operate?",
+          "isTrueCorrect": false,
+          "explanation": "Real police NEVER ask for money over the phone. Asking for payment to avoid arrest is always a scam."
+        },
+        {
+          "question": "If someone tells you to keep a police call secret from your family, should you be more suspicious?",
+          "isTrueCorrect": true,
+          "explanation": "Correct! Isolation is the scammer's main weapon. Legitimate agencies never ask you to hide contact with them."
+        }
+      ],
       "crossReference": ["courier_customs"],
       "sourceConfidence": "high — TRAI public advisory, MHA statement, multiple independent case reports, legal guidance sources"
     },
@@ -35,7 +57,29 @@
         "Do not scan the code or enter your PIN. Close the conversation.",
         "If you already scanned and lost money, screenshot everything — the message, the caller's number, any transaction ID — then call 1930 and your bank's fraud line immediately."
       ],
+      "whatNotToDo": [
+        "Do NOT scan a QR code sent by a stranger to 'receive' a payment — receiving needs nothing from you.",
+        "Do NOT enter your UPI PIN for any reason you didn't initiate yourself.",
+        "Do NOT trust anyone who calls you back after you share that you received a QR code — they will try again."
+      ],
       "howWhisHelps": "Whis flags SMS messages containing suspicious payment links, and can warn you before you open a message asking you to 'scan to receive' anything.",
+      "quizQuestions": [
+        {
+          "question": "Do you need to scan a QR code to receive money on UPI?",
+          "isTrueCorrect": false,
+          "explanation": "FALSE! You never need to scan anything to receive UPI money. Receiving just happens automatically — scanning only sends money."
+        },
+        {
+          "question": "If a buyer on OLX sends you a QR code to pay for your item, is that safe to scan?",
+          "isTrueCorrect": false,
+          "explanation": "No! Scanning their QR code will send money FROM your account, not deposit it. This is a classic QR scam trap."
+        },
+        {
+          "question": "Should you enter your UPI PIN for a transaction you did NOT initiate yourself?",
+          "isTrueCorrect": false,
+          "explanation": "Never! Your UPI PIN should only be entered when YOU are the one choosing to send money. Never for 'receiving'."
+        }
+      ],
       "crossReference": [],
       "sourceConfidence": "high — confirmed independently across many current sources, consistent, unambiguous mechanism"
     },
@@ -51,7 +95,29 @@
         "If you've already installed the app and shared the code, put your phone in airplane mode or turn it off immediately — these apps need an active connection to keep control.",
         "Once safely offline, uninstall the app, then call your bank's fraud line and 1930 before reconnecting to the internet."
       ],
+      "whatNotToDo": [
+        "Do NOT download any app that a caller specifically asks you to install during the call.",
+        "Do NOT share the 9-digit code (or any code) that the app displays to the person on the phone.",
+        "Do NOT stay online while the caller has remote access — airplane mode or power off is your first move."
+      ],
       "howWhisHelps": "Whis can warn you if a call is followed by an SMS containing a payment or app-download link, since that combination is a strong signal of this exact pattern.",
+      "quizQuestions": [
+        {
+          "question": "Should you share the 9-digit code from AnyDesk with a 'bank support' caller?",
+          "isTrueCorrect": false,
+          "explanation": "Never! Sharing that code gives them full control of your phone. Real bank support NEVER asks for remote access codes."
+        },
+        {
+          "question": "If you gave someone remote access, should you immediately put your phone in Airplane Mode?",
+          "isTrueCorrect": true,
+          "explanation": "Yes! Airplane mode cuts their connection immediately. Then uninstall the app and call your bank before reconnecting."
+        },
+        {
+          "question": "Is AnyDesk itself a dangerous or illegal app?",
+          "isTrueCorrect": false,
+          "explanation": "No, the app is legitimate. The danger is only when you share your 9-digit code with someone who called you."
+        }
+      ],
       "crossReference": [],
       "sourceConfidence": "high — RBI's own official warning on this mechanism, multiple case reports across cities, current 2026 KYC-chain variant confirmed by independent source"
     },
@@ -67,7 +133,29 @@
         "Do not click any link or pay any fee from an unexpected courier message. Contact the courier company directly using their official number, not any number given in the message.",
         "If you've already paid, contact the courier company immediately with your tracking number, and file a complaint at cybercrime.gov.in or call 1930 the same day — fast reporting has led to real, documented refunds."
       ],
+      "whatNotToDo": [
+        "Do NOT pay any 'customs fee' demanded via SMS or phone call to a stranger's UPI or bank account.",
+        "Do NOT call back the number given in the suspicious message — use the official courier website number instead.",
+        "Do NOT share personal ID or bank details to 'verify' you are the rightful parcel owner over a cold call."
+      ],
       "howWhisHelps": "Whis checks sender IDs against known courier-impersonation patterns and flags messages requesting urgent payment for a 'held' parcel.",
+      "quizQuestions": [
+        {
+          "question": "Does India Customs ever contact you by SMS or phone asking for payment to a private account?",
+          "isTrueCorrect": false,
+          "explanation": "No! CBIC (Customs) has officially stated they never contact the public this way. Any such message is a scam."
+        },
+        {
+          "question": "If you get a courier SMS asking for fees, is it safe to call the number in that same message?",
+          "isTrueCorrect": false,
+          "explanation": "No! Always find the courier company's official number from their actual website, not from the suspicious message."
+        },
+        {
+          "question": "Can fast reporting to 1930 help recover money lost to a courier scam?",
+          "isTrueCorrect": true,
+          "explanation": "Yes! Real documented cases show that calling 1930 quickly has resulted in money being frozen and returned."
+        }
+      ],
       "crossReference": ["digital_arrest"],
       "sourceConfidence": "high — official CBIC statement, real documented recovery case, multiple independent reports"
     },
@@ -83,7 +171,29 @@
         "Never grant a loan app access to your contacts, photos, or SMS. A genuine lender never needs this.",
         "If you're already being threatened, tell your close contacts in advance that your data was compromised and any messages from an unknown number should be ignored — this removes the scammer's main pressure point — then report to cybercrime.gov.in or 1930."
       ],
+      "whatNotToDo": [
+        "Do NOT grant permissions to contacts, photos, or SMS to any loan app — this is how they get blackmail material.",
+        "Do NOT pay extra 'processing fees' or 'insurance' before receiving the loan — real lenders deduct these from the loan, not ask for advance payment.",
+        "Do NOT ignore threats quietly — telling your family and friends removes the scammer's power over you."
+      ],
       "howWhisHelps": "Whis can flag SMS/WhatsApp messages containing loan-app APK links from unverified sources.",
+      "quizQuestions": [
+        {
+          "question": "Should a legitimate loan app require access to your phone contacts and photos?",
+          "isTrueCorrect": false,
+          "explanation": "No! No real RBI-registered lender needs your contacts or photos. Asking for this access is a major red flag."
+        },
+        {
+          "question": "If a loan app is threatening you with your contact list, will telling your family about it help?",
+          "isTrueCorrect": true,
+          "explanation": "Yes! Informing people removes the scammer's pressure. Once everyone knows, the blackmail has no power."
+        },
+        {
+          "question": "Can you verify a loan app is legitimate by checking the RBI NBFC registry?",
+          "isTrueCorrect": true,
+          "explanation": "Yes! The RBI website lists all registered NBFCs. If the lender isn't there, don't use the app."
+        }
+      ],
       "crossReference": [],
       "sourceConfidence": "high — RBI/ED enforcement actions with real case numbers, multiple documented individual cases with specific figures"
     }

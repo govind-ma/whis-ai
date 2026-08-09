@@ -16,8 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * AI Scam Story Generator — Generates real-world, funny & mature Hinglish scam awareness stories
- * with clear outcomes (What To Do / What Not To Do) and interactive Q&A questions.
+ * AI Scam Story Generator — Generates real-world, engaging scam stories
+ * (Bank Scam, KYC Scam, Money Scam, Digital Arrest, etc.) with practical solutions
+ * (What To Do & What Not To Do).
  */
 public class LearnStoryGenerator {
 
@@ -27,12 +28,15 @@ public class LearnStoryGenerator {
     }
 
     private static final String[] TOPICS = new String[]{
-            "Digital Arrest & Fake CBI Officer Video Call",
-            "Free Birthday Cake & Delivery OTP Scam",
-            "Sweety's AnyDesk Remote Desktop Love Fraud",
-            "Customs Parcel & Illegal Drugs Threat",
-            "Fake Electricity Bill Disconnection Link",
-            "WFH Telegram Prepaid Task Scam"
+            "Bank Account Freeze & Urgent Fraud Department Call",
+            "KYC Update Mandate & APK Download Link SMS",
+            "UPI Money Refund & Fake Payment QR Code Trap",
+            "Digital Arrest & Fake CBI Police Officer WhatsApp Video Call",
+            "Instant Paperless Loan App & Contact List Blackmail",
+            "Electricity Disconnection Power Cut Notice SMS",
+            "Telegram WFH Prepaid Task & Crypto Investment Scam",
+            "FedEx Courier Customs Clearance & Drug Package Extortion",
+            "Credit Card Reward Points Expiry & Fake Banking Page"
     };
 
     public static void generateNewStory(Context context, StoryCallback callback) {
@@ -40,18 +44,17 @@ public class LearnStoryGenerator {
         int randomIndex = (int) (Math.random() * TOPICS.length);
         String selectedTopic = TOPICS[randomIndex];
 
-        String prompt = "Generate a real-world, engaging, funny and mature Hinglish scam awareness story about: " + selectedTopic + ".\n"
+        String prompt = "Generate a real-world, engaging and realistic scam story about: " + selectedTopic + ".\n"
+                + "The story MUST include what happened (the realistic incident) AND how to solve that situation if it happens to someone.\n"
                 + "Return ONLY a valid JSON object with no markdown formatting:\n"
                 + "{\n"
                 + "  \"id\": \"story_" + System.currentTimeMillis() + "\",\n"
-                + "  \"title\": \"[Funny Catchy Hinglish Title]\",\n"
-                + "  \"story\": \"[3-paragraph funny & realistic story narrative in Hinglish about how someone almost got trapped and learned a lesson]\",\n"
-                + "  \"what_to_do\": [\"Step 1\", \"Step 2\", \"Step 3\"],\n"
-                + "  \"what_not_to_do\": [\"Mistake 1\", \"Mistake 2\", \"Mistake 3\"],\n"
-                + "  \"qna\": [\n"
-                + "    {\"q\": \"Question 1\", \"yes_correct\": false, \"explanation\": \"Explanation 1\"},\n"
-                + "    {\"q\": \"Question 2\", \"yes_correct\": true, \"explanation\": \"Explanation 2\"}\n"
-                + "  ]\n"
+                + "  \"title\": \"[Catchy Realistic Scam Story Title]\",\n"
+                + "  \"category\": \"[Bank Scam / KYC Scam / Money Scam / Digital Arrest / Loan App Scam]\",\n"
+                + "  \"story\": \"[3-paragraph realistic narrative explaining what happened during this scam incident]\",\n"
+                + "  \"why_it_works\": \"[Explanation of the trick scammers used to create panic or greed]\",\n"
+                + "  \"what_to_do\": [\"Step 1 to solve this problem\", \"Step 2\", \"Step 3\"],\n"
+                + "  \"what_not_to_do\": [\"Mistake 1 to avoid\", \"Mistake 2\", \"Mistake 3\"]\n"
                 + "}";
 
         GeminiAgentClient client = new GeminiAgentClient(context);
@@ -68,7 +71,6 @@ public class LearnStoryGenerator {
                     LearnChapter ch = parseChapterFromJson(json, selectedTopic);
                     mainHandler.post(() -> callback.onStoryGenerated(ch));
                 } catch (Exception e) {
-                    // Fallback to local rich story generator
                     LearnChapter fallback = generateLocalFallbackStory(selectedTopic);
                     mainHandler.post(() -> callback.onStoryGenerated(fallback));
                 }
@@ -84,91 +86,70 @@ public class LearnStoryGenerator {
 
     private static LearnChapter parseChapterFromJson(JSONObject json, String topic) {
         String id = json.optString("id", "story_" + System.currentTimeMillis());
-        String title = json.optString("title", "The Unexpected Scam Lesson");
-        String story = json.optString("story", "A funny real-life story about how Ramesh Uncle spotted a scam.");
+        String title = json.optString("title", topic + " Case File");
+        String category = json.optString("category", "SCAM STORY");
+        String story = json.optString("story", "A realistic scam situation story.");
+        String why = json.optString("why_it_works", "Scammers use panic, fear, or urgency to stop you from thinking clearly.");
 
         List<String> doList = new ArrayList<>();
         JSONArray doArr = json.optJSONArray("what_to_do");
         if (doArr != null) {
             for (int i = 0; i < doArr.length(); i++) doList.add(doArr.optString(i));
         }
-        if (doList.isEmpty()) doList = Arrays.asList("Disconnect suspicious calls immediately.", "Verify official website directly.", "Call 1930 Helpline if money was sent.");
+        if (doList.isEmpty()) doList = Arrays.asList("Hang up immediately.", "Call official bank helpline directly.", "Report to 1930 Cybercrime Helpline.");
 
         List<String> notDoList = new ArrayList<>();
         JSONArray notDoArr = json.optJSONArray("what_not_to_do");
         if (notDoArr != null) {
             for (int i = 0; i < notDoArr.length(); i++) notDoList.add(notDoArr.optString(i));
         }
-        if (notDoList.isEmpty()) notDoList = Arrays.asList("Never share OTP or UPI PIN.", "Never download AnyDesk/TeamViewer.", "Never pay money to avoid video call arrest.");
-
-        List<LearnChapter.QuizQuestion> qList = new ArrayList<>();
-        JSONArray qnaArr = json.optJSONArray("qna");
-        if (qnaArr != null) {
-            for (int i = 0; i < qnaArr.length(); i++) {
-                JSONObject qObj = qnaArr.optJSONObject(i);
-                if (qObj != null) {
-                    qList.add(new LearnChapter.QuizQuestion(
-                            qObj.optString("q", "Is this action safe?"),
-                            qObj.optBoolean("yes_correct", false),
-                            qObj.optString("explanation", "Always verify independently before acting.")
-                    ));
-                }
-            }
-        }
-        if (qList.isEmpty()) {
-            qList.add(new LearnChapter.QuizQuestion("Can any official arrest you via WhatsApp video call?", false, "No! Real police or CBI never conduct digital arrests over video call."));
-            qList.add(new LearnChapter.QuizQuestion("Should you pay money to clear your name during a call?", false, "Never! Demanding money over the phone is a 100% scam signal."));
-        }
+        if (notDoList.isEmpty()) notDoList = Arrays.asList("Never share OTP or PIN.", "Never download unknown APKs.", "Never transfer money to clear your name.");
 
         LearnChapter ch = new LearnChapter(
                 id,
                 title,
-                "AI STORY CASE",
+                category.toUpperCase(),
                 "RATING_5_STAR",
                 story,
-                "Fear of police or quick temptation disables logical thinking.",
+                why,
                 doList,
-                "Whis screens calls in real time and alerts family instantly."
+                "Whis screens suspicious calls & messages automatically to protect you."
         );
         ch.whatNotToDo = notDoList;
-        ch.quizQuestions = qList;
         return ch;
     }
 
     public static LearnChapter generateLocalFallbackStory(String topic) {
         String id = "story_" + System.currentTimeMillis();
-        String title = "Ramesh Uncle's $5,000 CBI Video Call Trap";
-        String story = "Ramesh Uncle was enjoying his afternoon tea when a WhatsApp video call rang from a guy in a police uniform claiming to be a CBI Officer. The officer shouted: 'Rameshji! A parcel with illegal SIM cards was seized in Mumbai in your name! You are under Digital Arrest!'\n\nRamesh Uncle got nervous and was about to transfer Rs 50,000 to 'clear his name'. But his daughter walked in, saw the officer wearing a cheap uniform with a fake badge, and laughed: 'Papa, real police never conducts digital arrests over WhatsApp!'\n\nRamesh Uncle disconnected, blocked the number, and saved his hard-earned savings while laughing at the scammer's bad acting.";
+        String title = topic + ": The Real Incident";
+        String category = topic.contains("KYC") ? "KYC SCAM" : (topic.contains("Bank") ? "BANK SCAM" : "MONEY SCAM");
+        
+        String story = "Sharmaji received an urgent SMS claiming his bank account was blocked due to pending KYC verification. The message contained a link: 'Click here to update KYC within 2 hours or account will be permanently frozen.'\n\nWorried about his savings, Sharmaji clicked the link and downloaded a file called 'BankKYC.apk'. A caller claiming to be a bank official then guided him to enter his bank details and share the OTP received on his phone.\n\nWithin minutes, Rs 75,000 was debited. Fortunately, Sharmaji immediately called the National Cybercrime Helpline 1930 and contacted his bank to freeze the beneficiary account before the money was withdrawn.";
 
         List<String> doList = Arrays.asList(
-                "Disconnect WhatsApp video calls claiming to be police or CBI.",
-                "Tell your family members immediately before making any transfer.",
-                "Call National Cybercrime Helpline 1930 if money was debited."
+                "Call 1930 National Cybercrime Helpline immediately within 2 hours of payment.",
+                "Contact your bank's official customer care number to freeze your debit card & banking access.",
+                "Always verify account status directly by visiting your bank branch or official banking app."
         );
 
         List<String> notDoList = Arrays.asList(
-                "Never pay money or 'security deposits' to clear your name.",
-                "Never share your bank details, OTPs, or UPI PIN over video calls.",
-                "Never stay isolated — scammers insist you don't tell anyone."
-        );
-
-        List<LearnChapter.QuizQuestion> quiz = Arrays.asList(
-                new LearnChapter.QuizQuestion("Is 'Digital Arrest' over a WhatsApp video call legal in India?", false, "FALSE! No Indian court, police station, or CBI office conducts digital arrests via video calls."),
-                new LearnChapter.QuizQuestion("If a caller threatens to arrest you unless you pay money, should you pay?", false, "FALSE! Demanding payment to prevent arrest is a 100% scam tactic.")
+                "Never click links or download APK files sent via SMS or WhatsApp for KYC updates.",
+                "Never share OTPs, PINs, or passwords with anyone claiming to be a bank official.",
+                "Never panic when given short deadlines like 'account frozen in 2 hours'."
         );
 
         LearnChapter ch = new LearnChapter(
                 id,
                 title,
-                "AI STORY CASE",
+                category,
                 "RATING_5_STAR",
                 story,
-                "Scammers use fear and urgency to bypass your normal logic.",
+                "Creation of artificial urgency (2-hour deadline) causes panic, preventing victims from verifying with official sources.",
                 doList,
-                "Whis flags fake police numbers automatically."
+                "Whis automatically flags SMS messages containing suspicious APK download links."
         );
         ch.whatNotToDo = notDoList;
-        ch.quizQuestions = quiz;
         return ch;
     }
 }
+

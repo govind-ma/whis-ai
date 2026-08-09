@@ -24,7 +24,7 @@
             android:id="@+id/tv_learn_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Whis Knowledge Book"
+            android:text="Whis Scam Story Library 📖"
             style="@style/Whis.TextAppearance.H1" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Every scam has a pattern. Once you see the pattern, it stops working on you."
+            android:text="Read real scam stories, learn how to solve them, &amp; unlock fresh AI stories!"
             style="@style/Whis.TextAppearance.Caption" />
 
         <!-- 1. Universal Reporting Card (1930 Helpline) -->
@@ -183,8 +183,8 @@
             android:textSize="13sp"
             android:textStyle="bold"
             android:textAllCaps="false"
-            android:textColor="#41C85A"
-            android:backgroundTint="#152619" />
+            android:textColor="@color/whis_trusted"
+            android:backgroundTint="@color/whis_trusted_tint" />
 
         <!-- No Search Results Label -->
         <TextView

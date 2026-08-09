@@ -31,4 +31,13 @@
 
     <color name="whis_green_dark">#1B5E20</color>
 
+    <!-- ── Story Note Theme Colors (Dark Palette) ───────────────────────── -->
+    <color name="whis_story_bg">#1A1A0A</color>
+    <color name="whis_story_border">#C8A86B</color>
+    <color name="whis_story_text">#E8E0C8</color>
+
+    <color name="whis_why_bg">#0F1A0F</color>
+    <color name="whis_why_border">#41C85A</color>
+    <color name="whis_why_text">#FFFFFF</color>
+
 </resources>

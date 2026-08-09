@@ -67,10 +67,16 @@ public class LearnRepository {
             }
 
             JSONArray jsonChapters = root.getJSONArray("chapters");
+            SharedPreferences prefs = appContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            java.util.Set<String> deletedIds = prefs.getStringSet("deleted_chapter_ids", new java.util.HashSet<>());
+
             for (int i = 0; i < jsonChapters.length(); i++) {
                 JSONObject obj = jsonChapters.getJSONObject(i);
 
                 String id = obj.getString("chapterId");
+                if (deletedIds.contains(id)) {
+                    continue; // Skip deleted chapters
+                }
                 String title = obj.getString("title");
                 String shortName = obj.optString("shortName", title);
 
@@ -82,10 +88,15 @@ public class LearnRepository {
                 List<String> crossRef = parseJsonArray(obj.optJSONArray("crossReference"));
                 String sourceConfidence = obj.optString("sourceConfidence", "");
 
-                chapters.add(new LearnChapter(
+                LearnChapter chapter = new LearnChapter(
                         id, title, shortName, triggers, whatHappens, whyItWorks,
                         doRightNow, howWhisHelps, crossRef, sourceConfidence
-                ));
+                );
+
+                List<String> whatNotToDo = parseJsonArray(obj.optJSONArray("whatNotToDo"));
+                chapter.whatNotToDo = whatNotToDo;
+
+                chapters.add(chapter);
             }
 
             // Load dynamically generated AI story chapters from SharedPreferences
@@ -110,6 +121,7 @@ public class LearnRepository {
             JSONObject obj = new JSONObject();
             obj.put("id", chapter.chapterId);
             obj.put("title", chapter.title);
+            obj.put("category", chapter.shortName);
             obj.put("story", chapter.whatHappens);
             obj.put("whyItWorks", chapter.whyItWorks);
             obj.put("howWhisHelps", chapter.howWhisHelps);
@@ -123,16 +135,64 @@ public class LearnRepository {
         }
     }
 
+    /**
+     * Deletes the completed story chapter and automatically generates a new AI story.
+     */
+    public void deleteChapterAndReplaceWithAi(Context context, String chapterId, LearnStoryGenerator.StoryCallback callback) {
+        // Remove chapter from active list
+        for (int i = 0; i < chapters.size(); i++) {
+            if (chapters.get(i).chapterId.equals(chapterId)) {
+                chapters.remove(i);
+                break;
+            }
+        }
+
+        // Store deleted chapter ID in prefs to prevent re-loading on restart
+        try {
+            SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            java.util.Set<String> deletedSet = new java.util.HashSet<>(
+                    prefs.getStringSet("deleted_chapter_ids", new java.util.HashSet<>())
+            );
+            deletedSet.add(chapterId);
+            prefs.edit().putStringSet("deleted_chapter_ids", deletedSet).apply();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to update deleted chapter IDs", e);
+        }
+
+        // Generate new replacement story automatically using AI
+        LearnStoryGenerator.generateNewStory(context, new LearnStoryGenerator.StoryCallback() {
+            @Override
+            public void onStoryGenerated(LearnChapter newChapter) {
+                addDynamicChapter(context, newChapter);
+                if (callback != null) {
+                    callback.onStoryGenerated(newChapter);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                if (callback != null) {
+                    callback.onError(error);
+                }
+            }
+        });
+    }
+
     private void loadDynamicChapters() {
         try {
             SharedPreferences prefs = appContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            java.util.Set<String> deletedIds = prefs.getStringSet("deleted_chapter_ids", new java.util.HashSet<>());
             String jsonStr = prefs.getString("dynamic_stories_json", "[]");
             JSONArray arr = new JSONArray(jsonStr);
 
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
                 String id = obj.optString("id", "story_" + i);
+                if (deletedIds.contains(id)) {
+                    continue;
+                }
                 String title = obj.optString("title", "AI Scam Story");
+                String category = obj.optString("category", "AI STORY");
                 String story = obj.optString("story", "");
                 String why = obj.optString("whyItWorks", "");
                 String whis = obj.optString("howWhisHelps", "");
@@ -140,7 +200,7 @@ public class LearnRepository {
                 List<String> doList = parseJsonArray(obj.optJSONArray("doRightNow"));
                 List<String> notDoList = parseJsonArray(obj.optJSONArray("whatNotToDo"));
 
-                LearnChapter ch = new LearnChapter(id, title, "AI STORY", "RATING_5_STAR", story, why, doList, whis);
+                LearnChapter ch = new LearnChapter(id, title, category, "RATING_5_STAR", story, why, doList, whis);
                 ch.whatNotToDo = notDoList;
                 chapters.add(ch);
             }

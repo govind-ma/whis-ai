@@ -24,14 +24,34 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_voice_mode"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="Voice"
-            android:textSize="12sp" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btn_clear_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="6dp"
+                android:text="🗑️ Clear"
+                android:textSize="11sp"
+                android:textAllCaps="false"
+                android:textColor="@color/whis_high_risk"
+                android:backgroundTint="@color/whis_high_risk_tint"
+                android:paddingHorizontal="10dp" />
+
+            <Button
+                android:id="@+id/btn_voice_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Voice"
+                android:textSize="11sp"
+                android:paddingHorizontal="10dp" />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- Chat Messages Container / ScrollView -->

@@ -164,7 +164,7 @@
                 android:textAllCaps="false"
                 android:paddingHorizontal="10dp"
                 android:textColor="@color/whis_trusted"
-                android:backgroundTint="#152619" />
+                android:backgroundTint="@color/whis_trusted_tint" />
 
         </LinearLayout>
 
@@ -307,8 +307,8 @@
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 android:paddingHorizontal="10dp"
-                android:textColor="#FF4D4D"
-                android:backgroundTint="#2D1515" />
+                android:textColor="@color/whis_high_risk"
+                android:backgroundTint="@color/whis_high_risk_tint" />
 
         </LinearLayout>
 

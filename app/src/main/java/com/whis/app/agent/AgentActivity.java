@@ -97,6 +97,25 @@ public class AgentActivity extends AppCompatActivity {
             dispatchSendMessage();
         });
 
+        // ── Clear Chat button ─────────────────────────────────────────────────
+        android.widget.Button btnClearChat = findViewById(R.id.btn_clear_chat);
+        if (btnClearChat != null) {
+            btnClearChat.setOnClickListener(v -> {
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Clear Chat")
+                        .setMessage("Delete all messages in this conversation?")
+                        .setPositiveButton("Clear", (dialog, which) -> {
+                            chatContainer.removeAllViews();
+                            if (viewModel != null) {
+                                viewModel.clearHistory();
+                            }
+                            android.widget.Toast.makeText(this, "Chat cleared", android.widget.Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+        }
+
         // ── Original AI logic (untouched) ────────────────────────────────────
         viewModel = new AgentViewModel(this);
 

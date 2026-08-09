@@ -64,8 +64,8 @@ public class LearnCarouselAdapter extends RecyclerView.Adapter<LearnCarouselAdap
             holder.tvBadge.setText("Completed ✓");
             holder.tvBadge.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.whis_trusted, holder.itemView.getContext().getTheme()));
         } else {
-            holder.tvBadge.setText("Tap to Read");
-            holder.tvBadge.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.whis_text_mid, holder.itemView.getContext().getTheme()));
+            holder.tvBadge.setText("Read Story 📖");
+            holder.tvBadge.setTextColor(holder.itemView.getContext().getResources().getColor(R.color.whis_trusted, holder.itemView.getContext().getTheme()));
         }
 
         // Shared element transition name setup
