@@ -180,52 +180,72 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:id="@+id/chip_filter_all"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:text="All"
-                    android:textSize="12sp"
-                    android:textAllCaps="false"
-                    android:paddingHorizontal="12dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:textColor="@color/whis_bg"
-                    android:backgroundTint="@color/whis_trusted"
-                    android:layout_marginEnd="6dp" />
+                    android:background="@drawable/bg_chip_active"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
 
-                <Button
+                <TextView
                     android:id="@+id/chip_filter_calls"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:text="Calls"
-                    android:textSize="12sp"
-                    android:textAllCaps="false"
-                    android:paddingHorizontal="12dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:textColor="@color/whis_text_hi"
-                    android:backgroundTint="#222226"
-                    android:layout_marginEnd="6dp" />
+                    android:background="@drawable/bg_chip_inactive"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
 
-                <Button
+                <TextView
                     android:id="@+id/chip_filter_messages"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:text="Messages"
-                    android:textSize="12sp"
-                    android:textAllCaps="false"
-                    android:paddingHorizontal="12dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:textColor="@color/whis_text_hi"
-                    android:backgroundTint="#222226"
-                    android:layout_marginEnd="6dp" />
+                    android:background="@drawable/bg_chip_inactive"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true" />
 
-                <Button
+                <TextView
                     android:id="@+id/chip_filter_blocked"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="36dp"
                     android:text="Blocked"
-                    android:textSize="12sp"
-                    android:textAllCaps="false"
-                    android:paddingHorizontal="12dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:textColor="@color/whis_text_hi"
-                    android:backgroundTint="#222226" />
+                    android:background="@drawable/bg_chip_inactive"
+                    android:clickable="true"
+                    android:focusable="true" />
 
             </LinearLayout>
 

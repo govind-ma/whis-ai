@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,18 +24,11 @@ import com.whis.app.ui.components.ListAnimationHelper;
 import com.whis.app.ui.components.ProtectionRing;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Home dashboard fragment (UI_PLAN.md §2.4 / §3.1).
- * <p>
- * Features:
- * <ul>
- *   <li>ProtectionRing status card showing current protection health</li>
- *   <li>Contextual AI entry point card ("Ask Whis anything")</li>
- *   <li>Activity feed — starts empty on fresh install; populated by real AI-analysed data</li>
- *   <li>Empty state shown when no activity has been recorded yet</li>
- * </ul>
  */
 public class HomeFragment extends Fragment {
 
@@ -120,11 +115,11 @@ public class HomeFragment extends Fragment {
                     if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
                         if (phoneNumber != null && !phoneNumber.isEmpty()) {
                             com.whis.app.call.BlockedNumberStore.block(requireContext(), phoneNumber);
-                            android.widget.Toast.makeText(requireContext(),
-                                    "🚫 Blocked: " + phoneNumber, android.widget.Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked: " + phoneNumber, Toast.LENGTH_SHORT).show();
                         } else {
-                            android.widget.Toast.makeText(requireContext(),
-                                    "🚫 Blocked high-risk item", android.widget.Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(),
+                                    "🚫 Blocked high-risk item", Toast.LENGTH_SHORT).show();
                         }
                         feedItems.remove(position);
                         if (adapterHolder[0] != null) adapterHolder[0].notifyItemRemoved(position);
@@ -141,16 +136,30 @@ public class HomeFragment extends Fragment {
         rvFeed.setAdapter(adapter);
 
         // ── Filter Chips ──────────────────────────────────────────────────
-        android.widget.Button chipAll = view.findViewById(R.id.chip_filter_all);
-        android.widget.Button chipCalls = view.findViewById(R.id.chip_filter_calls);
-        android.widget.Button chipMessages = view.findViewById(R.id.chip_filter_messages);
-        android.widget.Button chipBlocked = view.findViewById(R.id.chip_filter_blocked);
+        TextView chipAll = view.findViewById(R.id.chip_filter_all);
+        TextView chipCalls = view.findViewById(R.id.chip_filter_calls);
+        TextView chipMessages = view.findViewById(R.id.chip_filter_messages);
+        TextView chipBlocked = view.findViewById(R.id.chip_filter_blocked);
+
+        TextView[] chips = new TextView[]{chipAll, chipCalls, chipMessages, chipBlocked};
 
         if (chipAll != null && chipCalls != null && chipMessages != null && chipBlocked != null) {
-            chipAll.setOnClickListener(v -> filterFeed(feedItems, adapter, "ALL"));
-            chipCalls.setOnClickListener(v -> filterFeed(feedItems, adapter, "CALLS"));
-            chipMessages.setOnClickListener(v -> filterFeed(feedItems, adapter, "MESSAGES"));
-            chipBlocked.setOnClickListener(v -> filterFeed(feedItems, adapter, "BLOCKED"));
+            chipAll.setOnClickListener(v -> {
+                updateChipSelection(chips, chipAll);
+                filterFeed(feedItems, adapterHolder[0], "ALL");
+            });
+            chipCalls.setOnClickListener(v -> {
+                updateChipSelection(chips, chipCalls);
+                filterFeed(feedItems, adapterHolder[0], "CALLS");
+            });
+            chipMessages.setOnClickListener(v -> {
+                updateChipSelection(chips, chipMessages);
+                filterFeed(feedItems, adapterHolder[0], "MESSAGES");
+            });
+            chipBlocked.setOnClickListener(v -> {
+                updateChipSelection(chips, chipBlocked);
+                filterFeed(feedItems, adapterHolder[0], "BLOCKED");
+            });
         }
 
         // ── Export Cybercrime Report Button ────────────────────────────────
@@ -170,6 +179,19 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void updateChipSelection(TextView[] chips, TextView activeChip) {
+        for (TextView chip : chips) {
+            if (chip == null) continue;
+            if (chip == activeChip) {
+                chip.setBackgroundResource(R.drawable.bg_chip_active);
+                chip.setTextColor(getResources().getColor(R.color.whis_bg, requireContext().getTheme()));
+            } else {
+                chip.setBackgroundResource(R.drawable.bg_chip_inactive);
+                chip.setTextColor(getResources().getColor(R.color.whis_text_hi, requireContext().getTheme()));
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -183,11 +205,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    /**
-     * Breathing pulse animation on the ProtectionRing.
-     * Scale: 1.0 → 1.05 → 1.0, infinite loop, 2000ms, FastOutSlowInInterpolator.
-     * Pivot is the view centre so the ring expands symmetrically.
-     */
     private void startBreathingPulse(View target) {
         FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
 
@@ -211,7 +228,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void filterFeed(List<DetectionResult> allItems, ActivityFeedAdapter adapter, String filter) {
-        List<DetectionResult> filtered = new java.util.ArrayList<>();
+        List<DetectionResult> filtered = new ArrayList<>();
         for (DetectionResult item : allItems) {
             if ("ALL".equals(filter)) {
                 filtered.add(item);
@@ -219,7 +236,7 @@ public class HomeFragment extends Fragment {
                 filtered.add(item);
             } else if ("MESSAGES".equals(filter) && !item.getIdentifierType().contains("CALL")) {
                 filtered.add(item);
-            } else if ("BLOCKED".equals(filter) && item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK) {
+            } else if ("BLOCKED".equals(filter) && item.getVerdict() == WhisVerdict.HIGH_RISK) {
                 filtered.add(item);
             }
         }
@@ -228,22 +245,22 @@ public class HomeFragment extends Fragment {
         });
         RecyclerView rvFeed = getView() != null ? getView().findViewById(R.id.rv_activity_feed) : null;
         if (rvFeed != null) rvFeed.setAdapter(newAdapter);
-        android.widget.Toast.makeText(requireContext(), "Filter applied: " + filter, android.widget.Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Filter applied: " + filter, Toast.LENGTH_SHORT).show();
     }
 
     private void exportCybercrimeReport(List<DetectionResult> items) {
         StringBuilder report = new StringBuilder();
         report.append("========================================\n");
         report.append("  WHIS AI — CYBERCRIME THREAT REPORT\n");
-        report.append("  Generated: ").append(new java.util.Date()).append("\n");
+        report.append("  Generated: ").append(new Date()).append("\n");
         report.append("========================================\n\n");
 
         int count = 0;
         for (DetectionResult item : items) {
-            if (item.getVerdict() == com.whis.app.core.WhisVerdict.HIGH_RISK || item.getVerdict() == com.whis.app.core.WhisVerdict.SUSPICIOUS) {
+            if (item.getVerdict() == WhisVerdict.HIGH_RISK || item.getVerdict() == WhisVerdict.SUSPICIOUS) {
                 count++;
                 report.append("INCIDENT #").append(count).append("\n");
-                report.append("• Date/Time: ").append(new java.util.Date(item.getTimestamp())).append("\n");
+                report.append("• Date/Time: ").append(new Date(item.getTimestamp())).append("\n");
                 report.append("• Risk Level: ").append(item.getVerdict().name()).append("\n");
                 report.append("• Category: ").append(item.getIdentifierType()).append("\n");
                 report.append("• Details: ").append(item.getReasonText() != null ? item.getReasonText() : "N/A").append("\n");

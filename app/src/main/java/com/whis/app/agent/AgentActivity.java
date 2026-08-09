@@ -78,6 +78,19 @@ public class AgentActivity extends AppCompatActivity {
         // Setup animated input border
         setupInputBorder();
 
+        // Ensure scrolling to bottom when input is focused or keyboard appears
+        etInput.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                scrollToBottom();
+            }
+        });
+
+        scrollView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom < oldBottom) {
+                scrollToBottom();
+            }
+        });
+
         // Send button click → rotation + send logic
         btnSend.setOnClickListener(v -> {
             animateSendButton(v);

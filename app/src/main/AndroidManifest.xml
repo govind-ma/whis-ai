@@ -44,7 +44,8 @@
         <!-- AI Agent Activities -->
         <activity
             android:name=".agent.AgentActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".agent.RedAlertActivity"
