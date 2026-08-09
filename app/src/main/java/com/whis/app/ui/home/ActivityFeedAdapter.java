@@ -39,14 +39,29 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         void onItemClick(DetectionResult item, int position);
     }
 
+    public interface OnSelectionChangeListener {
+        void onSelectionChanged(int count);
+    }
+
     private final List<DetectionResult> items;
     private final OnItemClickListener listener;
+    private OnSelectionChangeListener selectionChangeListener;
     private final java.util.Set<Integer> selectedPositions = new java.util.HashSet<>();
 
     public ActivityFeedAdapter(@NonNull List<DetectionResult> items,
                                @NonNull OnItemClickListener listener) {
         this.items = items;
         this.listener = listener;
+    }
+
+    public void setOnSelectionChangeListener(OnSelectionChangeListener listener) {
+        this.selectionChangeListener = listener;
+    }
+
+    private void notifySelectionChanged() {
+        if (selectionChangeListener != null) {
+            selectionChangeListener.onSelectionChanged(selectedPositions.size());
+        }
     }
 
     public void toggleSelection(int position) {
@@ -56,6 +71,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             selectedPositions.add(position);
         }
         notifyItemChanged(position);
+        notifySelectionChanged();
     }
 
     public void selectAll() {
@@ -64,11 +80,13 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
             selectedPositions.add(i);
         }
         notifyDataSetChanged();
+        notifySelectionChanged();
     }
 
     public void unselectAll() {
         selectedPositions.clear();
         notifyDataSetChanged();
+        notifySelectionChanged();
     }
 
     public List<DetectionResult> getSelectedItems() {

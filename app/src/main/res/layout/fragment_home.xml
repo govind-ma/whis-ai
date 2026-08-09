@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- 1. ProtectionRing status card — GlassCardView for hero treatment -->
+                <!-- 1. Protection status card — GlassCardView for hero treatment -->
                 <com.whis.app.ui.components.GlassCardView
                     android:id="@+id/card_protection_status"
                     android:layout_width="match_parent"
@@ -43,39 +43,24 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
+                        android:orientation="vertical"
                         android:padding="@dimen/whis_spacing_card_padding">
 
-                        <com.whis.app.ui.components.ProtectionRing
-                            android:id="@+id/home_protection_ring"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/tv_protection_headline"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="@dimen/whis_spacing_card_padding"
-                            android:orientation="vertical">
+                            android:text="Protected"
+                            style="@style/Whis.TextAppearance.Display"
+                            android:textSize="22sp" />
 
-                            <TextView
-                                android:id="@+id/tv_protection_headline"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Protected"
-                                style="@style/Whis.TextAppearance.Display"
-                                android:textSize="22sp" />
-
-                            <TextView
-                                android:id="@+id/tv_protection_subtext"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="Calls &amp; SMS active protection is running"
-                                style="@style/Whis.TextAppearance.Caption" />
-
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_protection_subtext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Calls &amp; SMS active protection is running"
+                            style="@style/Whis.TextAppearance.Caption" />
 
                     </LinearLayout>
 
@@ -251,14 +236,15 @@
 
         </HorizontalScrollView>
 
-        <!-- Multi-Select Action Bar (Select All, Unselect All, Delete Selected) -->
+        <!-- Multi-Select Action Bar (Select All, Unselect All, Delete Selected) — hidden by default, shown on long click -->
         <LinearLayout
             android:id="@+id/bar_multi_select"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/btn_select_all"

@@ -15,18 +15,44 @@
         android:paddingTop="@dimen/whis_spacing_section"
         android:paddingBottom="@dimen/whis_spacing_section">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Call Protection"
-            style="@style/Whis.TextAppearance.H1" />
+        <!-- Top Bar with 3-Dot Menu -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Screened calls since protection was turned on"
-            style="@style/Whis.TextAppearance.Caption" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Call Protection"
+                    style="@style/Whis.TextAppearance.H1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Screened calls since protection was turned on"
+                    style="@style/Whis.TextAppearance.Caption" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/btn_calls_menu"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Options Menu"
+                android:src="@android:drawable/ic_menu_more"
+                android:tint="@color/whis_text_hi" />
+
+        </RelativeLayout>
 
         <!-- Blocked numbers management section -->
         <TextView

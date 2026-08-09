@@ -169,22 +169,30 @@ public class HomeFragment extends Fragment {
         }
 
         // ── Multi-Select Action Bar (Select All, Unselect All, Delete Selected) ──
+        View barMultiSelect = view.findViewById(R.id.bar_multi_select);
         View btnSelectAll = view.findViewById(R.id.btn_select_all);
         View btnUnselectAll = view.findViewById(R.id.btn_unselect_all);
         android.widget.Button btnDeleteSelected = view.findViewById(R.id.btn_delete_selected);
+
+        adapter.setOnSelectionChangeListener(count -> {
+            if (barMultiSelect != null) {
+                barMultiSelect.setVisibility(count > 0 ? View.VISIBLE : View.GONE);
+            }
+            if (btnDeleteSelected != null) {
+                btnDeleteSelected.setText(count > 0 ? "🗑️ Delete (" + count + ")" : "🗑️ Delete");
+            }
+        });
 
         if (btnSelectAll != null && btnUnselectAll != null && btnDeleteSelected != null) {
             btnSelectAll.setOnClickListener(v -> {
                 if (adapterHolder[0] != null) {
                     adapterHolder[0].selectAll();
-                    btnDeleteSelected.setText("🗑️ Delete (" + adapterHolder[0].getSelectedCount() + ")");
                 }
             });
 
             btnUnselectAll.setOnClickListener(v -> {
                 if (adapterHolder[0] != null) {
                     adapterHolder[0].unselectAll();
-                    btnDeleteSelected.setText("🗑️ Delete");
                 }
             });
 
@@ -203,7 +211,6 @@ public class HomeFragment extends Fragment {
                     feedItems.removeAll(selected);
                     adapterHolder[0].unselectAll();
                     adapterHolder[0].notifyDataSetChanged();
-                    btnDeleteSelected.setText("🗑️ Delete");
                     Toast.makeText(requireContext(), "Deleted " + selected.size() + " items", Toast.LENGTH_SHORT).show();
                 }
             });

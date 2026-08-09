@@ -3,15 +3,11 @@ package com.whis.app.ui.learn;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,23 +22,18 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.whis.app.R;
-import com.whis.app.ui.components.StatusCard;
 
 import java.util.List;
 
 /**
- * LearnFragment — Whis Knowledge Book Awareness Module (LEARN_PLAN.md).
- * Features horizontal carousel with peek effect, shared element transitions,
- * search-by-problem, 1930 national helpline quick dial, and dynamic chapter list.
+ * LearnFragment — Whis Scam Story Library (LEARN_PLAN.md).
+ * Displays real scam stories with practical solutions.
  */
 public class LearnFragment extends Fragment {
 
     private LearnRepository repository;
     private RecyclerView rvCarousel;
     private LinearLayout containerList;
-    private EditText etSearch;
-    private TextView tvProgressCount;
-    private ProgressBar pbOverallProgress;
     private TextView tvNoResults;
 
     @Nullable
@@ -50,7 +41,6 @@ public class LearnFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
-        // Window enter transition: fade in root layout alpha 0->1, 200ms
         view.setAlpha(0f);
         view.animate().alpha(1f).setDuration(200).start();
         return view;
@@ -64,9 +54,6 @@ public class LearnFragment extends Fragment {
 
         rvCarousel = view.findViewById(R.id.rv_learn_carousel);
         containerList = view.findViewById(R.id.container_lessons_list);
-        etSearch = view.findViewById(R.id.et_search_learn);
-        tvProgressCount = view.findViewById(R.id.tv_progress_count);
-        pbOverallProgress = view.findViewById(R.id.pb_overall_progress);
         tvNoResults = view.findViewById(R.id.tv_no_results);
 
         Button btnCall1930 = view.findViewById(R.id.btn_call_1930_banner);
@@ -77,27 +64,12 @@ public class LearnFragment extends Fragment {
         // Setup Carousel RecyclerView
         setupCarousel();
 
-        // Setup search input listener
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterChapters(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
         Button btnGenerateMain = view.findViewById(R.id.btn_generate_ai_story_main);
         if (btnGenerateMain != null) {
             btnGenerateMain.setOnClickListener(v -> triggerMainAiStoryGeneration());
         }
 
         renderCarousel(repository.getAllChapters());
-        updateProgress();
     }
 
     private void triggerMainAiStoryGeneration() {
@@ -109,7 +81,6 @@ public class LearnFragment extends Fragment {
                     repository.addDynamicChapter(requireContext(), newChapter);
                     List<LearnChapter> all = repository.getAllChapters();
                     renderCarousel(all);
-                    updateProgress();
                     rvCarousel.smoothScrollToPosition(all.size() - 1);
                 }
                 Toast.makeText(requireContext(), "🎉 New Story Unlocked: " + newChapter.title, Toast.LENGTH_LONG).show();
@@ -144,7 +115,6 @@ public class LearnFragment extends Fragment {
 
                     float fraction = Math.min(1.0f, d / maxD);
 
-                    // Interpolate scale 1.0 -> 0.92 and alpha 1.0 -> 0.7
                     float scale = 1.0f - (0.08f * fraction);
                     float alpha = 1.0f - (0.30f * fraction);
 
@@ -160,7 +130,7 @@ public class LearnFragment extends Fragment {
         if (chapters.isEmpty()) {
             if (tvNoResults != null) tvNoResults.setVisibility(View.VISIBLE);
             rvCarousel.setVisibility(View.GONE);
-            containerList.setVisibility(View.GONE);
+            if (containerList != null) containerList.setVisibility(View.GONE);
             return;
         }
 
@@ -188,7 +158,6 @@ public class LearnFragment extends Fragment {
 
         rvCarousel.setAdapter(adapter);
 
-        // Initial scroll position trigger for peek animation
         rvCarousel.post(() -> {
             rvCarousel.scrollBy(1, 0);
             rvCarousel.scrollBy(-1, 0);
@@ -199,12 +168,7 @@ public class LearnFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (repository != null) {
-            updateProgress();
-            if (etSearch != null) {
-                filterChapters(etSearch.getText().toString());
-            } else {
-                renderCarousel(repository.getAllChapters());
-            }
+            renderCarousel(repository.getAllChapters());
         }
     }
 
@@ -215,25 +179,6 @@ public class LearnFragment extends Fragment {
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Dialing 1930 Helpline...", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void filterChapters(String query) {
-        List<LearnChapter> filtered = repository.searchChapters(query);
-        renderCarousel(filtered);
-    }
-
-    private void updateProgress() {
-        int completed = repository.getCompletedCount();
-        int total = repository.getTotalCount();
-
-        if (tvProgressCount != null) {
-            tvProgressCount.setText(completed + " of " + total + " Completed");
-        }
-
-        if (pbOverallProgress != null) {
-            int percent = total > 0 ? (completed * 100) / total : 0;
-            pbOverallProgress.setProgress(percent);
         }
     }
 }

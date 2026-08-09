@@ -52,6 +52,29 @@ public class MessagesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 1. Top Bar 3-Dot Overflow Menu Handler
+        View btnMenu = view.findViewById(R.id.btn_messages_menu);
+        if (btnMenu != null) {
+            btnMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(requireContext(), v);
+                popup.getMenu().add("🗑️ Clear Message Log");
+                popup.setOnMenuItemClickListener(item -> {
+                    if (item.getTitle().toString().contains("Clear Message Log")) {
+                        new Thread(() -> {
+                            try {
+                                com.whis.app.msg.storage.LocalMsgDatabase.getInstance(requireContext()).msgHistoryDao().clearAll();
+                            } catch (Exception ignored) {}
+                        }).start();
+                        Toast.makeText(requireContext(), "Message log cleared", Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                        return true;
+                    }
+                    return false;
+                });
+                popup.show();
+            });
+        }
+
         // Feed populated by real SMS entries from LocalMsgDatabase
         List<DetectionResult> msgItems = new ArrayList<>();
         try {

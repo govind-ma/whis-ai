@@ -53,7 +53,35 @@ public class CallsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Blocked Numbers Management section
+        // 1. Top Bar 3-Dot Overflow Menu Handler
+        View btnMenu = view.findViewById(R.id.btn_calls_menu);
+        if (btnMenu != null) {
+            btnMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(requireContext(), v);
+                popup.getMenu().add("🗑️ Clear Call History");
+                popup.getMenu().add("🚫 Clear All Blocked Numbers");
+                popup.setOnMenuItemClickListener(item -> {
+                    String title = item.getTitle().toString();
+                    if (title.contains("Clear Call History")) {
+                        com.whis.app.call.CallHistoryStore.clearAll(requireContext());
+                        Toast.makeText(requireContext(), "Call history cleared", Toast.LENGTH_SHORT).show();
+                        // Refresh fragment view
+                        getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                        return true;
+                    } else if (title.contains("Clear All Blocked Numbers")) {
+                        com.whis.app.call.BlockedNumberStore.clearAll(requireContext());
+                        Toast.makeText(requireContext(), "All blocked numbers cleared", Toast.LENGTH_SHORT).show();
+                        LinearLayout containerBlocked = view.findViewById(R.id.container_blocked_numbers);
+                        if (containerBlocked != null) renderBlockedNumbers(containerBlocked);
+                        return true;
+                    }
+                    return false;
+                });
+                popup.show();
+            });
+        }
+
+        // 2. Blocked Numbers Management section
         LinearLayout containerBlocked = view.findViewById(R.id.container_blocked_numbers);
         renderBlockedNumbers(containerBlocked);
 
