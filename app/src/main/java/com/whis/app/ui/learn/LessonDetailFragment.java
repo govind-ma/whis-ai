@@ -69,6 +69,9 @@ public class LessonDetailFragment extends Fragment {
         Button btnAudio = view.findViewById(R.id.btn_audio_summary);
         LinearLayout containerQuiz = view.findViewById(R.id.container_quiz);
 
+        LinearLayout containerWhatNotToDo = view.findViewById(R.id.container_what_not_to_do);
+        Button btnGenerateAiStory = view.findViewById(R.id.btn_generate_ai_story);
+
         if (btnCall1930 != null) {
             btnCall1930.setOnClickListener(v -> dial1930());
         }
@@ -84,8 +87,18 @@ public class LessonDetailFragment extends Fragment {
             tvWhyItWorks.setText(chapter.whyItWorks);
             tvHowWhisHelps.setText(chapter.howWhisHelps);
 
-            // Render 3 action steps for "What do I do right now?"
-            renderActionSteps(containerDoRightNow, chapter.doRightNow);
+            // Render 3 action steps for "What do I do right now?" (Green)
+            renderActionSteps(containerDoRightNow, chapter.doRightNow, true);
+
+            // Render 3 mistake steps for "What NOT to do" (Red)
+            if (containerWhatNotToDo != null) {
+                renderActionSteps(containerWhatNotToDo, chapter.whatNotToDo, false);
+            }
+
+            // ── AI Story Generator Button Handler ──────────────────────────────
+            if (btnGenerateAiStory != null) {
+                btnGenerateAiStory.setOnClickListener(v -> triggerAiStoryGeneration());
+            }
 
             // ── Feature 5 Upgrade 1: Text-to-Speech Audio Summary ───────────────
             if (btnAudio != null) {
@@ -122,7 +135,34 @@ public class LessonDetailFragment extends Fragment {
         }
     }
 
-    private void renderActionSteps(LinearLayout container, List<String> steps) {
+    private void triggerAiStoryGeneration() {
+        Toast.makeText(requireContext(), "✨ Generating AI Scam Story...", Toast.LENGTH_SHORT).show();
+        LearnStoryGenerator.generateNewStory(requireContext(), new LearnStoryGenerator.StoryCallback() {
+            @Override
+            public void onStoryGenerated(LearnChapter newChapter) {
+                if (repository != null) {
+                    repository.addDynamicChapter(requireContext(), newChapter);
+                }
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("🎉 New Story Unlocked!")
+                        .setMessage("Unlocked: " + newChapter.title + "\n\nStory: " + newChapter.whatHappens.substring(0, Math.min(120, newChapter.whatHappens.length())) + "...")
+                        .setPositiveButton("Read Story 📖", (dialog, which) -> {
+                            Bundle args = new Bundle();
+                            args.putString(ARG_LESSON_ID, newChapter.chapterId);
+                            Navigation.findNavController(requireView()).navigate(R.id.action_learn_to_lesson_detail, args);
+                        })
+                        .setNegativeButton("Dismiss", null)
+                        .show();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(requireContext(), "Failed to generate story", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void renderActionSteps(LinearLayout container, List<String> steps, boolean isPositive) {
         container.removeAllViews();
         if (steps == null || steps.isEmpty()) return;
 
@@ -140,13 +180,16 @@ public class LessonDetailFragment extends Fragment {
             layout.setOrientation(LinearLayout.HORIZONTAL);
             layout.setGravity(android.view.Gravity.TOP);
 
-            // Step number badge
+            // Step number badge (Green if Sahi Kadam, Red if Galti Mat Karna)
             TextView tvStepNum = new TextView(requireContext());
-            tvStepNum.setText("Step " + (i + 1));
+            tvStepNum.setText(isPositive ? "✅ Step " + (i + 1) : "❌ Avoid " + (i + 1));
             tvStepNum.setTextSize(12);
             tvStepNum.setTypeface(null, android.graphics.Typeface.BOLD);
             tvStepNum.setTextColor(getResources().getColor(R.color.whis_bg, requireContext().getTheme()));
-            tvStepNum.setBackgroundResource(R.drawable.bg_icon_circle_trusted);
+            tvStepNum.setBackgroundResource(isPositive ? R.drawable.bg_icon_circle_trusted : R.drawable.bg_hero_glass_glow);
+            if (!isPositive) {
+                tvStepNum.setBackgroundColor(0xFFFF4D4D);
+            }
             tvStepNum.setPadding(
                     (int) (8 * getResources().getDisplayMetrics().density),
                     (int) (4 * getResources().getDisplayMetrics().density),

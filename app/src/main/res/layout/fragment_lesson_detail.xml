@@ -148,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/whis_spacing_section"
-            android:text="3. WHAT DO I DO RIGHT NOW IF THIS IS HAPPENING TO ME?"
+            android:text="3. SAHI KADAM (WHAT TO DO)"
             style="@style/Whis.TextAppearance.H2"
             android:textColor="@color/whis_trusted" />
 
@@ -158,6 +158,35 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:orientation="vertical" />
+
+        <!-- 3B: GALTI MAT KARNA (WHAT NOT TO DO) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/whis_spacing_section"
+            android:text="3B. GALTI MAT KARNA (WHAT NOT TO DO)"
+            style="@style/Whis.TextAppearance.H2"
+            android:textColor="#FF4D4D" />
+
+        <LinearLayout
+            android:id="@+id/container_what_not_to_do"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical" />
+
+        <!-- AI Story Generator Button -->
+        <Button
+            android:id="@+id/btn_generate_ai_story"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/whis_touch_standard"
+            android:layout_marginTop="@dimen/whis_spacing_base"
+            android:text="✨ Generate AI Scam Story &amp; Unlock Chapter"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="#41C85A"
+            android:backgroundTint="#152619" />
 
         <!-- Audio Summary Listen Button (Text-to-Speech) -->
         <Button

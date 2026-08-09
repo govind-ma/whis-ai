@@ -18,6 +18,13 @@ public class LearnChapter {
     public final String howWhisHelps;
     public final List<String> crossReference;
     public final String sourceConfidence;
+    public List<String> whatNotToDo = new ArrayList<>();
+
+    public LearnChapter(String chapterId, String title, String shortName,
+                        String sourceConfidence, String whatHappens, String whyItWorks,
+                        List<String> doRightNow, String howWhisHelps) {
+        this(chapterId, title, shortName, new ArrayList<>(), whatHappens, whyItWorks, doRightNow, howWhisHelps, new ArrayList<>(), sourceConfidence);
+    }
 
     public LearnChapter(String chapterId, String title, String shortName,
                         List<String> searchTriggers, String whatHappens, String whyItWorks,

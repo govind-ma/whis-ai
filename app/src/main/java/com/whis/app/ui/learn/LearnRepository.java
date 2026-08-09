@@ -87,10 +87,65 @@ public class LearnRepository {
                         doRightNow, howWhisHelps, crossRef, sourceConfidence
                 ));
             }
-            Log.d(TAG, "Successfully loaded " + chapters.size() + " chapters from assets.");
+
+            // Load dynamically generated AI story chapters from SharedPreferences
+            loadDynamicChapters();
+            Log.d(TAG, "Successfully loaded " + chapters.size() + " total chapters.");
         } catch (Exception e) {
             Log.e(TAG, "Failed to load chapters from assets, using fallback content", e);
             loadFallbackChapters();
+        }
+    }
+
+    public void addDynamicChapter(Context context, LearnChapter chapter) {
+        if (chapter == null) return;
+        chapters.add(chapter);
+
+        // Save to SharedPreferences
+        try {
+            SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            String existing = prefs.getString("dynamic_stories_json", "[]");
+            JSONArray arr = new JSONArray(existing);
+
+            JSONObject obj = new JSONObject();
+            obj.put("id", chapter.chapterId);
+            obj.put("title", chapter.title);
+            obj.put("story", chapter.whatHappens);
+            obj.put("whyItWorks", chapter.whyItWorks);
+            obj.put("howWhisHelps", chapter.howWhisHelps);
+            obj.put("doRightNow", new JSONArray(chapter.doRightNow));
+            obj.put("whatNotToDo", new JSONArray(chapter.whatNotToDo));
+
+            arr.put(obj);
+            prefs.edit().putString("dynamic_stories_json", arr.toString()).apply();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to save dynamic story chapter", e);
+        }
+    }
+
+    private void loadDynamicChapters() {
+        try {
+            SharedPreferences prefs = appContext.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            String jsonStr = prefs.getString("dynamic_stories_json", "[]");
+            JSONArray arr = new JSONArray(jsonStr);
+
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                String id = obj.optString("id", "story_" + i);
+                String title = obj.optString("title", "AI Scam Story");
+                String story = obj.optString("story", "");
+                String why = obj.optString("whyItWorks", "");
+                String whis = obj.optString("howWhisHelps", "");
+
+                List<String> doList = parseJsonArray(obj.optJSONArray("doRightNow"));
+                List<String> notDoList = parseJsonArray(obj.optJSONArray("whatNotToDo"));
+
+                LearnChapter ch = new LearnChapter(id, title, "AI STORY", "RATING_5_STAR", story, why, doList, whis);
+                ch.whatNotToDo = notDoList;
+                chapters.add(ch);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to parse stored dynamic story chapters", e);
         }
     }
 
