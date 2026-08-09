@@ -63,7 +63,7 @@ public class CallsFragment extends Fragment {
                 popup.setOnMenuItemClickListener(item -> {
                     String title = item.getTitle().toString();
                     if (title.contains("Clear Call History")) {
-                        com.whis.app.call.CallHistoryStore.clearAll(requireContext());
+                        com.whis.app.call.CallHistoryStore.clear(requireContext());
                         Toast.makeText(requireContext(), "Call history cleared", Toast.LENGTH_SHORT).show();
                         // Refresh fragment view
                         getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();

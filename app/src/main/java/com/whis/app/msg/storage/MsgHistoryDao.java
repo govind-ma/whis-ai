@@ -30,4 +30,7 @@ public interface MsgHistoryDao {
 
     @Query("SELECT * FROM msg_history ORDER BY timestamp DESC LIMIT 100")
     List<MsgHistoryEntry> getRecentVerdicts();
+
+    @Query("DELETE FROM msg_history")
+    void clearAll();
 }

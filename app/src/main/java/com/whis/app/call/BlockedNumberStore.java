@@ -59,6 +59,12 @@ public class BlockedNumberStore {
         return new ArrayList<>(load(context));
     }
 
+    /** Clear all blocked numbers. */
+    public static synchronized void clearAll(Context context) {
+        prefs(context).edit().remove(KEY_SET).apply();
+        Log.d(TAG, "All blocked numbers cleared");
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     /** Strips spaces, dashes, country code (+91, 91, 0) for 10-digit core comparison. */
