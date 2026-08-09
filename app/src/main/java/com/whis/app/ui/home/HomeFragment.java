@@ -1,7 +1,5 @@
 package com.whis.app.ui.home;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +18,6 @@ import com.whis.app.R;
 import com.whis.app.core.DetectionResult;
 import com.whis.app.core.WhisVerdict;
 import com.whis.app.ui.components.ListAnimationHelper;
-import com.whis.app.ui.components.ProtectionRing;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,12 +42,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. ProtectionRing status + breathing pulse animation
-        ProtectionRing ring = view.findViewById(R.id.home_protection_ring);
-        ring.setStatus(WhisVerdict.TRUSTED, 1.0f);
-        startBreathingPulse(ring);
-
-        // 2. "Ask Whis anything" card click handler → launches Whis AI Assistant
+        // 1. "Ask Whis anything" card click handler → launches Whis AI Assistant
         view.findViewById(R.id.card_ask_whis_ai).setOnClickListener(v ->
                 com.whis.app.agent.AgentLauncher.launch(requireContext()));
 
@@ -253,27 +244,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void startBreathingPulse(View target) {
-        FastOutSlowInInterpolator interpolator = new FastOutSlowInInterpolator();
 
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(target, View.SCALE_X, 1.0f, 1.05f, 1.0f);
-        scaleX.setDuration(2000);
-        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
-        scaleX.setRepeatMode(ObjectAnimator.RESTART);
-        scaleX.setInterpolator(interpolator);
-
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(target, View.SCALE_Y, 1.0f, 1.05f, 1.0f);
-        scaleY.setDuration(2000);
-        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
-        scaleY.setRepeatMode(ObjectAnimator.RESTART);
-        scaleY.setInterpolator(interpolator);
-
-        AnimatorSet pulse = new AnimatorSet();
-        pulse.playTogether(scaleX, scaleY);
-        pulse.start();
-
-        target.setTag(R.id.home_protection_ring, pulse);
-    }
 
     private void filterFeed(List<DetectionResult> allItems, ActivityFeedAdapter adapter, String filter) {
         List<DetectionResult> filtered = new ArrayList<>();
