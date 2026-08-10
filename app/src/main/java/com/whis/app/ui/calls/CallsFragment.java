@@ -164,9 +164,13 @@ public class CallsFragment extends Fragment {
             @Override
             public void onMarkSafe(int adapterPosition) {
                 if (adapterPosition < callItems.size()) {
-                    String label = callItems.get(adapterPosition).getReasonText();
-                    Toast.makeText(requireContext(),
-                            "Marked safe: " + label, Toast.LENGTH_SHORT).show();
+                    DetectionResult item = callItems.get(adapterPosition);
+                    // Remove from persistent storage
+                    java.util.Set<Long> ts = new java.util.HashSet<>();
+                    ts.add(item.getTimestamp());
+                    com.whis.app.call.CallHistoryStore.deleteByTimestamps(requireContext(), ts);
+
+                    Toast.makeText(requireContext(), "✅ Marked safe", Toast.LENGTH_SHORT).show();
                     callItems.remove(adapterPosition);
                     adapter.notifyItemRemoved(adapterPosition);
                     if (callItems.isEmpty()) {
@@ -179,15 +183,35 @@ public class CallsFragment extends Fragment {
             @Override
             public void onReportScam(int adapterPosition) {
                 if (adapterPosition < callItems.size()) {
-                    String label = callItems.get(adapterPosition).getReasonText();
-                    Toast.makeText(requireContext(),
-                            "Reported scam: " + label, Toast.LENGTH_SHORT).show();
+                    DetectionResult item = callItems.get(adapterPosition);
+                    String phone = null;
+                    if (item instanceof com.whis.app.call.WhisCallAnalysis) {
+                        phone = ((com.whis.app.call.WhisCallAnalysis) item).incomingNumber;
+                    }
+
+                    // 1. Block the number persistently
+                    if (phone != null && !phone.isEmpty()) {
+                        com.whis.app.call.BlockedNumberStore.block(requireContext(), phone);
+                        Toast.makeText(requireContext(), "🚫 Reported & Blocked: " + phone, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "🚫 Reported scam call", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // 2. Remove from persistent call history storage
+                    java.util.Set<Long> ts = new java.util.HashSet<>();
+                    ts.add(item.getTimestamp());
+                    com.whis.app.call.CallHistoryStore.deleteByTimestamps(requireContext(), ts);
+
+                    // 3. Update list UI
                     callItems.remove(adapterPosition);
                     adapter.notifyItemRemoved(adapterPosition);
                     if (callItems.isEmpty()) {
                         emptyState.setVisibility(View.VISIBLE);
                         ListAnimationHelper.startIconFloat(emptyIcon);
                     }
+
+                    // 4. Refresh blocked numbers UI section above
+                    renderBlockedNumbers(containerBlocked);
                 }
             }
         });

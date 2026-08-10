@@ -150,9 +150,8 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onMarkSafe(int adapterPosition) {
                 if (adapterPosition < msgItems.size()) {
-                    String label = msgItems.get(adapterPosition).getReasonText();
-                    Toast.makeText(requireContext(),
-                            "Marked safe: " + label, Toast.LENGTH_SHORT).show();
+                    DetectionResult item = msgItems.get(adapterPosition);
+                    Toast.makeText(requireContext(), "✅ Marked safe", Toast.LENGTH_SHORT).show();
                     msgItems.remove(adapterPosition);
                     adapter.notifyItemRemoved(adapterPosition);
                     if (msgItems.isEmpty()) {
@@ -165,9 +164,20 @@ public class MessagesFragment extends Fragment {
             @Override
             public void onReportScam(int adapterPosition) {
                 if (adapterPosition < msgItems.size()) {
-                    String label = msgItems.get(adapterPosition).getReasonText();
-                    Toast.makeText(requireContext(),
-                            "Reported scam: " + label, Toast.LENGTH_SHORT).show();
+                    DetectionResult item = msgItems.get(adapterPosition);
+                    String sender = null;
+                    if (item instanceof com.whis.app.msg.model.MsgDetectionResult) {
+                        sender = ((com.whis.app.msg.model.MsgDetectionResult) item).sender;
+                    }
+
+                    // Block sender number persistently
+                    if (sender != null && !sender.isEmpty()) {
+                        com.whis.app.call.BlockedNumberStore.block(requireContext(), sender);
+                        Toast.makeText(requireContext(), "🚫 Reported & Blocked: " + sender, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "🚫 Reported scam message", Toast.LENGTH_SHORT).show();
+                    }
+
                     msgItems.remove(adapterPosition);
                     adapter.notifyItemRemoved(adapterPosition);
                     if (msgItems.isEmpty()) {
