@@ -177,6 +177,9 @@ public class AgentActivity extends AppCompatActivity {
             showTypingIndicator();
             viewModel.sendUserMessage(initialContext, null, buildCallback());
         }
+
+        // Handle text shared from other apps (Share to Whis)
+        handleSharedIntent(getIntent());
     }
 
     // =========================================================================
@@ -460,5 +463,33 @@ public class AgentActivity extends AppCompatActivity {
 
     private int dpToPx(float dp) {
         return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
+    /**
+     * Handles text shared to Whis from other apps (WhatsApp messages, SMS screenshots etc.).
+     * Pre-fills the input with the shared text and shows a prompt.
+     */
+    private void handleSharedIntent(Intent intent) {
+        if (intent == null) return;
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (android.content.Intent.ACTION_SEND.equals(action) && "text/plain".equals(type)) {
+            String sharedText = intent.getStringExtra(android.content.Intent.EXTRA_TEXT);
+            if (sharedText != null && !sharedText.trim().isEmpty()) {
+                // Pre-fill input and show a helper prompt bubble
+                if (etInput != null) {
+                    etInput.setText("क्या यह message safe है?\n\n" + sharedText.trim());
+                    etInput.setSelection(etInput.getText().length());
+                }
+                // Small delay to let UI settle, then show info toast
+                mainHandler.postDelayed(() -> {
+                    if (!isFinishing()) {
+                        android.widget.Toast.makeText(this,
+                                "\uD83D\uDD0D Whis को message share किया — Send दबाएं analysis के लिए",
+                                android.widget.Toast.LENGTH_LONG).show();
+                    }
+                }, 600);
+            }
+        }
     }
 }

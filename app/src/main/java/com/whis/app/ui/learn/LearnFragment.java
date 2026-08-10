@@ -70,6 +70,9 @@ public class LearnFragment extends Fragment {
         }
 
         renderCarousel(repository.getAllChapters());
+
+        // Add scam education lesson cards below the carousel
+        setupScamLessons(view);
     }
 
     private void triggerMainAiStoryGeneration() {
@@ -186,5 +189,88 @@ public class LearnFragment extends Fragment {
         } catch (Exception e) {
             Toast.makeText(requireContext(), "Dialing 1930 Helpline...", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setupScamLessons(View rootView) {
+        LinearLayout container = rootView.findViewById(R.id.container_lessons_list);
+        if (container == null) return;
+
+        container.removeAllViews();
+
+        // Section header
+        TextView header = new TextView(requireContext());
+        header.setText("\uD83D\uDCDA Scam Awareness Guide — जानें, बचें");
+        header.setTextSize(16f);
+        header.setTextColor(0xFFEEEEEE);
+        header.setPadding(0, 48, 0, 16);
+        android.graphics.Typeface bold = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD);
+        header.setTypeface(bold);
+        container.addView(header);
+
+        java.util.List<ScamLessonData.Lesson> lessons = ScamLessonData.getAllLessons();
+        for (ScamLessonData.Lesson lesson : lessons) {
+            addLessonCard(container, lesson);
+        }
+    }
+
+    private void addLessonCard(LinearLayout container, ScamLessonData.Lesson lesson) {
+        // Card wrapper
+        LinearLayout card = new LinearLayout(requireContext());
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setPadding(40, 36, 40, 36);
+        android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+        bg.setColor(0xFF1A1A2E);
+        bg.setCornerRadius(24f);
+        bg.setStroke(2, 0xFF2A2A4A);
+        card.setBackground(bg);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 0, 24);
+        card.setLayoutParams(lp);
+
+        // Title row
+        TextView title = new TextView(requireContext());
+        title.setText(lesson.emoji + "  " + lesson.titleHindi + "  |  " + lesson.titleEnglish);
+        title.setTextSize(15f);
+        title.setTextColor(0xFFFFFFFF);
+        android.graphics.Typeface bold = android.graphics.Typeface.create(android.graphics.Typeface.DEFAULT, android.graphics.Typeface.BOLD);
+        title.setTypeface(bold);
+        card.addView(title);
+
+        // Example script
+        TextView example = new TextView(requireContext());
+        example.setText("\uD83D\uDDE3\uFE0F " + lesson.exampleScript);
+        example.setTextSize(13f);
+        example.setTextColor(0xFFAAAAAA);
+        example.setPadding(0, 16, 0, 8);
+        card.addView(example);
+
+        // Red flags
+        for (String flag : lesson.redFlags) {
+            TextView flagView = new TextView(requireContext());
+            flagView.setText(flag);
+            flagView.setTextSize(13f);
+            flagView.setTextColor(0xFFFF6B6B);
+            flagView.setPadding(0, 4, 0, 4);
+            card.addView(flagView);
+        }
+
+        // What to do
+        TextView whatToDo = new TextView(requireContext());
+        whatToDo.setText(lesson.whatToDo);
+        whatToDo.setTextSize(13f);
+        whatToDo.setTextColor(0xFF4CAF50);
+        whatToDo.setPadding(0, 12, 0, 4);
+        card.addView(whatToDo);
+
+        // Helpline
+        TextView helpline = new TextView(requireContext());
+        helpline.setText("\uD83D\uDCDE " + lesson.helpline);
+        helpline.setTextSize(12f);
+        helpline.setTextColor(0xFF888888);
+        helpline.setPadding(0, 4, 0, 0);
+        card.addView(helpline);
+
+        container.addView(card);
     }
 }

@@ -133,19 +133,19 @@ public final class AlertRenderer {
         String reason = result.getReasonText() != null ? result.getReasonText() : "";
 
         if (verdict == WhisVerdict.TRUSTED || "CONTACT".equalsIgnoreCase(result.getIdentifierType())) {
-            tvTitle.setText("🟢 Saved Contact");
+            tvTitle.setText("🟢 Saved Contact — सुरक्षित");
             tvCopy.setText(reason.isEmpty() ? "Saved contact in your address book. 100% verified safe." : reason);
             tvScore.setText("Risk Score: 0/100 (Safe)");
             btnPrimary.setButtonColor(R.color.whis_trusted);
             btnPrimary.setText("Dismiss");
         } else if (verdict == WhisVerdict.HIGH_RISK) {
-            tvTitle.setText("🚨 Cyber Scam Analysis");
+            tvTitle.setText("🚨 Cyber Scam — बहुत खतरनाक!");
             tvCopy.setText("🚨 SCAM DIAGNOSIS & REASON:\n\n" + reason);
             tvScore.setText("Risk Score: " + result.getRiskScore() + "/100 (HIGH RISK)");
             btnPrimary.setButtonColor(R.color.whis_high_risk);
-            btnPrimary.setText("Block & Protect");
+            btnPrimary.setText("Block करें — सुरक्षित रहें");
         } else {
-            tvTitle.setText("ℹ️ Unknown Number Details");
+            tvTitle.setText("ℹ️ Unknown Number — सावधान रहें");
             tvCopy.setText("Standard activity from an un-saved number.\n\nSummary: " + (reason.isEmpty() ? "No financial scam patterns detected." : reason));
             tvScore.setText("Risk Score: " + result.getRiskScore() + "/100 (Neutral)");
             btnPrimary.setButtonColor(R.color.whis_suspicious);

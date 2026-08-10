@@ -126,7 +126,7 @@ public class CallGeminiAnalyzer {
 
             JSONObject sysMsg = new JSONObject();
             sysMsg.put("role", "system");
-            sysMsg.put("content", "You are an AI call classifier. Assess incoming call: return strictly JSON with risk_level (SAFE, SUSPICIOUS, SCAM), category (TRUSTED, DIGITAL_ARREST, IMPERSONATION, UNKNOWN), and reason.");
+            sysMsg.put("content", "You are an AI call classifier. Assess incoming call: return strictly JSON with risk_level (SAFE, SUSPICIOUS, SCAM), category (TRUSTED, DIGITAL_ARREST, IMPERSONATION, UNKNOWN), and reason. Always write the reason in simple Hindi (Devanagari script), under 15 words.");
             messages.put(sysMsg);
 
             JSONObject userMsg = new JSONObject();
@@ -195,6 +195,7 @@ public class CallGeminiAnalyzer {
                     + "- International numbers claiming to be TRAI\n"
                     + "- Numbers reported for digital arrest scams\n"
                     + "- Courier scam numbers\n\n"
+                    + "Always write the 'reason' field in simple Hindi (Devanagari script). Use words a person with no tech knowledge can understand. Keep it under 15 words.\n\n"
                     + "Respond ONLY in this exact JSON format:\n"
                     + "{\n"
                     + "  \"risk_level\": \"SAFE\" or \"SUSPICIOUS\" or \"SCAM\",\n"

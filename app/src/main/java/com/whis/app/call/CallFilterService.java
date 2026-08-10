@@ -196,12 +196,12 @@ public class CallFilterService extends JobIntentService {
             }
 
             String displayNum = (phoneNumber != null && !phoneNumber.isEmpty()) ? phoneNumber : "Unknown";
-            String title = "⚠️ Suspicious Call: " + displayNum;
-            String text = "Unknown caller displaying suspicious activity patterns.";
+            String title = "\u26a0\ufe0f Suspicious Call — सावधान!";
+            String text = displayNum + "\nअनजान caller है। कोई पैसा या OTP न दें।";
 
             if ("Scam Detected".equalsIgnoreCase(badge)) {
-                title = "🚨 Scam Call Warning: " + displayNum;
-                text = "Possible digital arrest or impersonation call. Do not panic or transfer money.";
+                title = "\uD83D\uDEA8 SCAM CALL — तुरंत फोन काटें!";
+                text = displayNum + "\nयह Digital Arrest या Impersonation scam हो सकता है।\nपैसे मत भेजें — 1930 पर call करें।";
             }
 
             NotificationCompat.Builder builder =

@@ -68,6 +68,12 @@ public class SmsFilterService extends JobIntentService {
         } else if (result.verdict == WhisVerdict.SUSPICIOUS || result.verdict == WhisVerdict.HIGH_RISK) {
             showWarningNotification(sender, result, badge);
         }
+
+        // UPI SMS Pattern check — offline, instant, no network needed
+        UpiSmsPatternEngine.UpiScanResult upiScan = UpiSmsPatternEngine.scan(sender, body);
+        if (upiScan.isScamSuspected) {
+            showUpiWarningNotification(sender, upiScan);
+        }
     }
 
     private void saveHistoryEntry(String sender, String body, MsgDetectionResult result, long timestamp) {
@@ -146,6 +152,36 @@ public class SmsFilterService extends JobIntentService {
                 .setAutoCancel(true);
 
         nm.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void showUpiWarningNotification(String sender, UpiSmsPatternEngine.UpiScanResult upiScan) {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nm == null) return;
+
+        String channelId = "whis_upi_warnings";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Whis UPI Scam Warnings",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Instant alerts for suspicious UPI and banking SMS messages");
+            nm.createNotificationChannel(channel);
+        }
+
+        String displaySender = (sender != null && !sender.isEmpty()) ? sender : "Unknown";
+        androidx.core.app.NotificationCompat.Builder builder =
+                new androidx.core.app.NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(android.R.drawable.stat_sys_warning)
+                        .setContentTitle("\u26a0\ufe0f UPI Alert: " + displaySender)
+                        .setContentText(upiScan.warningHindi)
+                        .setStyle(new androidx.core.app.NotificationCompat.BigTextStyle()
+                                .bigText(upiScan.warningHindi + "\n\n" + upiScan.warningEnglish
+                                        + "\n\nWhis AI Confidence: " + upiScan.confidenceScore + "%"))
+                        .setPriority(androidx.core.app.NotificationCompat.PRIORITY_MAX)
+                        .setAutoCancel(true);
+
+        nm.notify(NOTIFICATION_ID + 200, builder.build());
     }
 
     private static String sha256(String base) {
