@@ -97,22 +97,72 @@ public class AgentActivity extends AppCompatActivity {
             dispatchSendMessage();
         });
 
-        // ── Clear Chat button ─────────────────────────────────────────────────
-        android.widget.Button btnClearChat = findViewById(R.id.btn_clear_chat);
-        if (btnClearChat != null) {
-            btnClearChat.setOnClickListener(v -> {
-                new androidx.appcompat.app.AlertDialog.Builder(this)
-                        .setTitle("Clear Chat")
-                        .setMessage("Delete all messages in this conversation?")
-                        .setPositiveButton("Clear", (dialog, which) -> {
+        // ── Top Bar 3-Dot Overflow Menu Handler ──────────────────────────────
+        View btnAiMenu = findViewById(R.id.btn_ai_menu);
+        if (btnAiMenu != null) {
+            btnAiMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(this, v);
+                popup.getMenu().add(0, 1, 0, "🧹 Clear Chat History");
+                popup.getMenu().add(0, 2, 1, "📋 Copy Conversation");
+                popup.getMenu().add(0, 3, 2, "🛡️ Reset AI Security Profile");
+                popup.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case 1:
+                            // Clear Chat History
+                            new androidx.appcompat.app.AlertDialog.Builder(this)
+                                    .setTitle("Clear Chat History")
+                                    .setMessage("Are you sure you want to delete all messages in this conversation? This cannot be undone.")
+                                    .setPositiveButton("Clear", (dialog, which) -> {
+                                        chatContainer.removeAllViews();
+                                        if (viewModel != null) {
+                                            viewModel.clearHistory();
+                                        }
+                                        android.widget.Toast.makeText(this, "Chat history cleared", android.widget.Toast.LENGTH_SHORT).show();
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
+                            return true;
+
+                        case 2:
+                            // Copy Conversation to Clipboard
+                            StringBuilder sb = new StringBuilder();
+                            for (int i = 0; i < chatContainer.getChildCount(); i++) {
+                                View child = chatContainer.getChildAt(i);
+                                if (child instanceof ViewGroup) {
+                                    ViewGroup vg = (ViewGroup) child;
+                                    for (int j = 0; j < vg.getChildCount(); j++) {
+                                        View inner = vg.getChildAt(j);
+                                        if (inner instanceof TextView) {
+                                            sb.append(((TextView) inner).getText()).append("\n\n");
+                                        }
+                                    }
+                                }
+                            }
+                            if (sb.length() > 0) {
+                                android.content.ClipboardManager cm =
+                                        (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                                if (cm != null) {
+                                    cm.setPrimaryClip(android.content.ClipData.newPlainText("Whis AI Chat", sb.toString().trim()));
+                                    android.widget.Toast.makeText(this, "📋 Conversation copied to clipboard", android.widget.Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                android.widget.Toast.makeText(this, "No messages to copy", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+
+                        case 3:
+                            // Reset AI Security Profile
                             chatContainer.removeAllViews();
                             if (viewModel != null) {
                                 viewModel.clearHistory();
                             }
-                            android.widget.Toast.makeText(this, "Chat cleared", android.widget.Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
+                            appendWhisBubble("Hello! I am your Whis AI Cyber Security Case Officer. How can I help protect you today?");
+                            android.widget.Toast.makeText(this, "🛡️ AI Security Profile Reset", android.widget.Toast.LENGTH_SHORT).show();
+                            return true;
+                    }
+                    return false;
+                });
+                popup.show();
             });
         }
 
@@ -195,12 +245,23 @@ public class AgentActivity extends AppCompatActivity {
         float r = dpToPx(14);
         if (isUser) {
             bubbleBg.setCornerRadii(new float[]{r, r, dpToPx(4), dpToPx(4), r, r, r, r});
-        } else {
-            bubbleBg.setCornerRadii(new float[]{dpToPx(4), dpToPx(4), r, r, r, r, r, r});
         }
         bubbleBg.setColor(isUser ? userBgColor : whisBgColor);
         bubbleBg.setStroke(1, borderColor);
         tv.setBackground(bubbleBg);
+
+        tv.setTextIsSelectable(true);
+
+        // Long-press bubble to copy full message
+        tv.setOnLongClickListener(v -> {
+            android.content.ClipboardManager cm =
+                    (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+            if (cm != null) {
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("Whis AI Message", text));
+                android.widget.Toast.makeText(this, "📋 Message copied to clipboard", android.widget.Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
 
         // Max width: 80% of screen
         int maxW = (int) (getResources().getDisplayMetrics().widthPixels * 0.80f);
@@ -210,7 +271,37 @@ public class AgentActivity extends AppCompatActivity {
         tv.setMaxWidth(maxW);
         tv.setLayoutParams(tvParams);
 
-        frame.addView(tv);
+        if (!isUser) {
+            // For AI Whis bubbles, wrap in a vertical container with a 1-tap Copy action button
+            LinearLayout aiGroup = new LinearLayout(this);
+            aiGroup.setOrientation(LinearLayout.VERTICAL);
+            FrameLayout.LayoutParams groupParams = new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            groupParams.gravity = Gravity.START;
+            aiGroup.setLayoutParams(groupParams);
+
+            aiGroup.addView(tv);
+
+            // 1-tap Copy button under AI response
+            TextView btnCopy = new TextView(this);
+            btnCopy.setText("📋 Copy text");
+            btnCopy.setTextSize(11f);
+            btnCopy.setTextColor(getResources().getColor(R.color.whis_trusted, getTheme()));
+            btnCopy.setPadding(dpToPx(8), dpToPx(4), dpToPx(8), dpToPx(4));
+            btnCopy.setOnClickListener(v -> {
+                android.content.ClipboardManager cm =
+                        (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                if (cm != null) {
+                    cm.setPrimaryClip(android.content.ClipData.newPlainText("Whis AI Response", text));
+                    android.widget.Toast.makeText(this, "📋 Text copied to clipboard!", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+            aiGroup.addView(btnCopy);
+            frame.addView(aiGroup);
+        } else {
+            frame.addView(tv);
+        }
+
         return frame;
     }
 

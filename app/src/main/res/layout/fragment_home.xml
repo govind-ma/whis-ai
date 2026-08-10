@@ -234,6 +234,19 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/btn_block_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="🚫 Block"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/whis_suspicious"
+                android:backgroundTint="@color/whis_suspicious_tint"
+                android:layout_marginEnd="6dp" />
+
+            <Button
                 android:id="@+id/btn_delete_selected"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
@@ -246,6 +259,7 @@
                 android:backgroundTint="@color/whis_high_risk_tint" />
 
         </LinearLayout>
+
 
         <!-- 4. Activity feed RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView

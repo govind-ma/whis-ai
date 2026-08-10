@@ -77,6 +77,20 @@ public class PermissionStepFragment extends Fragment {
         TextView tvTitle = view.findViewById(R.id.tv_perm_title);
         tvTitle.setText(step.title);
 
+        // 3D Permission Stack Setup
+        com.whis.app.ui.components.PermissionCardStackView cardStack = view.findViewById(R.id.perm_card_stack);
+        if (cardStack != null) {
+            cardStack.setActiveIndex(step.ordinal());
+            cardStack.setOnStepSelectedListener((selectedStep, index) -> {
+                if (selectedStep != step) {
+                    OnboardingActivity host = (OnboardingActivity) getActivity();
+                    if (host != null) {
+                        host.goToNext(PermissionStepFragment.newInstance(selectedStep));
+                    }
+                }
+            });
+        }
+
         // Explanation
         TextView tvExplanation = view.findViewById(R.id.tv_perm_explanation);
         tvExplanation.setText(step.explanation);

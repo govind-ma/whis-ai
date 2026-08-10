@@ -156,6 +156,16 @@
                     android:textAllCaps="false"
                     android:textSize="14sp" />
 
+                <Button
+                    android:id="@+id/btn_review_permission_stack"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/whis_touch_standard"
+                    android:layout_marginTop="8dp"
+                    android:text="🛡️ Review Protection Criteria Stack"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textColor="@color/whis_trusted" />
+
             </LinearLayout>
         </com.whis.app.ui.components.StatusCard>
 

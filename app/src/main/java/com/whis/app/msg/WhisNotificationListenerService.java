@@ -29,7 +29,7 @@ public class WhisNotificationListenerService extends NotificationListenerService
         String packageName = sbn.getPackageName();
         if (getPackageName().equals(packageName)) return;
 
-        // Skip System Utilities (smartcapture, screenshot, systemui, dialer, settings, etc.)
+        // Skip System Utilities, Phone Apps, Dialers, Contacts & Call Logs to prevent call duplication
         String pkgLower = packageName.toLowerCase();
         if (pkgLower.startsWith("android")
                 || pkgLower.contains("systemui")
@@ -40,7 +40,12 @@ public class WhisNotificationListenerService extends NotificationListenerService
                 || pkgLower.contains("telecom")
                 || pkgLower.contains("incallui")
                 || pkgLower.contains("phone")
-                || (pkgLower.startsWith("com.samsung.android.") && !pkgLower.contains("messaging"))) {
+                || pkgLower.contains("contacts")
+                || pkgLower.contains("calllog")
+                || pkgLower.contains("logsprovider")
+                || (pkgLower.startsWith("com.samsung.android.") && !pkgLower.contains("messaging"))
+                || (pkgLower.startsWith("com.sec.android.") && !pkgLower.contains("messaging"))
+                || (pkgLower.startsWith("com.google.android.") && !pkgLower.contains("messaging") && !pkgLower.contains("apps.messaging"))) {
             return;
         }
 

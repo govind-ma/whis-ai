@@ -60,13 +60,20 @@ public class MessagesFragment extends Fragment {
                 popup.getMenu().add("🗑️ Clear Message Log");
                 popup.setOnMenuItemClickListener(item -> {
                     if (item.getTitle().toString().contains("Clear Message Log")) {
-                        new Thread(() -> {
-                            try {
-                                com.whis.app.msg.storage.LocalMsgDatabase.getInstance(requireContext()).msgHistoryDao().clearAll();
-                            } catch (Exception ignored) {}
-                        }).start();
-                        Toast.makeText(requireContext(), "Message log cleared", Toast.LENGTH_SHORT).show();
-                        getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                .setTitle("Clear Message Log")
+                                .setMessage("Are you sure you want to delete all screened message history? This cannot be undone.")
+                                .setPositiveButton("Clear", (dialog, which) -> {
+                                    new Thread(() -> {
+                                        try {
+                                            com.whis.app.msg.storage.LocalMsgDatabase.getInstance(requireContext()).msgHistoryDao().clearAll();
+                                        } catch (Exception ignored) {}
+                                    }).start();
+                                    Toast.makeText(requireContext(), "Message log cleared", Toast.LENGTH_SHORT).show();
+                                    getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
                         return true;
                     }
                     return false;

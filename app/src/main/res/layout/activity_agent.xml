@@ -24,34 +24,18 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!-- 3-Dot Overflow Menu Button -->
+        <ImageButton
+            android:id="@+id/btn_ai_menu"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <Button
-                android:id="@+id/btn_clear_chat"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:layout_marginEnd="6dp"
-                android:text="🗑️ Clear"
-                android:textSize="11sp"
-                android:textAllCaps="false"
-                android:textColor="@color/whis_high_risk"
-                android:backgroundTint="@color/whis_high_risk_tint"
-                android:paddingHorizontal="10dp" />
-
-            <Button
-                android:id="@+id/btn_voice_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Voice"
-                android:textSize="11sp"
-                android:paddingHorizontal="10dp" />
-        </LinearLayout>
+            android:src="@android:drawable/ic_menu_more"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Menu Options"
+            android:scaleType="centerInside"
+            android:tint="@color/whis_text_hi" />
     </RelativeLayout>
 
     <!-- Chat Messages Container / ScrollView -->

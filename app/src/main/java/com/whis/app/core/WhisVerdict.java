@@ -43,5 +43,11 @@ public enum WhisVerdict {
     /**
      * Confirmed or near-confirmed scam. Strongest warning shown.
      */
-    HIGH_RISK
+    HIGH_RISK,
+
+    /**
+     * User has explicitly blocked this number. Calls will be silently rejected.
+     * Displayed as a dark "Blocked" pill in the activity feed.
+     */
+    BLOCKED
 }

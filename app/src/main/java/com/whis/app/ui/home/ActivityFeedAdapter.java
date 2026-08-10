@@ -131,6 +131,17 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
         }
         row.setVerdictStyle(verdict, item.getIdentifierType());
 
+        // ── Blocked overlay: show "🚫 Blocked" chip if this number is blocked ─
+        boolean isBlocked = false;
+        if (item instanceof com.whis.app.call.WhisCallAnalysis) {
+            String num = ((com.whis.app.call.WhisCallAnalysis) item).incomingNumber;
+            if (num != null && !num.isEmpty()) {
+                isBlocked = com.whis.app.call.BlockedNumberStore.isBlocked(
+                        row.getContext(), num);
+            }
+        }
+        row.setBlockedOverlay(isBlocked);
+
         boolean isSelected = selectedPositions.contains(position);
         if (isSelected) {
             row.setAlpha(0.9f);
@@ -186,14 +197,30 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<ActivityFeedAdapte
     private static String formatCleanTitle(DetectionResult item) {
         String reason = item.getReasonText() != null ? item.getReasonText() : "";
 
-        if (item.getVerdict() == WhisVerdict.TRUSTED || "CONTACT".equalsIgnoreCase(item.getIdentifierType())) {
+        if (item.getVerdict() == WhisVerdict.TRUSTED
+                || "CONTACT".equalsIgnoreCase(item.getIdentifierType())
+                || "SAVED_CONTACT".equalsIgnoreCase(item.getIdentifierType())) {
             if (reason.contains(" (")) {
-                return reason.substring(0, reason.indexOf(" (")).trim();
+                String name = reason.substring(0, reason.indexOf(" (")).trim();
+                if (!name.isEmpty() && !name.equalsIgnoreCase("Unknown")) return name;
+            }
+            if (reason.contains(" - ")) {
+                String name = reason.substring(0, reason.indexOf(" - ")).trim();
+                if (!name.isEmpty() && !name.equalsIgnoreCase("Unknown")) return name;
             }
             return "Saved Contact";
         } else if (item.getVerdict() == WhisVerdict.HIGH_RISK) {
             return "🚨 Scam Detected";
         } else {
+            // Extract phone number or sender header from reason text if available
+            java.util.regex.Matcher m = java.util.regex.Pattern.compile("(\\+?\\d{10,13}|[A-Z]{2}-[A-Z0-9]{6})").matcher(reason);
+            if (m.find()) {
+                return m.group();
+            }
+            if (reason.contains(" - ")) {
+                String sender = reason.substring(0, reason.indexOf(" - ")).trim();
+                if (!sender.isEmpty() && !sender.equalsIgnoreCase("Unknown")) return sender;
+            }
             return "Unknown Number";
         }
     }

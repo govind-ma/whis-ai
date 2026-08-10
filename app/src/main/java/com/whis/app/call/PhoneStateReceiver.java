@@ -36,18 +36,13 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             return;
         }
 
-        // ── BLOCK CHECK: Silently reject calls from blocked numbers ────────────
+        // ── BLOCK CHECK: Skip AI analysis for blocked numbers ─────────────────
+        // Actual call rejection is handled by:
+        //   • WhisCallScreeningService (Android 10+, requires CALL_SCREENING role)
+        //   • BlockedNumberContract sync in BlockedNumberStore (system dialer rejects pre-Android 10)
+        // We still return early here to avoid unnecessary Gemini API calls for blocked numbers.
         if (BlockedNumberStore.isBlocked(context, phoneNumber)) {
-            Log.d(TAG, "Blocked number calling: " + phoneNumber + " — rejecting silently.");
-            try {
-                android.telecom.TelecomManager tm =
-                        (android.telecom.TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
-                if (tm != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                    tm.endCall();
-                }
-            } catch (Exception e) {
-                Log.w(TAG, "Could not end blocked call: " + e.getMessage());
-            }
+            Log.d(TAG, "Blocked number calling: " + phoneNumber + " — skipping AI analysis (blocking handled by CallScreeningService/system).");
             return;
         }
 

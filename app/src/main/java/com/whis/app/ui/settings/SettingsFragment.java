@@ -111,23 +111,46 @@ public class SettingsFragment extends Fragment {
             });
         }
 
-        // 5. Dark theme switch
+        // 5. Dark theme switch — default is Light Mode
         if (switchDarkMode != null) {
-            int currentMode = getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
-            switchDarkMode.setChecked(currentMode == android.content.res.Configuration.UI_MODE_NIGHT_YES);
+            boolean isDarkMode = requireContext().getSharedPreferences("whis_prefs", android.content.Context.MODE_PRIVATE)
+                    .getBoolean("dark_mode", false);
+            switchDarkMode.setChecked(isDarkMode);
 
             switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                requireContext().getSharedPreferences("whis_prefs", android.content.Context.MODE_PRIVATE)
+                        .edit().putBoolean("dark_mode", isChecked).apply();
                 int newMode = isChecked ? androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
                                         : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
                 androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(newMode);
             });
         }
 
-        // 6. Report False Positive action
+        // 6. Report False Positive action — opens email with pre-filled report
         if (btnReportFalsePositive != null) {
-            btnReportFalsePositive.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "Thank you. Report submitted for AI review.", Toast.LENGTH_LONG).show()
-            );
+            btnReportFalsePositive.setOnClickListener(v -> {
+                try {
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                    emailIntent.setData(android.net.Uri.parse("mailto:"));
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"whisai.support@gmail.com"});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Whis AI — False Positive Report");
+                    emailIntent.putExtra(Intent.EXTRA_TEXT,
+                            "Hi Whis AI Team,\n\n"
+                            + "I want to report a false positive detection in the app.\n\n"
+                            + "--- Details ---\n"
+                            + "App Version: Whis v2.2 (Build 3)\n"
+                            + "Device: " + android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL + "\n"
+                            + "Android: " + android.os.Build.VERSION.RELEASE + "\n\n"
+                            + "Describe what was incorrectly flagged:\n"
+                            + "[Please describe the number/message that was wrongly detected]\n\n"
+                            + "Thank you.");
+                    startActivity(Intent.createChooser(emailIntent, "Send Report via Email"));
+                } catch (Exception e) {
+                    Toast.makeText(requireContext(),
+                            "No email app found. Please email: whisai.support@gmail.com",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
         }
 
         // 7. System display & font settings button
@@ -156,7 +179,7 @@ public class SettingsFragment extends Fragment {
             });
         }
 
-        // 9. Do Not Disturb (DND) Access settings button
+        // 9. DND Access settings button
         View btnDndAccess = view.findViewById(R.id.btn_open_dnd_access);
         if (btnDndAccess != null) {
             btnDndAccess.setOnClickListener(v -> {
@@ -164,13 +187,23 @@ public class SettingsFragment extends Fragment {
                     Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
                     startActivity(intent);
                 } catch (Exception e) {
-                    Toast.makeText(requireContext(), "Opening Settings...", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(Settings.ACTION_SETTINGS));
+                    Toast.makeText(requireContext(),
+                            "Please open your phone's Settings to allow Do Not Disturb Access.",
+                            Toast.LENGTH_LONG).show();
                 }
             });
         }
 
-        // 10. Emergency Contacts (2 Contacts)
+        // 10. Review 3D Protection Permission Criteria Stack
+        View btnReviewStack = view.findViewById(R.id.btn_review_permission_stack);
+        if (btnReviewStack != null) {
+            btnReviewStack.setOnClickListener(v -> {
+                Intent onboardingIntent = new Intent(requireContext(), com.whis.app.ui.onboarding.OnboardingActivity.class);
+                startActivity(onboardingIntent);
+            });
+        }
+
+        // 11. Emergency Contacts (2 Contacts)
         android.widget.EditText etName1 = view.findViewById(R.id.et_emergency_name_1);
         android.widget.EditText etPhone1 = view.findViewById(R.id.et_emergency_phone_1);
         android.widget.EditText etName2 = view.findViewById(R.id.et_emergency_name_2);
@@ -179,20 +212,37 @@ public class SettingsFragment extends Fragment {
 
         if (etName1 != null && etPhone1 != null && etName2 != null && etPhone2 != null) {
             etName1.setText(com.whis.app.core.EmergencyContactStore.getC1Name(requireContext()));
-            etPhone1.setText(com.whis.app.core.EmergencyContactStore.getC1Phone(requireContext()));
+            etPhone1.setText(com.whis.app.core.EmergencyContactStore.getC1CleanDigits(requireContext()));
             etName2.setText(com.whis.app.core.EmergencyContactStore.getC2Name(requireContext()));
-            etPhone2.setText(com.whis.app.core.EmergencyContactStore.getC2Phone(requireContext()));
+            etPhone2.setText(com.whis.app.core.EmergencyContactStore.getC2CleanDigits(requireContext()));
         }
 
         if (btnSaveEmergency != null) {
             btnSaveEmergency.setOnClickListener(v -> {
-                String name1 = etName1 != null ? etName1.getText().toString() : "";
-                String phone1 = etPhone1 != null ? etPhone1.getText().toString() : "";
-                String name2 = etName2 != null ? etName2.getText().toString() : "";
-                String phone2 = etPhone2 != null ? etPhone2.getText().toString() : "";
+                String name1 = etName1 != null ? etName1.getText().toString().trim() : "";
+                String phone1 = etPhone1 != null ? etPhone1.getText().toString().trim() : "";
+                String name2 = etName2 != null ? etName2.getText().toString().trim() : "";
+                String phone2 = etPhone2 != null ? etPhone2.getText().toString().trim() : "";
+
+                // Validate phone numbers — must be a valid 10-digit number
+                if (!phone1.isEmpty() && !com.whis.app.core.EmergencyContactStore.isValid10DigitPhone(phone1)) {
+                    if (etPhone1 != null) etPhone1.setError("Enter a valid 10-digit phone number");
+                    Toast.makeText(requireContext(), "⚠️ Contact 1 must be a valid 10-digit number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!phone2.isEmpty() && !com.whis.app.core.EmergencyContactStore.isValid10DigitPhone(phone2)) {
+                    if (etPhone2 != null) etPhone2.setError("Enter a valid 10-digit phone number");
+                    Toast.makeText(requireContext(), "⚠️ Contact 2 must be a valid 10-digit number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 com.whis.app.core.EmergencyContactStore.saveContacts(requireContext(), name1, phone1, name2, phone2);
-                Toast.makeText(requireContext(), "Emergency Contacts Saved Successfully!", Toast.LENGTH_SHORT).show();
+
+                // Update text fields with clean 10-digit numbers
+                if (etPhone1 != null && !phone1.isEmpty()) etPhone1.setText(com.whis.app.core.EmergencyContactStore.getC1CleanDigits(requireContext()));
+                if (etPhone2 != null && !phone2.isEmpty()) etPhone2.setText(com.whis.app.core.EmergencyContactStore.getC2CleanDigits(requireContext()));
+
+                Toast.makeText(requireContext(), "✅ Emergency Contacts Saved (" + com.whis.app.core.EmergencyContactStore.getC1Phone(requireContext()) + ")!", Toast.LENGTH_LONG).show();
             });
         }
     }

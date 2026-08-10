@@ -115,6 +115,7 @@ public class RiskTag extends AppCompatTextView {
             case UNKNOWN:     return R.color.whis_unknown;
             case SUSPICIOUS:  return R.color.whis_suspicious;
             case HIGH_RISK:   return R.color.whis_high_risk;
+            case BLOCKED:     return R.color.whis_high_risk; // dark red reuse
             default:          return R.color.whis_unknown;
         }
     }
@@ -126,6 +127,7 @@ public class RiskTag extends AppCompatTextView {
             case UNKNOWN:     return "Unknown";
             case SUSPICIOUS:  return "Suspicious";
             case HIGH_RISK:   return "High Risk";
+            case BLOCKED:     return "🚫 Blocked";
             default:          return "Unknown";
         }
     }

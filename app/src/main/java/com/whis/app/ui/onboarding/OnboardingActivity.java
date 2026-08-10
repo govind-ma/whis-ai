@@ -21,6 +21,12 @@ public class OnboardingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        boolean isDarkMode = getSharedPreferences("whis_prefs", MODE_PRIVATE)
+                .getBoolean("dark_mode", false);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+                           : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        );
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 

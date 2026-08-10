@@ -128,9 +128,15 @@ public class LearnFragment extends Fragment {
 
     private void renderCarousel(List<LearnChapter> chapters) {
         if (chapters.isEmpty()) {
-            if (tvNoResults != null) tvNoResults.setVisibility(View.VISIBLE);
+            if (tvNoResults != null) {
+                tvNoResults.setText("📭 No stories available\n\nTap ✨ Generate Story below to create a new AI scam story.");
+                tvNoResults.setVisibility(View.VISIBLE);
+            }
             rvCarousel.setVisibility(View.GONE);
             if (containerList != null) containerList.setVisibility(View.GONE);
+            // Show the generate button prominently when list is empty
+            View btnGenerateMain = getView() != null ? getView().findViewById(R.id.btn_generate_ai_story_main) : null;
+            if (btnGenerateMain != null) btnGenerateMain.setVisibility(View.VISIBLE);
             return;
         }
 

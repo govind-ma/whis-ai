@@ -30,11 +30,19 @@
             android:layout_marginTop="@dimen/whis_spacing_item"
             style="@style/Whis.TextAppearance.H1" />
 
+        <!-- 3D Stacked Permission Criteria Cards -->
+        <com.whis.app.ui.components.PermissionCardStackView
+            android:id="@+id/perm_card_stack"
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp" />
+
         <!-- Explanation card — plain language "why we're asking" -->
         <com.whis.app.ui.components.StatusCard
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/whis_spacing_section">
+            android:layout_marginTop="8dp">
 
             <TextView
                 android:id="@+id/tv_perm_explanation"

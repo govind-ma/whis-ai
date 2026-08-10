@@ -33,11 +33,25 @@ public class EmergencyContactFragment extends Fragment {
         EditText etPhone = view.findViewById(R.id.et_contact_phone);
 
         view.findViewById(R.id.btn_emergency_next).setOnClickListener(v -> {
+            String name = etName != null ? etName.getText().toString().trim() : "";
+            String rawPhone = etPhone != null ? etPhone.getText().toString().trim() : "";
+
+            if (!rawPhone.isEmpty() && !com.whis.app.core.EmergencyContactStore.isValid10DigitPhone(rawPhone)) {
+                if (etPhone != null) etPhone.setError("Please enter a valid 10-digit phone number");
+                return;
+            }
+
+            String formattedPhone = com.whis.app.core.EmergencyContactStore.formatPhoneNumber(rawPhone);
+
             OnboardingActivity host = (OnboardingActivity) requireActivity();
             OnboardingData data = host.getData();
 
-            data.emergencyContactName = etName.getText().toString().trim();
-            data.emergencyContactPhone = etPhone.getText().toString().trim();
+            data.emergencyContactName = name;
+            data.emergencyContactPhone = formattedPhone;
+
+            if (!name.isEmpty() && !formattedPhone.isEmpty()) {
+                com.whis.app.core.EmergencyContactStore.saveContacts(requireContext(), name, formattedPhone, "", "");
+            }
 
             host.goToNext(new ConsentFragment());
         });

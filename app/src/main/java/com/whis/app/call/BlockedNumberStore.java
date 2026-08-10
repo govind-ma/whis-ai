@@ -1,7 +1,10 @@
 package com.whis.app.call;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.provider.BlockedNumberContract;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ public class BlockedNumberStore {
 
     private BlockedNumberStore() {}
 
-    /** Block a number. No-op if already blocked. */
+    /** Block a number. No-op if already blocked. Also syncs with Android system BlockedNumberContract. */
     public static synchronized void block(Context context, String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) return;
         String normalized = normalize(phoneNumber);
@@ -36,9 +39,22 @@ public class BlockedNumberStore {
         current.add(normalized);
         save(context, current);
         Log.d(TAG, "Blocked: " + normalized);
+        // Sync to Android system block list so native Phone app also rejects this number
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                if (BlockedNumberContract.canCurrentUserBlockNumbers(context)) {
+                    ContentValues values = new ContentValues();
+                    values.put(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER, phoneNumber);
+                    context.getContentResolver().insert(
+                            BlockedNumberContract.BlockedNumbers.CONTENT_URI, values);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not sync block to system BlockedNumberContract: " + e.getMessage());
+            }
+        }
     }
 
-    /** Unblock a number. No-op if not blocked. */
+    /** Unblock a number. No-op if not blocked. Also removes from Android system BlockedNumberContract. */
     public static synchronized void unblock(Context context, String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) return;
         String normalized = normalize(phoneNumber);
@@ -46,6 +62,19 @@ public class BlockedNumberStore {
         current.remove(normalized);
         save(context, current);
         Log.d(TAG, "Unblocked: " + normalized);
+        // Sync removal from Android system block list
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                if (BlockedNumberContract.canCurrentUserBlockNumbers(context)) {
+                    context.getContentResolver().delete(
+                            BlockedNumberContract.BlockedNumbers.CONTENT_URI,
+                            BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER + " = ?",
+                            new String[]{phoneNumber});
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not sync unblock to system BlockedNumberContract: " + e.getMessage());
+            }
+        }
     }
 
     /** Returns true if the given number is in the blocked list. */
@@ -59,10 +88,21 @@ public class BlockedNumberStore {
         return new ArrayList<>(load(context));
     }
 
-    /** Clear all blocked numbers. */
+    /** Clear all blocked numbers. Also clears from Android system BlockedNumberContract. */
     public static synchronized void clearAll(Context context) {
         prefs(context).edit().remove(KEY_SET).apply();
         Log.d(TAG, "All blocked numbers cleared");
+        // Sync clear to Android system block list
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                if (BlockedNumberContract.canCurrentUserBlockNumbers(context)) {
+                    context.getContentResolver().delete(
+                            BlockedNumberContract.BlockedNumbers.CONTENT_URI, null, null);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not clear system BlockedNumberContract: " + e.getMessage());
+            }
+        }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

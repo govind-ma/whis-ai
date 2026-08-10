@@ -52,6 +52,14 @@ public class WhisMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // ── 0. Default Theme setup — Light Mode by default ─────────────────
+        boolean isDarkMode = getSharedPreferences("whis_prefs", MODE_PRIVATE)
+                .getBoolean("dark_mode", false);
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                isDarkMode ? androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+                           : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        );
+
         // ── 1. API Key sanity check ───────────────────────────────────────────
         // BuildConfig.GEMINI_API_KEY is injected from local.properties at build time.
         if (BuildConfig.GEMINI_API_KEY == null || BuildConfig.GEMINI_API_KEY.isEmpty()) {

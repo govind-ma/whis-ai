@@ -58,10 +58,17 @@ public class HomeFragment extends Fragment {
                             exportReport(view);
                             return true;
                         case 2:
-                            // Clear all call history
-                            com.whis.app.call.CallHistoryStore.clear(requireContext());
-                            Toast.makeText(requireContext(), "Activity history cleared", Toast.LENGTH_SHORT).show();
-                            getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                            // Clear all call history — with confirmation
+                            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                    .setTitle("Clear Activity History")
+                                    .setMessage("Are you sure you want to delete all activity history? This cannot be undone.")
+                                    .setPositiveButton("Clear", (dialog, which) -> {
+                                        com.whis.app.call.CallHistoryStore.clear(requireContext());
+                                        Toast.makeText(requireContext(), "Activity history cleared", Toast.LENGTH_SHORT).show();
+                                        getParentFragmentManager().beginTransaction().detach(this).attach(this).commit();
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
                             return true;
                         case 3:
                             // Show multi-select bar
@@ -127,6 +134,28 @@ public class HomeFragment extends Fragment {
         } catch (Exception e) {
             // Defensive
         }
+
+        // Deduplicate feed — prevents duplicate entries occurring within 10 seconds of each other
+        List<DetectionResult> dedupedItems = new ArrayList<>();
+        for (DetectionResult item : feedItems) {
+            boolean isDuplicate = false;
+            for (DetectionResult existing : dedupedItems) {
+                boolean timeClose = Math.abs(item.getTimestamp() - existing.getTimestamp()) < 10000;
+                String itemNum = com.whis.app.call.BlockedNumberStore.normalize(item.getReasonText());
+                String existNum = com.whis.app.call.BlockedNumberStore.normalize(existing.getReasonText());
+                boolean sameNum = !itemNum.isEmpty() && itemNum.equals(existNum);
+                
+                if (timeClose && (sameNum || item.getReasonText().contains("Unknown") || existing.getReasonText().contains("Unknown"))) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate) {
+                dedupedItems.add(item);
+            }
+        }
+        feedItems.clear();
+        feedItems.addAll(dedupedItems);
 
         // Sort feed by timestamp DESC (newest activity first)
         java.util.Collections.sort(feedItems, (a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()));
@@ -199,6 +228,11 @@ public class HomeFragment extends Fragment {
             if (btnDeleteSelected != null) {
                 btnDeleteSelected.setText(count > 0 ? "🗑️ Delete (" + count + ")" : "🗑️ Delete");
             }
+            // Update block button label
+            View btnBlockSel = view.findViewById(R.id.btn_block_selected);
+            if (btnBlockSel instanceof android.widget.Button) {
+                ((android.widget.Button) btnBlockSel).setText(count > 0 ? "🚫 Block (" + count + ")" : "🚫 Block");
+            }
         });
 
         if (btnSelectAll != null && btnUnselectAll != null && btnDeleteSelected != null) {
@@ -211,6 +245,7 @@ public class HomeFragment extends Fragment {
             btnUnselectAll.setOnClickListener(v -> {
                 if (adapterHolder[0] != null) {
                     adapterHolder[0].unselectAll();
+                    if (barMultiSelect != null) barMultiSelect.setVisibility(View.GONE);
                 }
             });
 
@@ -229,9 +264,38 @@ public class HomeFragment extends Fragment {
                     feedItems.removeAll(selected);
                     adapterHolder[0].unselectAll();
                     adapterHolder[0].notifyDataSetChanged();
+                    if (barMultiSelect != null) barMultiSelect.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Deleted " + selected.size() + " items", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            // Block Selected — block all call numbers in selection
+            android.widget.Button btnBlockSelected = view.findViewById(R.id.btn_block_selected);
+            if (btnBlockSelected != null) {
+                btnBlockSelected.setOnClickListener(v -> {
+                    if (adapterHolder[0] != null) {
+                        List<DetectionResult> selected = adapterHolder[0].getSelectedItems();
+                        if (selected.isEmpty()) {
+                            Toast.makeText(requireContext(), "Select items to block first", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        int blockedCount = 0;
+                        for (DetectionResult item : selected) {
+                            if (item instanceof com.whis.app.call.WhisCallAnalysis) {
+                                String num = ((com.whis.app.call.WhisCallAnalysis) item).incomingNumber;
+                                if (num != null && !num.isEmpty()) {
+                                    com.whis.app.call.BlockedNumberStore.block(requireContext(), num);
+                                    blockedCount++;
+                                }
+                            }
+                        }
+                        adapterHolder[0].unselectAll();
+                        adapterHolder[0].notifyDataSetChanged();
+                        if (barMultiSelect != null) barMultiSelect.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), "🚫 Blocked " + blockedCount + " number(s)", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
         }
 
         // 4. Empty state — visible until real detections arrive
@@ -278,12 +342,21 @@ public class HomeFragment extends Fragment {
         for (DetectionResult item : allItems) {
             if ("ALL".equals(filter)) {
                 filtered.add(item);
-            } else if ("CALLS".equals(filter) && item.getIdentifierType().contains("CALL")) {
+            } else if ("CALLS".equals(filter) && "CALL".equals(item.getSourceType())) {
+                // Only show items from the call module
                 filtered.add(item);
-            } else if ("MESSAGES".equals(filter) && !item.getIdentifierType().contains("CALL")) {
+            } else if ("MESSAGES".equals(filter) && "SMS".equals(item.getSourceType())) {
+                // Only show items from the SMS/msg module
                 filtered.add(item);
-            } else if ("BLOCKED".equals(filter) && item.getVerdict() == WhisVerdict.HIGH_RISK) {
-                filtered.add(item);
+            } else if ("BLOCKED".equals(filter)) {
+                // Show items whose number is in the blocked list
+                String num = null;
+                if (item instanceof com.whis.app.call.WhisCallAnalysis) {
+                    num = ((com.whis.app.call.WhisCallAnalysis) item).incomingNumber;
+                }
+                if (num != null && com.whis.app.call.BlockedNumberStore.isBlocked(requireContext(), num)) {
+                    filtered.add(item);
+                }
             }
         }
         ActivityFeedAdapter newAdapter = new ActivityFeedAdapter(filtered, (item, position) -> {
@@ -291,7 +364,6 @@ public class HomeFragment extends Fragment {
         });
         RecyclerView rvFeed = getView() != null ? getView().findViewById(R.id.rv_activity_feed) : null;
         if (rvFeed != null) rvFeed.setAdapter(newAdapter);
-        Toast.makeText(requireContext(), "Filter applied: " + filter, Toast.LENGTH_SHORT).show();
     }
 
     private void exportReport(View view) {

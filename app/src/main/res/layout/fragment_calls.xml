@@ -54,27 +54,6 @@
 
         </RelativeLayout>
 
-        <!-- Blocked numbers management section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/whis_spacing_section"
-            android:text="Blocked Numbers Management"
-            style="@style/Whis.TextAppearance.H2" />
-
-        <com.whis.app.ui.components.StatusCard
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/whis_spacing_base">
-
-            <LinearLayout
-                android:id="@+id/container_blocked_numbers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-        </com.whis.app.ui.components.StatusCard>
-
         <!-- Screened calls section -->
         <TextView
             android:layout_width="wrap_content"

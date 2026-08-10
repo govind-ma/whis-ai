@@ -42,6 +42,7 @@ public class WhisListRow extends LinearLayout {
     private TextView titleView;
     private TextView subtitleView;
     private RiskTag riskTag;
+    private RiskTag blockedTag;
 
     public WhisListRow(@NonNull Context context) {
         super(context);
@@ -123,6 +124,15 @@ public class WhisListRow extends LinearLayout {
         riskTag.setLayoutParams(tagParams);
         riskTag.setVisibility(GONE);
         addView(riskTag);
+
+        // ── Blocked chip (hidden by default, shown when number is blocked) ─
+        blockedTag = new RiskTag(context);
+        LayoutParams blockedTagParams = new LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        blockedTagParams.setMarginStart(dpToPx(context, 4));
+        blockedTag.setLayoutParams(blockedTagParams);
+        blockedTag.setVisibility(GONE);
+        addView(blockedTag);
     }
 
     /** Set the leading icon drawable resource. */
@@ -161,6 +171,26 @@ public class WhisListRow extends LinearLayout {
         } else {
             riskTag.setVerdict(verdict);
             riskTag.setVisibility(VISIBLE);
+        }
+    }
+
+    /**
+     * Show or hide the secondary "🚫 Blocked" chip.
+     * When shown, also dims the row slightly to indicate the number is silenced.
+     *
+     * @param isBlocked true to show the Blocked chip; false to hide it
+     */
+    public void setBlockedOverlay(boolean isBlocked) {
+        if (isBlocked) {
+            blockedTag.setVerdict(WhisVerdict.BLOCKED);
+            blockedTag.setVisibility(VISIBLE);
+            // Dim the title to signal this call is silenced
+            titleView.setAlpha(0.55f);
+            subtitleView.setAlpha(0.55f);
+        } else {
+            blockedTag.setVisibility(GONE);
+            titleView.setAlpha(1.0f);
+            subtitleView.setAlpha(1.0f);
         }
     }
 
