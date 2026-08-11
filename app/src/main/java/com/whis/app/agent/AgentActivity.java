@@ -252,6 +252,13 @@ public class AgentActivity extends AppCompatActivity {
                     etInput.setText(optionText.trim());
                     dispatchSendMessage();
                     optionsContainer.setVisibility(View.GONE);
+                    etInput.postDelayed(() -> {
+                        etInput.requestFocus();
+                        android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.showSoftInput(etInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    }, 200);
                 });
 
                 optionsContainer.addView(btnOption);
@@ -489,6 +496,13 @@ public class AgentActivity extends AppCompatActivity {
                     appendWhisBubble(message.content, message.optionButtons);
                     if (etInput != null) {
                         etInput.requestFocus();
+                        etInput.postDelayed(() -> {
+                            etInput.requestFocus();
+                            android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                            if (imm != null) {
+                                imm.showSoftInput(etInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                            }
+                        }, 150);
                     }
                 });
             }
