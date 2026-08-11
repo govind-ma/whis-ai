@@ -88,11 +88,13 @@
             android:hint="Ask Whis AI or describe what happened..."
             android:textColor="@color/whis_text_hi"
             android:textColorHint="@color/whis_text_mid"
-            android:background="@null"
             android:paddingHorizontal="12dp"
             android:textSize="14sp"
-            android:inputType="textMultiLine|textCapSentences"
-            android:maxLines="3"
+            android:inputType="textCapSentences"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:enabled="true"
             android:imeOptions="actionSend" />
 
         <!-- Send button — rotation animation applied in code on click -->
