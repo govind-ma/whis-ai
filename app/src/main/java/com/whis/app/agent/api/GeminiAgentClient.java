@@ -318,8 +318,8 @@ public class GeminiAgentClient {
         }
 
         try {
-            // Strip optional markdown code fences
             String clean = rawText.trim();
+            // Remove markdown fences
             if (clean.startsWith("```json")) {
                 clean = clean.substring(7);
             } else if (clean.startsWith("```")) {
@@ -328,11 +328,19 @@ public class GeminiAgentClient {
             if (clean.endsWith("```")) {
                 clean = clean.substring(0, clean.length() - 3);
             }
+            clean = clean.trim();
 
-            JSONObject json = new JSONObject(clean.trim());
+            // Extract embedded JSON object if model included extra text before/after JSON
+            int firstBrace = clean.indexOf("{");
+            int lastBrace = clean.lastIndexOf("}");
+            if (firstBrace >= 0 && lastBrace > firstBrace) {
+                clean = clean.substring(firstBrace, lastBrace + 1);
+            }
+
+            JSONObject json = new JSONObject(clean);
             String msgText = json.optString("message", "");
             if (msgText.trim().isEmpty()) {
-                msgText = clean.trim();
+                msgText = rawText.trim();
             }
             response.setMessage(msgText);
 
