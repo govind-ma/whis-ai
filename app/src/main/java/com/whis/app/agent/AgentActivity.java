@@ -309,7 +309,7 @@ public class AgentActivity extends AppCompatActivity {
         }
         bubbleBg.setColor(isUser ? userBgColor : whisBgColor);
         bubbleBg.setStroke(1, borderColor);
-        // tv.setTextIsSelectable removed because it steals window focus from etInput when dynamically added to layout
+        tv.setBackground(bubbleBg);
 
         // Long-press bubble to copy full message
         tv.setOnLongClickListener(v -> {
