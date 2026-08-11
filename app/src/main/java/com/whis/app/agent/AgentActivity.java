@@ -97,6 +97,16 @@ public class AgentActivity extends AppCompatActivity {
             dispatchSendMessage();
         });
 
+        // Allow sending message via Keyboard Enter / IME Send action
+        etInput.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEND) {
+                animateSendButton(btnSend);
+                dispatchSendMessage();
+                return true;
+            }
+            return false;
+        });
+
         // ── Top Bar 3-Dot Overflow Menu Handler ──────────────────────────────
         View btnAiMenu = findViewById(R.id.btn_ai_menu);
         if (btnAiMenu != null) {
@@ -197,12 +207,59 @@ public class AgentActivity extends AppCompatActivity {
     }
 
     /**
-     * Appends an AI (Whis) message bubble (left-aligned) with slide-up animation.
+     * Appends an AI (Whis) message bubble (left-aligned) with optional quick reply option buttons.
      */
     private void appendWhisBubble(String text) {
+        appendWhisBubble(text, null);
+    }
+
+    private void appendWhisBubble(String text, java.util.List<String> optionButtons) {
         View bubble = buildBubble(text, false);
         chatContainer.addView(bubble);
         animateBubbleEntrance(bubble);
+
+        // Render option buttons if provided by AI
+        if (optionButtons != null && !optionButtons.isEmpty()) {
+            LinearLayout optionsContainer = new LinearLayout(this);
+            optionsContainer.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, dpToPx(4), 0, dpToPx(8));
+            optionsContainer.setLayoutParams(lp);
+
+            for (String optionText : optionButtons) {
+                if (optionText == null || optionText.trim().isEmpty()) continue;
+                TextView btnOption = new TextView(this);
+                btnOption.setText(optionText.trim());
+                btnOption.setTextSize(13f);
+                btnOption.setTextColor(Color.WHITE);
+                btnOption.setPadding(dpToPx(14), dpToPx(10), dpToPx(14), dpToPx(10));
+
+                GradientDrawable optionBg = new GradientDrawable();
+                optionBg.setShape(GradientDrawable.RECTANGLE);
+                optionBg.setCornerRadius(dpToPx(20));
+                optionBg.setColor(0xFF2A2A4A);
+                optionBg.setStroke(dpToPx(1), getResources().getColor(R.color.whis_trusted, getTheme()));
+                btnOption.setBackground(optionBg);
+
+                LinearLayout.LayoutParams btnLp = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                btnLp.setMargins(0, dpToPx(4), 0, dpToPx(4));
+                btnOption.setLayoutParams(btnLp);
+
+                btnOption.setOnClickListener(v -> {
+                    // Send selected option text as user input
+                    etInput.setText(optionText.trim());
+                    dispatchSendMessage();
+                    optionsContainer.setVisibility(View.GONE);
+                });
+
+                optionsContainer.addView(btnOption);
+            }
+            chatContainer.addView(optionsContainer);
+            animateBubbleEntrance(optionsContainer);
+        }
+
         scrollToBottom();
     }
 
@@ -429,7 +486,7 @@ public class AgentActivity extends AppCompatActivity {
             @Override
             public void onMessageReceived(ChatMessage message) {
                 hideTypingIndicator();
-                mainHandler.post(() -> appendWhisBubble(message.content));
+                mainHandler.post(() -> appendWhisBubble(message.content, message.optionButtons));
             }
 
             @Override
