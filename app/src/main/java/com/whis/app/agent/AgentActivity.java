@@ -248,17 +248,11 @@ public class AgentActivity extends AppCompatActivity {
                 btnOption.setLayoutParams(btnLp);
 
                 btnOption.setOnClickListener(v -> {
-                    // Send selected option text as user input
-                    etInput.setText(optionText.trim());
-                    dispatchSendMessage();
+                    String choice = optionText.trim();
                     optionsContainer.setVisibility(View.GONE);
-                    etInput.postDelayed(() -> {
-                        etInput.requestFocus();
-                        android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                        if (imm != null) {
-                            imm.showSoftInput(etInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
-                        }
-                    }, 200);
+                    etInput.setText(choice);
+                    dispatchSendMessage();
+                    etInput.requestFocus();
                 });
 
                 optionsContainer.addView(btnOption);
@@ -315,9 +309,7 @@ public class AgentActivity extends AppCompatActivity {
         }
         bubbleBg.setColor(isUser ? userBgColor : whisBgColor);
         bubbleBg.setStroke(1, borderColor);
-        tv.setBackground(bubbleBg);
-
-        tv.setTextIsSelectable(true);
+        // tv.setTextIsSelectable removed because it steals window focus from etInput when dynamically added to layout
 
         // Long-press bubble to copy full message
         tv.setOnLongClickListener(v -> {
@@ -481,7 +473,6 @@ public class AgentActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(text)) return;
 
         etInput.setText("");
-        etInput.setEnabled(false);
         btnSend.setEnabled(false);
 
         appendUserBubble(text);
