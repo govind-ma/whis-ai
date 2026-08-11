@@ -474,7 +474,7 @@ public class AgentActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(text)) return;
 
         etInput.setText("");
-        etInput.clearFocus();
+        etInput.setEnabled(true);
         appendUserBubble(text);
         showTypingIndicator();
 
@@ -486,7 +486,14 @@ public class AgentActivity extends AppCompatActivity {
             @Override
             public void onMessageReceived(ChatMessage message) {
                 hideTypingIndicator();
-                mainHandler.post(() -> appendWhisBubble(message.content, message.optionButtons));
+                mainHandler.post(() -> {
+                    appendWhisBubble(message.content, message.optionButtons);
+                    if (etInput != null) {
+                        etInput.setEnabled(true);
+                        etInput.setFocusable(true);
+                        etInput.setFocusableInTouchMode(true);
+                    }
+                });
             }
 
             @Override
