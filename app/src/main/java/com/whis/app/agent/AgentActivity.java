@@ -492,6 +492,13 @@ public class AgentActivity extends AppCompatActivity {
                         etInput.setEnabled(true);
                         etInput.setFocusable(true);
                         etInput.setFocusableInTouchMode(true);
+                        etInput.requestFocus();
+                        // Re-engage soft keyboard input connection
+                        android.view.inputmethod.InputMethodManager imm =
+                                (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.showSoftInput(etInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                        }
                     }
                 });
             }
@@ -512,7 +519,15 @@ public class AgentActivity extends AppCompatActivity {
             @Override
             public void onError(String errorMessage) {
                 hideTypingIndicator();
-                mainHandler.post(() -> appendWhisBubble("Error: " + (errorMessage != null ? errorMessage : "Failed to reach server.")));
+                mainHandler.post(() -> {
+                    appendWhisBubble("Error: " + (errorMessage != null ? errorMessage : "Failed to reach server."));
+                    if (etInput != null) {
+                        etInput.setEnabled(true);
+                        etInput.setFocusable(true);
+                        etInput.setFocusableInTouchMode(true);
+                        etInput.requestFocus();
+                    }
+                });
             }
         };
     }
